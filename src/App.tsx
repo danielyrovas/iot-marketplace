@@ -1,6 +1,6 @@
 import { createSignal, lazy } from "solid-js";
 import { A, useRoutes } from "@solidjs/router";
-// import { invoke } from "@tauri-apps/api/tauri";
+import { invoke } from "@tauri-apps/api/tauri";
 import "./App.css";
 
 const routes = [
@@ -23,6 +23,14 @@ const routes = [
 ];
 
 export default function App() {
+  const [greetMsg, setGreetMsg] = createSignal("");
+  const [name, setName] = createSignal("");
+
+  async function greet() {
+    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
+    setGreetMsg(await invoke("greet", { name: name() }));
+  }
+
   const Routes = useRoutes(routes);
   return (
     <>
@@ -42,6 +50,20 @@ export default function App() {
         </div>
       </nav>
       <Routes />
+      <div class="row">
+        <div>
+          <input
+            id="greet-input"
+            onChange={(e) => setName(e.currentTarget.value)}
+            placeholder="Enter a name..."
+          />
+          <button type="button" onClick={() => greet()}>
+            Greet
+          </button>
+        </div>
+      </div>
+
+      <p>{greetMsg()}</p>
     </>
   );
 }
