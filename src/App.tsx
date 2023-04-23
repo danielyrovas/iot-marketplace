@@ -38,7 +38,7 @@ export default function App() {
     <>
       <h1>Awesome Site</h1>
       <nav class="place-items-center">
-        <A class={cardStyle} href="/">
+        <A class={cardStyle} href="/" end={true}>
           Home
         </A>
         <A class={cardStyle} href="/register/sensor">
