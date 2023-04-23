@@ -7,7 +7,7 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "tauri-app",
+    "productName": "IoT Marketplace",
     "version": "0.0.0"
   },
   "tauri": {
@@ -40,9 +40,9 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "tauri-app",
-        "width": 800,
-        "height": 600
+        "title": "IoT Marketplace",
+        "width": 1400,
+        "height": 900
       }
     ]
   }

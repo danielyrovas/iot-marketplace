@@ -1,9 +1,18 @@
 import { defineConfig } from "vite";
 import solidPlugin from "vite-plugin-solid";
+import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
   plugins: [solidPlugin()],
+  resolve: {
+    alias: [
+      {
+        find: "@",
+        replacement: path.resolve(__dirname, "./src/"),
+      },
+    ],
+  },
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   // prevent vite from obscuring rust errors
