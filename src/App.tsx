@@ -32,10 +32,10 @@ export default function App() {
   return (
     <>
       <h1>Internet of Things Marketplace</h1>
-      <nav class="place-items-center m-[10px]">
+      <nav class="flex justify-center items-center">
         <For each={Object.values(routes || {})}>
           {(a) => (
-            <A href={a.path}>
+            <A href={a.path} class="p-5">
               <Button>{a.name}</Button>
             </A>
           )}

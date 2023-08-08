@@ -10,7 +10,7 @@ export default function About() {
     setGreetMsg(await invoke("greet", { name: name() }));
   }
   return (
-    <div>
+    <div class="m-[10px]">
       <h1> About IoT Market Place Dashboard </h1>
 
       <p>An example solidjs frontend to rust backend interop function call</p>
