@@ -1,10 +1,10 @@
 import { FieldProps, Field } from "solid-form-handler";
 import { Component, JSX, Show, splitProps } from "solid-js";
 
-export type TextInputProps = JSX.InputHTMLAttributes<HTMLInputElement> &
+export type TextInputPropsOld = JSX.InputHTMLAttributes<HTMLInputElement> &
   FieldProps & { label?: string };
 
-export const TextInput: Component<TextInputProps> = (props) => {
+export const TextInputOld: Component<TextInputProps> = (props) => {
   const [local, rest] = splitProps(props, [
     "classList",
     "label",
@@ -18,7 +18,7 @@ export const TextInput: Component<TextInputProps> = (props) => {
       render={(field) => (
         <div classList={local.classList}>
           <Show when={local.label}>
-            <label class="form-label" for={field.props.id}>
+            <label class="label" for={field.props.id}>
               {local.label}
             </label>
           </Show>

@@ -1,7 +1,7 @@
 import { For, lazy } from "solid-js";
-import { Button } from "@suid/material";
 import { A, useRoutes } from "@solidjs/router";
 import "./index.css";
+import { Button } from "@/components";
 
 const routes = [
   {
@@ -31,12 +31,14 @@ export default function App() {
   //   "h-[160px] p-[5px] m-[20px] aspect aspect-[2] rounded-[16px] shadow-[0_0_0_4px_hsl(0_0%_0%_/_15%)]";
   return (
     <>
-      <h1>Internet of Things Marketplace</h1>
-      <nav class="flex justify-center items-center">
+      <h1 class="text-3xl font-bold text-center">
+        Internet of Things Marketplace
+      </h1>
+      <nav class="flex justify-center items-center navbar">
         <For each={Object.values(routes || {})}>
           {(a) => (
-            <A href={a.path} class="p-5">
-              <Button>{a.name}</Button>
+            <A href={a.path} class="p-2">
+              <Button class="">{a.name}</Button>
             </A>
           )}
         </For>

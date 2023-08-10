@@ -1,11 +1,10 @@
 import { defineConfig } from "vite";
 import solidPlugin from "vite-plugin-solid";
-import suidPlugin from "@suid/vite-plugin";
 import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
-  plugins: [suidPlugin(), solidPlugin()],
+  plugins: [solidPlugin()],
   resolve: {
     alias: [
       {
