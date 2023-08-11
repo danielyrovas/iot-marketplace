@@ -12,10 +12,10 @@ export const Button: ParentComponent<Props> = (props) => {
 };
 
 export type TextInputProps = JSX.InputHTMLAttributes<HTMLInputElement> & {
+  name: string;
   label?: string;
-  name?: string;
-  inputClass?: string;
   labelClass?: string;
+  inputClass?: string;
   type?: string;
 };
 export const TextInput: Component<TextInputProps> = (props) => {
@@ -29,13 +29,14 @@ export const TextInput: Component<TextInputProps> = (props) => {
   ]);
   return (
     <div class={"form-control " + (local.class || "")}>
-      <Show when={local.name}>
-        <label class={"label " + (local.labelClass || "")} for={local.label}>
-          <span class="w-full label-text">{local.name}</span>
+      <Show when={local.label}>
+        <label class={"label " + (local.labelClass || "")} for={local.name}>
+          <span class="w-full label-text">{local.label}</span>
         </label>
       </Show>
       <input
         {...rest}
+        name={local.name}
         type={local.type || "text"}
         class={"input input-bordered " + (local.inputClass || "")}
       />
