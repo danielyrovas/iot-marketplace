@@ -49,7 +49,7 @@ export default function BrokerRegister() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} class="p-8">
         <TextInput
           label="name"
           placeholder="e.g. Farm Broker"
@@ -69,7 +69,9 @@ export default function BrokerRegister() {
           value={form.address}
           onChange={updateFormField("address")}
         />
-        <input type="submit" value="Submit order" />
+        <div class="flex flex-row justify-center mt-4">
+          <input class="btn" type="submit" value="Register Broker" />
+        </div>
       </form>
       <pre>{JSON.stringify(form, null, 2)}</pre>
     </div>
