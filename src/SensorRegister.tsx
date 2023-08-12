@@ -2,7 +2,7 @@ import { createSignal, Show } from "solid-js";
 
 import { useFormHandler } from "solid-form-handler";
 import { yupSchema } from "solid-form-handler/yup";
-import { TextInput } from "@/components";
+import { TextInput } from "./components";
 import * as yup from "yup";
 
 // type Sensor = {
