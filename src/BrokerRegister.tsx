@@ -1,8 +1,8 @@
 import { createSignal } from "solid-js";
 
 import { Component, createEffect } from "solid-js";
-import { TextInput } from "./components";
-import { createBrokerForm } from "./logic";
+import { TextInput } from "@/components";
+import { createBrokerForm } from "@/logic";
 
 export default function BrokerRegister() {
   // return (

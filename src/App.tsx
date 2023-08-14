@@ -1,7 +1,7 @@
 import { For, lazy } from "solid-js";
 import { A, useRoutes } from "@solidjs/router";
 import "./index.css";
-import { Button } from "./components";
+import { Button } from "@/components";
 
 const routes = [
   {
