@@ -1,13 +1,15 @@
 import { ParentComponent, JSX, splitProps, Component, Show } from "solid-js";
 
-type Props<ParentProps = {}> = ParentProps & { class?: JSX.ElementClass };
+type Props<ParentProps = {}> = ParentProps & {
+  class?: JSX.ElementClass;
+} & JSX.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const Button: ParentComponent<Props> = (props) => {
   const [local, rest] = splitProps(props, ["class", "children"]);
   return (
-    <div {...rest} class={"btn btn-primary " + local.class}>
+    <button {...rest} class={"btn btn-primary " + local.class}>
       {local.children}
-    </div>
+    </button>
   );
 };
 

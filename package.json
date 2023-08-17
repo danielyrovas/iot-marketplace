@@ -15,6 +15,7 @@
     "@tauri-apps/api": "^1.2.0",
     "cssnano": "^6.0.0",
     "cssnano-preset-advanced": "^6.0.0",
+    "senshamartproject": "file:../SenShaMart",
     "solid-form-handler": "^1.2.0-alpha.5",
     "solid-js": "^1.7.0",
     "yup": "^1.1.1"
