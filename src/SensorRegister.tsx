@@ -19,17 +19,23 @@ export default function SensorRegister() {
           onChange={updateFormField()}
         />
         <TextInput
-          label="Type"
-          name="type"
-          value={form.type}
+          label="Cost per minute"
+          name="costPerMinute"
+          value={form.costPerMinute}
           onChange={updateFormField()}
         />
         <TextInput
-          label="Country"
-          name="country"
-          value={form.country}
+          label="Cost per KB"
+          name="costPerKB"
+          value={form.costPerKB}
           onChange={updateFormField()}
         />
+	<TextInput
+          label="Integration broker"
+          name="integrationBroker"
+          value={form.integrationBroker}
+          onChange={updateFormField()}
+          />
         <div class="flex flex-row justify-center mt-4">
           <input class="btn" type="submit" value="Register Sensor" />
         </div>

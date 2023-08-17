@@ -2,15 +2,17 @@ import { createStore } from "solid-js/store";
 
 type FormFields = {
   name?: string;
-  type?: string;
-  country?: string;
+  costPerMinute?: string;
+  costPerKB?: string;
+  integrationBroker?: string;
 };
 
 const submit = (form: FormFields) => {
   const dataToSubmit = {
-    name: form.name,
-    type: form.type,
-    country: form.country,
+      name: form.name,
+      costPerMinute: form.costPerMinute,
+      costPerKB: form.costPerKB,
+      integrationBroker: form.integrationBroker,
   };
   console.log(`submitting ${JSON.stringify(dataToSubmit)}`);
 };
@@ -18,8 +20,9 @@ const submit = (form: FormFields) => {
 export const createSensorForm = () => {
   const [form, setForm] = createStore<FormFields>({
     name: "",
-    type: "",
-    country: "",
+    costPerMinute: "",
+    costPerKB: "",
+    integrationBroker: "",
   });
 
   const clearField = (fieldName: string) => {
