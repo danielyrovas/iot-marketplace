@@ -1,33 +1,46 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import { createSignal } from "solid-js";
+import { TextInput } from "@/components";
 
 export default function About() {
-  const [greetMsg, setGreetMsg] = createSignal("");
-  const [name, setName] = createSignal("");
+  const [key, setKey] = createSignal("");
+  const [saveMsg, setSaveMsg] = createSignal("");
+  const [loadMsg, setLoadMsg] = createSignal("");
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name: name() }));
+  async function save() {
+    setSaveMsg(await invoke("save_config", { config: { wallet_key: key() } }));
   }
+  async function load() {
+    setLoadMsg(JSON.stringify(await invoke("load_config")));
+  }
+
   return (
     <div class="m-[10px]">
-      <h1> About IoT Market Place Dashboard </h1>
-
-      <p>An example solidjs frontend to rust backend interop function call</p>
-      <div class="row">
-        <div>
-          <input
-            id="greet-input"
-            onChange={(e) => setName(e.currentTarget.value)}
-            placeholder="Enter a name..."
+      <p></p>
+      <div class="flex-row justify-between">
+        <div class="flex justify-center m-4">
+          <TextInput
+            label="Wallet Key"
+            name="wallet_key"
+            class="w-[30rem]"
+            onChange={(e) => setKey(e.currentTarget.value)}
           />
-          <button type="button" onClick={() => greet()}>
-            Greet
+        </div>
+        <div class="flex justify-center m-4">
+          <button class="btn" type="button" onClick={() => save()}>
+            Save
+          </button>
+        </div>
+        <div class="flex justify-center m-4">
+          <button class="btn" type="button" onClick={() => load()}>
+            Load Config
           </button>
         </div>
       </div>
 
-      <p>{greetMsg()}</p>
+      <p>{saveMsg()}</p>
+      <h1>Config:</h1>
+      <p>{loadMsg()}</p>
     </div>
   );
 }
