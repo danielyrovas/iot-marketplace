@@ -14,6 +14,7 @@ const submit = (form: FormFields) => {
   // map fields, if needed, e.g. shipping_address
   const dataToSubmit = {
     name: form.name,
+    endpoint: form.endpoint,
     address: form.address,
     shipping_address: form.shippingAddress,
   };
