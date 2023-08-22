@@ -58,16 +58,10 @@ export default function BrokerRegister() {
           onChange={updateFormField("name")}
         />
         <TextInput
-          label="surname"
-          name="Surname"
-          value={form.surname}
-          onChange={updateFormField("surname")}
-        />
-        <TextInput
-          label="address"
-          name="Address"
-          value={form.address}
-          onChange={updateFormField("address")}
+          label="endpoint"
+          name="Endpoint"
+          value={form.endpoint}
+          onChange={updateFormField("endpoint")}
         />
         <div class="flex flex-row justify-center mt-4">
           <input class="btn" type="submit" value="Register Broker" />

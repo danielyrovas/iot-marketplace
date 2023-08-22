@@ -1,8 +1,8 @@
 import { createStore } from "solid-js/store";
 
 type FormFields = {
+  endpoint: string;
   name?: string;
-  surname?: string;
   address?: string;
   shippingAddress?: string;
   sameAsAddress: boolean;
@@ -14,7 +14,6 @@ const submit = (form: FormFields) => {
   // map fields, if needed, e.g. shipping_address
   const dataToSubmit = {
     name: form.name,
-    surname: form.surname,
     address: form.address,
     shipping_address: form.shippingAddress,
   };
@@ -25,8 +24,7 @@ const submit = (form: FormFields) => {
 export const createBrokerForm = () => {
   const [form, setForm] = createStore<FormFields>({
     name: "",
-    surname: "",
-    address: "",
+    endpoint: "",
     shippingAddress: "",
     sameAsAddress: false,
   });
