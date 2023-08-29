@@ -17,6 +17,7 @@
     "cssnano": "^6.0.0",
     "cssnano-preset-advanced": "^6.0.0",
     "graphql": "^16.8.0",
+    "n3": "^1.17.1",
     "rdflib": "^2.2.32",
     "solid-fetch": "^3.0.6",
     "solid-form-handler": "^1.2.0-alpha.5",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.2.3",
+    "@types/jsonld": "^1.5.9",
     "@types/node": "^18.16.0",
     "@types/rdfjs__parser-n3": "^2.0.1",
     "autoprefixer": "^10.4.14",

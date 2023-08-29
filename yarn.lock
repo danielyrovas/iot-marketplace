@@ -546,6 +546,11 @@
   resolved "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
+"@types/jsonld@^1.5.9":
+  version "1.5.9"
+  resolved "https://registry.npmjs.org/@types/jsonld/-/jsonld-1.5.9.tgz"
+  integrity sha512-K76ImkErPYL2wGPZpNFSKp6wE+h/APecZLJrU7UfDaGqt/f+D9Rrg1aR7VdRrQ6k5DUNRZ2vn9yACwmpOr9QcA==
+
 "@types/node@*", "@types/node@^18.16.0", "@types/node@>= 14":
   version "18.17.3"
   resolved "https://registry.npmjs.org/@types/node/-/node-18.17.3.tgz"
@@ -2234,7 +2239,7 @@ n3@^0.11.3:
   resolved "https://registry.npmjs.org/n3/-/n3-0.11.3.tgz"
   integrity sha512-Hk5GSXBeAZrYoqi+NeS/U0H47Hx0Lzj7K6nLWCZpC9E04iUwEwBcrlMb/5foAli7QF4newPNQQQGgM6IAxTxGg==
 
-n3@^1.16.2, n3@^1.16.4:
+n3@^1.16.2, n3@^1.16.4, n3@^1.17.1:
   version "1.17.1"
   resolved "https://registry.npmjs.org/n3/-/n3-1.17.1.tgz"
   integrity sha512-HlanMWpvN2kcTrFuU3GPObyY7qrVQWy2Hp7l4GSXJlcQapjQMR7OM4kCr788pTQzNIpiHS3JRvyZ2YUcYJ82rA==
