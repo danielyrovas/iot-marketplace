@@ -11,6 +11,9 @@
     "types": [
       "vite/client"
     ],
+    "typeRoots": [
+      "./node_modules/sparqljs-legacy-type/"
+    ],
     "noEmit": true,
     "isolatedModules": true,
     "paths": {

@@ -24,6 +24,11 @@ const routes = [
     name: "About",
     component: lazy(() => import("./About")),
   },
+  {
+    path: "/query",
+    name: "Query",
+    component: lazy(() => import("./sparlql-client")),
+  },
 ];
 export default function App() {
   const Routes = useRoutes(routes);
