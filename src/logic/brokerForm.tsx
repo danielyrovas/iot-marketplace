@@ -3,9 +3,6 @@ import { createStore } from "solid-js/store";
 type FormFields = {
   endpoint: string;
   name?: string;
-  address?: string;
-  shippingAddress?: string;
-  sameAsAddress: boolean;
 };
 
 const submit = (form: FormFields) => {
@@ -15,8 +12,6 @@ const submit = (form: FormFields) => {
   const dataToSubmit = {
     name: form.name,
     endpoint: form.endpoint,
-    address: form.address,
-    shipping_address: form.shippingAddress,
   };
   // should be submitting your form to some backend service
   console.log(`submitting ${JSON.stringify(dataToSubmit)}`);
@@ -26,8 +21,6 @@ export const createBrokerForm = () => {
   const [form, setForm] = createStore<FormFields>({
     name: "",
     endpoint: "",
-    shippingAddress: "",
-    sameAsAddress: false,
   });
 
   const clearField = (fieldName: string) => {
