@@ -1,53 +1,23 @@
 import { createSignal } from "solid-js";
 import logo from "./assets/logo.svg";
-import { invoke } from "@tauri-apps/api/tauri";
 import "./App.css";
 
-function App() {
-  const [greetMsg, setGreetMsg] = createSignal("");
-  const [name, setName] = createSignal("");
-
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name: name() }));
-  }
+export default function App() {
+  const [darkTheme, setDarkTheme] = createSignal(true);
+  const themes = ["iot-dark", "iot-light"]
 
   return (
-    <div class="container">
-      <h1>Welcome to Tauri!</h1>
-
-      <div class="row">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" class="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://solidjs.com" target="_blank">
-          <img src={logo} class="logo solid" alt="Solid logo" />
-        </a>
+    <div class="w-full min-h-screen" data-theme={themes[darkTheme() ? 0 : 1]}>
+      <div class="prose p-4">
+        <h1>Welcome to IoT Marketplace!</h1>
       </div>
 
-      <p>Click on the Tauri, Vite, and Solid logos to learn more.</p>
+      <button
+        class="btn btn-primary p-[20px]"
+        onClick={() => setDarkTheme(!darkTheme())}
+      >{darkTheme() ? "Switch to light theme" : "Switch to dark theme"}</button>
 
-      <form
-        class="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-
-      <p>{greetMsg()}</p>
-    </div>
+      <p>Current Theme: {themes[darkTheme() ? 0 : 1]}</p>
+    </div >
   );
 }
-
-export default App;
