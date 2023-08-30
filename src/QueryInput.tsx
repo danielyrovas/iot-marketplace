@@ -3,36 +3,56 @@ import { createSignal } from 'solid-js';
 interface QueryInputProps {
   executeQuery: (query: string) => void;
 }
-const freeformQueries = {
-    "Get all camera sensors": "SELECT ?sensor ?lat ?long ?measures WHERE { ?sensor <http://www.w3.org/ns/sosa/observes> ?observes. ?sensor <http://www.w3.org/ns/sosa/hasFeatureOfInterest> ?location. ?observes <http://www.w3.org/2000/01/rdf-schema#label> ?measures . ?location <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat .  ?location <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?long . ?observes <http://www.w3.org/2000/01/rdf-schema#label> \"video\"}",
-    "Get all milk pressure sensors": "SELECT ?sensor ?lat ?long ?measures WHERE { ?sensor <http://www.w3.org/ns/sosa/observes> ?observes. ?sensor <http://www.w3.org/ns/sosa/hasFeatureOfInterest> ?location. ?observes <http://www.w3.org/2000/01/rdf-schema#label> ?measures . ?location <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat .  ?location <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?long . ?observes <http://www.w3.org/2000/01/rdf-schema#label> \"Milk Pressure\"}",
-    "Get all air temperature sensors": "SELECT ?sensor ?lat ?long ?measures WHERE { ?sensor <http://www.w3.org/ns/sosa/observes> ?observes. ?sensor <http://www.w3.org/ns/sosa/hasFeatureOfInterest> ?location. ?observes <http://www.w3.org/2000/01/rdf-schema#label> ?measures . ?location <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat .  ?location <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?long . ?observes <http://www.w3.org/2000/01/rdf-schema#label> \"Air Temperature\"}",
-    "Get all air humidity sensors": "SELECT ?sensor ?lat ?long ?measures WHERE { ?sensor <http://www.w3.org/ns/sosa/observes> ?observes. ?sensor <http://www.w3.org/ns/sosa/hasFeatureOfInterest> ?location. ?observes <http://www.w3.org/2000/01/rdf-schema#label> ?measures . ?location <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat .  ?location <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?long . ?observes <http://www.w3.org/2000/01/rdf-schema#label> \"Relative air Humidity\"}",
-    "Get all milk temperature sensors": "SELECT ?sensor ?lat ?long ?measures WHERE { ?sensor <http://www.w3.org/ns/sosa/observes> ?observes. ?sensor <http://www.w3.org/ns/sosa/hasFeatureOfInterest> ?location. ?observes <http://www.w3.org/2000/01/rdf-schema#label> ?measures . ?location <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat .  ?location <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?long . ?observes <http://www.w3.org/2000/01/rdf-schema#label> \"Milk Temperature\"}",
-    "Get all sensors in Australia": "SELECT ?sensor ?lat ?long ?measures WHERE { ?sensor <http://www.w3.org/ns/sosa/observes> ?observes. ?sensor <http://www.w3.org/ns/sosa/hasFeatureOfInterest> ?location. ?observes <http://www.w3.org/2000/01/rdf-schema#label> ?measures . ?location <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat .  ?location <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?long . FILTER(xsd:decimal(?long) > 113.338953078 && xsd:decimal(?long) < 153.569469029 && xsd:decimal(?lat) > -43.6345972634 && xsd:decimal(?lat) < -10.6681857235)}"
-  };
+
+const presetQueries = [
+  {
+    label: 'Query 1',
+    query: `SELECT ?person ?personLabel WHERE {
+      ?person wdt:P19 wd:Q84;
+      SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+    } LIMIT 10`,
+  },
+  {
+    label: 'Query 2',
+    query: `SELECT ?city ?cityLabel WHERE {
+      ?city wdt:P31 wd:Q515.
+      SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+    } LIMIT 10`,
+  },
+  {
+    label: 'Query 3',
+    query: `SELECT ?country ?countryLabel WHERE {
+      ?country wdt:P31 wd:Q6256.
+      SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+    } LIMIT 10`,
+  },
+];
 
 export const QueryInput = (props: QueryInputProps) => {
-  const [query, setQuery] = createSignal(`SELECT ?person ?personLabel WHERE {
-    ?person wdt:P19 wd:Q84;
-    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-  } limit 10`);
+  const [selectedQuery, setSelectedQuery] = createSignal(0);
 
   const handleQueryChange = (event: Event) => {
-    const inputValue = (event.target as HTMLTextAreaElement).value;
-    setQuery(inputValue);
+    const selectedIndex = (event.target as HTMLSelectElement).selectedIndex;
+    setSelectedQuery(selectedIndex);
   };
 
   const handleSubmit = (event: Event) => {
     event.preventDefault();
-    props.executeQuery(query());
+    const selectedPresetQuery = presetQueries[selectedQuery()].query;
+    props.executeQuery(selectedPresetQuery);
   };
 
   return (
     <div>
       <h2>SPARQL Query</h2>
       <form onSubmit={handleSubmit}>
-        <textarea value={query()} onInput={handleQueryChange} />
+        <select onChange={handleQueryChange}>
+          {presetQueries.map((preset, index) => (
+            <option key={index} value={index}>
+              {preset.label}
+            </option>
+          ))}
+        </select>
         <button type="submit">Execute Query</button>
       </form>
     </div>
