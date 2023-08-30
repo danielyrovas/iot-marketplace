@@ -1,23 +1,66 @@
-import { createSignal } from "solid-js";
-import logo from "./assets/logo.svg";
+import { For, lazy, createSignal, Show } from "solid-js";
 import "./App.css";
+import { appWindow } from '@tauri-apps/api/window';
+
+const tabs = [
+  {
+    name: 'Home', title: 'Internet of Things Marketplace',
+    component: lazy(() => import("./pages/home")),
+  },
+  {
+    name: 'Register a Sensor', title: 'IoT Marketplace: Sensor Registration',
+    component: lazy(() => import("./pages/registerSensor")),
+  },
+  {
+    name: 'Register a Broker', title: 'IoT Marketplace: Broker Registration',
+    component: lazy(() => import("./pages/registerBroker")),
+  },
+  {
+    name: 'Configuration', title: 'IoT Marketplace: Configuration',
+    component: lazy(() => import("./pages/settings")),
+  },
+]
+const cfgIndex = tabs.length - 1;
 
 export default function App() {
-  const [darkTheme, setDarkTheme] = createSignal(true);
-  const themes = ["iot-dark", "iot-light"]
+  const setTheme = (theme) => {
+    document.getElementById("body").dataset.theme = theme ? 'dark' : 'light';
+  }
+  const [darkTheme, setDarkTheme] = createSignal(
+    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)')
+      .matches ? true : false
+  );
+  const [tabIndex, setTabIndex] = createSignal(0);
 
   return (
-    <div class="w-full min-h-screen" data-theme={themes[darkTheme() ? 0 : 1]}>
-      <div class="prose p-4">
-        <h1>Welcome to IoT Marketplace!</h1>
+    <div class="w-full h-full">
+      {setTheme(darkTheme())}
+      <div class="p-4">
+        <h1 class="text-3xl font-bold text-center">{tabs[tabIndex()].title}</h1>
       </div>
 
-      <button
-        class="btn btn-primary p-[20px]"
-        onClick={() => setDarkTheme(!darkTheme())}
-      >{darkTheme() ? "Switch to light theme" : "Switch to dark theme"}</button>
+      <div class="flex flex-row absolute top-3 right-2">
+        <div class="btn btn-circle mx-1"
+          onClick={() => { setDarkTheme(!darkTheme()); }}
+        >{darkTheme() ? <i class="fa-solid fa-sun" /> : <i class="fa-solid fa-moon" />}
+        </div>
+        <div class="btn btn-circle mx-1"
+          onClick={() => { setTabIndex(cfgIndex); }}
+        ><i class="fa-solid fa-cog" /></div>
+      </div>
 
-      <p>Current Theme: {themes[darkTheme() ? 0 : 1]}</p>
-    </div >
+      <nav class="flex justify-center items-center navbar">
+        <For each={tabs}>
+          {(tab, index) => (
+            <Show when={tab.name !== 'Configuration'}>
+              <button class="btn m-2" onClick={() => setTabIndex(index())}>
+                {tab.name}
+              </button>
+            </Show>
+          )}
+        </For>
+      </nav>
+      {tabs[tabIndex()].component()}
+    </div>
   );
 }

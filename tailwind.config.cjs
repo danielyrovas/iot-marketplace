@@ -10,7 +10,7 @@ module.exports = {
   daisyui: {
     themes: [
       {
-        "iot-light": {
+        light: {
           primary: "#f9d8a7",
           secondary: "#f9e6bb",
           accent: "#ef777f",
@@ -23,15 +23,15 @@ module.exports = {
         },
       },
       {
-        "iot-dark": {
+        dark: {
           primary: "#f9d8a7",
           secondary: "#f9e6bb",
           accent: "#ef777f",
           neutral: "#282d39",
           "base-100": "#263040",
-          info: "#21c8f2",
-          success: "#64d89c",
-          warning: "#fbb709",
+          info: "#3abff8",
+          success: "#36d399",
+          warning: "#fdba74",
           error: "#f05678",
         },
       },
