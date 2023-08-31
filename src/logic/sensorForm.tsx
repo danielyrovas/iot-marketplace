@@ -36,17 +36,21 @@ export const createSensorForm = () => {
 	rdfObject: "",
     }],
   });
-
-  const extraNodes = () => {
-      const [node, setNode] = createStore([]);
-      let nodeId = 0;
-  }
+    let nodeId = 0;
+    let nodeFlag = false;
+    const [node, setNode] = createStore([]);
 
     const addNode = () => {
-	setNode([...node, {id: ++nodeId, text}]);
-  }
+	setNode([...node, { nodeId: ++nodeId }]);
+	console.log("Adding node...")
+    }
 
-  const clearField = (fieldName: string) => {
+    const removeNode = () => {
+	
+	setNode([{ nodeId: undefined! }]);
+    }
+
+    const clearField = (fieldName: string) => {
     setForm({
       [fieldName]: "",
     });
@@ -80,17 +84,47 @@ export const createSensorForm = () => {
       });
     }
 
-      if (inputElement.name === "rdfSubject") {
-	  setForm('extraNodes', 0, {rdfSubject: inputElement.value});
-	  setForm('extraNodes', 1, {rdfSubject: inputElement.value});
-      } else if (inputElement.name === "rdfPredicate") {
-	  setForm('extraNodes', 0, {rdfPredicate: inputElement.value});
-	  setForm('extraNodes', 1, {rdfPredicate: inputElement.value});
-      } else if (inputElement.name === "rdfObject") {
-	  setForm('extraNodes', 0, {rdfObject: inputElement.value});
-	  setForm('extraNodes', 1, {rdfObject: inputElement.value});
+     
+      if (inputElement.name === "rdfSubject" && !(node)) {
+	setForm('extraNodes', 0, {rdfSubject: inputElement.value});
+	if (!(nodeFlag) &&
+	    !(form.extraNodes[0].rdfPredicate) &&
+	    !(form.extraNodes[0].rdfObject)) {
+	    console.log(nodeFlag);
+	    addNode();
+	    nodeFlag = true;
+	}
+    } else if (inputElement.name === "rdfPredicate" && !(node)) {
+	setForm('extraNodes', 0, {rdfPredicate: inputElement.value});
+	if (!(nodeFlag) &&
+	    !(form.extraNodes[0].rdfSubject) &&
+	    !(form.extraNodes[0].rdfObject)) {
+	    addNode();
+	    nodeFlag = true;
+	}
+    } else if (inputElement.name === "rdfObject" && !(node)) {
+	setForm('extraNodes', 0, {rdfObject: inputElement.value});
+	if (!(nodeFlag) &&
+	    !(form.extraNodes[0].rdfSubject) &&
+	    !(form.extraNodes[0].rdfPredicate)) {
+	    addNode();
+	    nodeFlag = true;
+	}
       }
+
+      // if (inputElement.name === "rdfSubject") {
+      // 	  setForm('extraNodes', 0, {rdfSubject: inputElement.value});
+      // 	  addNode();
+      // }
+
+      if (!(form.extraNodes[0].rdfSubject) &&
+	  !(form.extraNodes[0].rdfPredicate) &&
+	  !(form.extraNodes[0].rdfObject)){
+	  removeNode();
+	  nodeFlag = false;
+      }
+      
   };
 
-  return { form, submit, updateFormField, clearField };
+    return { form, node, submit, updateFormField, clearField };
 };

@@ -1,8 +1,9 @@
 import { TextInput } from "@/components";
 import { createSensorForm } from "@/logic";
+import { extraNodes } from "@/logic";
 
 export default function SensorRegister() {
-  const { form, updateFormField, submit, clearField } = createSensorForm();
+    const { form, node, updateFormField, submit, clearField } = createSensorForm();
 
   const handleSubmit = (event: Event): void => {
     event.preventDefault();
@@ -54,11 +55,38 @@ export default function SensorRegister() {
           value={form.rdfObject}
           onChange={updateFormField()}
           />
+	  <For each={node}>
+	     {(myNode) => {
+		 const { id } = myNode;
+		 return  <div>
+		     <TextInput
+		       label={"RDF Subject" + id}
+		       name="rdfSubject"
+		       value={form.rdfSubject[1]}
+		       onChange={updateFormField()}
+		       />
+		     <TextInput
+		       label={"RDF Subject" + id}
+		       name="rdfPredicate"
+		       value={form.rdfPredicate}
+		       onChange={updateFormField()}
+		       />
+		     <TextInput
+		       label={"RDF Subject" + id}
+		       name="rdfObject"
+		       value={form.rdfObject}
+		       onChange={updateFormField()}
+		       />
+		 </div>
+	     }}
+	  </For>
+	   
         <div class="flex flex-row justify-center mt-4">
           <input class="btn" type="submit" value="Register Sensor" />
         </div>
       </form>
-      <pre>{JSON.stringify(form, null, 2)}</pre>
+	  <pre>{JSON.stringify(form, null, 2)}</pre>
+	  <pre>{JSON.stringify(node, null, 2)}</pre>
     </div>
   );
 }
