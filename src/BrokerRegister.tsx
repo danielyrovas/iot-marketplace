@@ -1,40 +1,9 @@
-import { createSignal } from "solid-js";
-
 import { Component, createEffect } from "solid-js";
 import { TextInput } from "@/components";
 import { createBrokerForm } from "@/logic";
 
 export default function BrokerRegister() {
-  // return (
-  //   <div>
-  //     <div class="min-h-screen hero">
-  //       <div class="flex-col lg:flex-row-reverse">
-  //         <div class="flex-shrink-0 w-full max-w-sm shadow-2xl card bg-base-100">
-  //           <div class="form-control">
-  //             <label class="label">
-  //               <span class="label-text">Password</span>
-  //             </label>
-  //             <input
-  //               type="text"
-  //               placeholder="password"
-  //               class="input input-bordered"
-  //             />
-  //             <label class="label">
-  //               <a href="#" class="label-text-alt link link-hover">
-  //                 Forgot password?
-  //               </a>
-  //             </label>
-  //           </div>
-  //           <div class="mt-6 form-control">
-  //             <button class="btn btn-primary">Login</button>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
-
-  const { form, updateFormField, submit, clearField } = createBrokerForm();
+  const { form, updateFormField, submit, clearField, addCustomAttribute } = createBrokerForm();
 
   const handleSubmit = (event: Event): void => {
     event.preventDefault();
@@ -45,20 +14,37 @@ export default function BrokerRegister() {
     <div>
       <form onSubmit={handleSubmit} class="p-8">
         <TextInput
-          label="name"
+          label=" Broker name"
           placeholder="e.g. Farm Broker"
           name="Name"
           value={form.name}
           onChange={updateFormField("name")}
         />
         <TextInput
-          label="endpoint"
+          label="Endpoint"
           name="Endpoint"
           value={form.endpoint}
           onChange={updateFormField("endpoint")}
         />
+        
+        {/* Render custom attributes */}
+        {form.customAttributes.map((attr, index) => (
+          
+            <TextInput
+              label={`Other information`}
+              placeholder="Fill in any other information that you would like to add"
+              name={`Custom Attribute ${index + 1}`}
+              value={attr}
+              onChange={updateFormField("customAttributes", index)}
+            />
+          
+        ))}
+        
         <div class="flex flex-row justify-center mt-4">
-          <input class="btn" type="submit" value="Register Broker" />
+          <button class="btn" type="button" onClick={addCustomAttribute}>
+            Add Custom Attribute
+          </button>
+          <input class="btn ml-2" type="submit" value="Register Broker" />
         </div>
       </form>
       <pre>{JSON.stringify(form, null, 2)}</pre>
