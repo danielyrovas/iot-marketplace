@@ -40,6 +40,7 @@ export const QueryInput = (props: QueryInputProps) => {
     event.preventDefault();
     const selectedPresetQuery = presetQueries[selectedQuery()].query;
     props.executeQuery(selectedPresetQuery);
+    console.log(props)
   };
 
   return (
@@ -53,7 +54,7 @@ export const QueryInput = (props: QueryInputProps) => {
             </option>
           ))}
         </select>
-        <button type="submit">Execute Query</button>
+        <button type="submit" >Execute Query</button>
       </form>
     </div>
   );
