@@ -3,14 +3,20 @@ import { TextInput } from "@/components";
 import { createBrokerForm } from "@/logic";
 
 export default function BrokerRegister() {
-  const { form, updateFormField, submit, clearField, addCustomAttribute } = createBrokerForm();
+  const {
+    form,
+    updateFormField,
+    submit,
+    clearField,
+    addCustomAttribute,
+    removeCustomAttribute, 
+  } = createBrokerForm();
 
   const handleSubmit = (event: Event): void => {
     event.preventDefault();
     submit(form);
   };
- 
-  
+
   return (
     <div>
       <form onSubmit={handleSubmit} class="p-8">
@@ -27,10 +33,10 @@ export default function BrokerRegister() {
           value={form.endpoint}
           onChange={updateFormField("endpoint")}
         />
-        
+
         {/* Render custom attributes */}
         {form.customAttributes.map((attr, index) => (
-          
+          <div class="flex">
             <TextInput
               label={`Other information`}
               placeholder="Fill in any other information that you would like to add"
@@ -38,12 +44,19 @@ export default function BrokerRegister() {
               value={attr}
               onChange={updateFormField("customAttributes", index)}
             />
-          
+            <button
+              class="btn ml-2"
+              type="button"
+              onClick={() => removeCustomAttribute(index)}
+            >
+              Delete
+            </button>
+          </div>
         ))}
-        
+
         <div class="flex flex-row justify-center mt-4">
           <button class="btn" type="button" onClick={addCustomAttribute}>
-           Add other desired information
+            Add other desired information
           </button>
           <input class="btn ml-2" type="submit" value="Register Broker" />
         </div>

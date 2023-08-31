@@ -3,7 +3,7 @@ import { createStore } from "solid-js/store";
 type FormFields = {
   endpoint: string;
   name?: string;
-  customAttributes: string[]; 
+  customAttributes: string[];
 };
 
 const submit = (form: FormFields) => {
@@ -19,7 +19,7 @@ export const createBrokerForm = () => {
   const [form, setForm] = createStore<FormFields>({
     name: "",
     endpoint: "",
-    customAttributes: [], 
+    customAttributes: [],
   });
 
   const clearField = (fieldName: string) => {
@@ -35,7 +35,9 @@ export const createBrokerForm = () => {
     return true;
   };
 
-  const updateFormField = (fieldName: string, index?: number) => (event: Event) => {
+  const updateFormField = (fieldName: string, index?: number) => (
+    event: Event
+  ) => {
     const inputElement = event.currentTarget as HTMLInputElement;
 
     if (!is_valid(fieldName, inputElement.value)) {
@@ -63,5 +65,20 @@ export const createBrokerForm = () => {
     }));
   };
 
-  return { form, submit, updateFormField, clearField, addCustomAttribute };
+  const removeCustomAttribute = (index: number) => {
+    const updatedAttributes = [...form.customAttributes];
+    updatedAttributes.splice(index, 1);
+    setForm({
+      customAttributes: updatedAttributes,
+    });
+  };
+
+  return {
+    form,
+    submit,
+    updateFormField,
+    clearField,
+    addCustomAttribute,
+    removeCustomAttribute,
+  };
 };
