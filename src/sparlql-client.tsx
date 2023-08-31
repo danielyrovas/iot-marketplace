@@ -29,11 +29,12 @@ const sQL: Component = () => {
   return (
     <div>
       <h1>RDF Data Viewer</h1>
+      <h2> &nbsp </h2>
       <QueryInput executeQuery={fetchRdfData} />
       {rdfData() !== null ? (
         <RdfDataDisplay rdfData={memoRdfData()} />
       ) : (
-        <div>Loading RDF data...</div>
+        <div>No query have been executed...</div>
       )}
     </div>
   );

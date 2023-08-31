@@ -6,21 +6,21 @@ interface QueryInputProps {
 
 const presetQueries = [
   {
-    label: 'Query 1',
+    label: 'Query 1 - Name ',
     query: `SELECT ?person ?personLabel WHERE {
       ?person wdt:P19 wd:Q84;
       SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
     } LIMIT 10`,
   },
   {
-    label: 'Query 2',
+    label: 'Query 2 - City ',
     query: `SELECT ?city ?cityLabel WHERE {
       ?city wdt:P31 wd:Q515.
       SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
     } LIMIT 10`,
   },
   {
-    label: 'Query 3',
+    label: 'Query 3 - Country ',
     query: `SELECT ?country ?countryLabel WHERE {
       ?country wdt:P31 wd:Q6256.
       SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }

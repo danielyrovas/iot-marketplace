@@ -16,6 +16,7 @@ export const RdfDataDisplay: Component<RdfDataDisplayProps> = (props) => {
   if (!results || results.length === 0) {
     return <div>No RDF data to display.</div>;
   }
+  console.log(results);
  const [ts, setTs] = createStore()
   const headers = Object.keys(results[0]);
 
@@ -24,7 +25,7 @@ export const RdfDataDisplay: Component<RdfDataDisplayProps> = (props) => {
  
 
   return (
-    <div>
+    <div >
         
 
         {console.log(props.rdfData?.results?.bindings[0])}
