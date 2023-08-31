@@ -5,7 +5,14 @@ type FormFields = {
   costPerMinute?: string;
   costPerKB?: string;
   integrationBroker?: string;
+  extraNodes?: extraNodesFields[];  
 };
+
+type extraNodesFields = {
+    rdfSubject: string;
+    rdfPredicate: string;
+    rdfObject: string;
+}
 
 const submit = (form: FormFields) => {
   const dataToSubmit = {
@@ -22,8 +29,22 @@ export const createSensorForm = () => {
     name: "",
     costPerMinute: "",
     costPerKB: "",
-    integrationBroker: "",
+    integrationBroker: "",  
+    extraNodes: [{
+	rdfSubject: "",
+	rdfPredicate: "",
+	rdfObject: "",
+    }],
   });
+
+  const extraNodes = () => {
+      const [node, setNode] = createStore([]);
+      let nodeId = 0;
+  }
+
+    const addNode = () => {
+	setNode([...node, {id: ++nodeId, text}]);
+  }
 
   const clearField = (fieldName: string) => {
     setForm({
@@ -44,7 +65,7 @@ export const createSensorForm = () => {
     // validate field and set error border
     // TODO: add alt-text error message
     if (!is_valid(inputElement.name, inputElement.value)) {
-      inputElement.classList.add("input-error");
+	inputElement.classList.add("input-error");
     } else {
       inputElement.classList.remove("input-error");
     }
@@ -58,6 +79,17 @@ export const createSensorForm = () => {
         [inputElement.name]: inputElement.value,
       });
     }
+
+      if (inputElement.name === "rdfSubject") {
+	  setForm('extraNodes', 0, {rdfSubject: inputElement.value});
+	  setForm('extraNodes', 1, {rdfSubject: inputElement.value});
+      } else if (inputElement.name === "rdfPredicate") {
+	  setForm('extraNodes', 0, {rdfPredicate: inputElement.value});
+	  setForm('extraNodes', 1, {rdfPredicate: inputElement.value});
+      } else if (inputElement.name === "rdfObject") {
+	  setForm('extraNodes', 0, {rdfObject: inputElement.value});
+	  setForm('extraNodes', 1, {rdfObject: inputElement.value});
+      }
   };
 
   return { form, submit, updateFormField, clearField };

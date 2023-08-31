@@ -35,6 +35,24 @@ export default function SensorRegister() {
           name="integrationBroker"
           value={form.integrationBroker}
           onChange={updateFormField()}
+          />  
+	<TextInput
+          label="RDF Subject 1"
+          name="rdfSubject"
+          value={form.rdfSubject}
+          onChange={updateFormField()}
+          />
+	<TextInput
+          label="RDF Predicate 1"
+          name="rdfPredicate"
+          value={form.rdfPredicate}
+          onChange={updateFormField()}
+          />
+	<TextInput
+          label="RDF Object 1"
+          name="rdfObject"
+          value={form.rdfObject}
+          onChange={updateFormField()}
           />
         <div class="flex flex-row justify-center mt-4">
           <input class="btn" type="submit" value="Register Sensor" />
