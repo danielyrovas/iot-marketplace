@@ -42,7 +42,7 @@ export default function BrokerRegister() {
         
         <div class="flex flex-row justify-center mt-4">
           <button class="btn" type="button" onClick={addCustomAttribute}>
-            Add Custom Attribute
+           Add other desired information
           </button>
           <input class="btn ml-2" type="submit" value="Register Broker" />
         </div>
