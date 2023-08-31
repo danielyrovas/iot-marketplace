@@ -1,20 +1,17 @@
-//validation
 import { createStore } from "solid-js/store";
 
 type FormFields = {
   endpoint: string;
   name?: string;
+  customAttributes: string[];
 };
 
 const submit = (form: FormFields) => {
-  // here we can:
-  // filter out unneeded data, e.g. the checkbox sameAsAddress
-  // map fields, if needed, e.g. shipping_address
   const dataToSubmit = {
     name: form.name,
     endpoint: form.endpoint,
+    customAttributes: form.customAttributes,
   };
-  // should be submitting your form to some backend service
   console.log('submitting ${JSON.stringify(dataToSubmit)}');
 };
 
@@ -22,6 +19,7 @@ export const createBrokerForm = () => {
   const [form, setForm] = createStore<FormFields>({
     name: "",
     endpoint: "",
+    customAttributes: [],
   });
 
   const clearField = (fieldName: string) => {
@@ -37,20 +35,22 @@ export const createBrokerForm = () => {
     return true;
   };
 
-  const updateFormField = (fieldName: string) => (event: Event) => {
+  const updateFormField = (fieldName: string, index?: number) => (
+    event: Event
+  ) => {
     const inputElement = event.currentTarget as HTMLInputElement;
 
-    // validate field and set error border
-    // TODO: add alt-text error message
     if (!is_valid(fieldName, inputElement.value)) {
       inputElement.classList.add("input-error");
     } else {
       inputElement.classList.remove("input-error");
     }
 
-    if (inputElement.type === "checkbox") {
+    if (fieldName === "customAttributes" && index !== undefined) {
+      const updatedAttributes = [...form.customAttributes];
+      updatedAttributes[index] = inputElement.value;
       setForm({
-        [fieldName]: !!inputElement.checked,
+        customAttributes: updatedAttributes,
       });
     } else {
       setForm({
@@ -59,5 +59,26 @@ export const createBrokerForm = () => {
     }
   };
 
-  return { form, submit, updateFormField, clearField };
+  const addCustomAttribute = () => {
+    setForm((prevForm) => ({
+      customAttributes: [...prevForm.customAttributes, ""],
+    }));
+  };
+
+  const removeCustomAttribute = (index: number) => {
+    const updatedAttributes = [...form.customAttributes];
+    updatedAttributes.splice(index, 1);
+    setForm({
+      customAttributes: updatedAttributes,
+    });
+  };
+
+  return {
+    form,
+    submit,
+    updateFormField,
+    clearField,
+    addCustomAttribute,
+    removeCustomAttribute,
+  };
 };
