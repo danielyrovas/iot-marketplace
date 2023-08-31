@@ -3,7 +3,7 @@ import { createStore } from "solid-js/store";
 type FormFields = {
   endpoint: string;
   name?: string;
-  customAttributes: string[]; // Add customAttributes array
+  customAttributes: string[]; 
 };
 
 const submit = (form: FormFields) => {
@@ -13,14 +13,13 @@ const submit = (form: FormFields) => {
     customAttributes: form.customAttributes,
   };
   console.log(`submitting ${JSON.stringify(dataToSubmit)}`);
-  // Here, you can perform the actual submission to your backend service
 };
 
 export const createBrokerForm = () => {
   const [form, setForm] = createStore<FormFields>({
     name: "",
     endpoint: "",
-    customAttributes: [], // Initialize empty array for custom attributes
+    customAttributes: [], 
   });
 
   const clearField = (fieldName: string) => {
