@@ -5,13 +5,13 @@ import { RdfDataDisplay } from './RdfDataDisplay';
 import { N3Parser } from 'rdflib';
 import * as rdf from 'rdflib';
 import { json } from 'stream/consumers';
+import { JsonLdArray } from 'jsonld/jsonld-spec';
 const sQL = () => {
-  const [rdfData, setRdfData] = createSignal<any[]>([]);
+  const [rdfData, setRdfData] = createSignal<JsonLdArray>([]);
 
 
   const fetchRdfData = async (query: string) => {
     try {
-        console.log(query);
       const encodedQuery = encodeURIComponent(query);
       const endpointurl = 'https://query.wikidata.org/sparql';
       const headers = { 'Accept': 'application/sparql-results+json' };
@@ -21,8 +21,8 @@ const sQL = () => {
     //   if (!response.ok) {
     //     throw new Error(`HTTP error ${response.status}`);
     //   }
-      const rdfString =  response;
-      console.log(rdfString);
+      
+    //   console.log(response);
     //   const abc = response.body;
       
     // fetchRdfData(query ).then(response => {console.log(JSON.stringify(rdfString, null, 2))});
@@ -31,8 +31,13 @@ const sQL = () => {
 
       // Convert RDF data to JSON-LD format
     //   const jsonldData = await jsonld.fromRDF(rdfString, { format: 'application/n-quads' });
+     const abc = await response.then(body => body);
+    //  console.log(Object.keys(abc));
+     const efg = Object.keys(abc);
+    console.log(efg.length)
+      setRdfData(abc);
 
-      setRdfData(await rdfString);
+      
     //   console.log(jsonldData);
     } catch (error) {
       console.error('Error fetching RDF data:', error);
@@ -42,9 +47,10 @@ const sQL = () => {
   return (
     <div>
       <h1>RDF Data Viewer</h1>
-        <p></p>
+
+        <QueryInput executeQuery={fetchRdfData} />
       <RdfDataDisplay rdfData={rdfData()} />
-      <QueryInput executeQuery={fetchRdfData} />
+      
     </div>
   );
 };
