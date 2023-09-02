@@ -10,30 +10,33 @@ export const Button = (props) => {
 };
 
 export const TextInput = (props) => {
-    const [local, rest] = splitProps(props, [
-        "class",
-        "type",
-        "name",
-        "label",
-        "labelClass",
-        "inputClass",
-    ]);
+    // const [local, rest] = splitProps(props, [
+    //     "class",
+    //     "type",
+    //     "name",
+    //     "label",
+    //     "labelClass",
+    //     "inputClass",
+    // ]);
     return (
-        <div class={"form-control " + (local.class || "")}>
-            <Show when={local.label}>
+        <div class={"form-control " + (props.class || "")}
+        >
+            <Show when={props.label}>
                 <label
-                    class={"label " + (local.labelClass || "")}
-                    for={local.name}
+                    class={"label " + (props.labelClass || "")}
+                    for={props.name}
                 >
-                    <span class="w-full label-text">{local.label}</span>
+                    <span class="w-full label-text">{props.label}</span>
                 </label>
             </Show>
             <input
-                {...rest}
-                name={local.name}
-                type={local.type || "text"}
-                class={"input input-bordered " + (local.inputClass || "")}
+                {...props}
+                type={props.type || "text"}
+                class={"input input-bordered " + (props.inputClass || "")}
             />
+            <Show when={props.key.length > 1 && props.key.length < 60}>
+                <div class="invalid-feedback">{props.invalidMsg}</div>
+            </Show>
         </div>
     );
 };

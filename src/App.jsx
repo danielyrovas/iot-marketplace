@@ -1,6 +1,5 @@
 import { For, lazy, createSignal, Show } from "solid-js";
 import "./App.css";
-import { appWindow } from '@tauri-apps/api/window';
 
 const tabs = [
   {

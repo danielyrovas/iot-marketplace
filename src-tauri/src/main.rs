@@ -5,12 +5,6 @@ use directories::ProjectDirs;
 use serde::{Deserialize, Serialize};
 pub(crate) use std::format as f;
 
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
-fn greet(name: &str) -> String {
-    f!("Hello, {}! You've been greeted from Rust!", name)
-}
-
 #[derive(Debug, Serialize, Deserialize)]
 struct Config {
     wallet_key: Option<String>,
@@ -44,23 +38,19 @@ fn load_config() -> Config {
 }
 
 #[tauri::command(rename_all = "snake_case")]
-fn save_config(config: Config) -> String {
+fn save_config(config: Config) {
     println!("Saving config {:?}", config);
     let dirs = ProjectDirs::from("org", "IoT Marketplace", "SenShaMart")
         .expect("Could not configure cache directory");
     std::fs::create_dir_all(dirs.cache_dir()).expect("Could not create cache directory");
 
-    // if let Ok(file_buf) =
-    // std::fs::read_to_string(dirs.cache_dir().join("conf.json")) {
     let conf_json = serde_json::to_string_pretty(&config).expect("Could not serialize to JSON");
     std::fs::write(dirs.cache_dir().join("conf.json"), conf_json).expect("Could not write to file");
-
-    f!("Saved config {:?}", config)
 }
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet, load_config, save_config])
+        .invoke_handler(tauri::generate_handler![load_config, save_config])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
