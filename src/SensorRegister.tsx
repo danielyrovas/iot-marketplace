@@ -36,45 +36,49 @@ export default function SensorRegister() {
           name="integrationBroker"
           value={form.integrationBroker}
           onChange={updateFormField()}
-          />  
+          />
+	  {/*  
 	<TextInput
-          label="RDF Subject 1"
+          label="RDF Subject"
           name="rdfSubject"
-          value={form.rdfSubject}
+          value={form.extraNodes[0].rdfSubject}
           onChange={updateFormField()}
           />
 	<TextInput
-          label="RDF Predicate 1"
+          label="RDF Predicate"
           name="rdfPredicate"
-          value={form.rdfPredicate}
+          value={form.extraNodes[0].rdfPredicate}
           onChange={updateFormField()}
           />
 	<TextInput
-          label="RDF Object 1"
+          label="RDF Object"
           name="rdfObject"
-          value={form.rdfObject}
+          value={form.extraNodes[0].rdfObject}
           onChange={updateFormField()}
           />
-	  <For each={node}>
-	     {(myNode) => {
-		 const { id } = myNode;
+	   */}
+	  <For each={form.extraNodes}>
+	  {(node, i) => {
 		 return  <div>
-		     <TextInput
-		       label={"RDF Subject" + id}
+		  <TextInput
+	               id={i()}
+	               label={`RDF Subject ${i() + 1}`}
 		       name="rdfSubject"
-		       value={form.rdfSubject[1]}
+	               value={form.extraNodes[i()].rdfSubject}
 		       onChange={updateFormField()}
 		       />
-		     <TextInput
-		       label={"RDF Subject" + id}
+		  <TextInput
+	               id={i()}
+		       label={`RDF Predicate ${i() + 1}`}
 		       name="rdfPredicate"
-		       value={form.rdfPredicate}
+	               value={form.extraNodes[i()].rdfPredicate}
 		       onChange={updateFormField()}
 		       />
-		     <TextInput
-		       label={"RDF Subject" + id}
+		  <TextInput
+	               id={i()}
+		       label={`RDF Object ${i() + 1}`}
 		       name="rdfObject"
-		       value={form.rdfObject}
+	               value={form.extraNodes[i()].rdfObject}
 		       onChange={updateFormField()}
 		       />
 		 </div>
@@ -86,7 +90,6 @@ export default function SensorRegister() {
         </div>
       </form>
 	  <pre>{JSON.stringify(form, null, 2)}</pre>
-	  <pre>{JSON.stringify(node, null, 2)}</pre>
     </div>
   );
 }

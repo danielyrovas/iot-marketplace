@@ -30,7 +30,7 @@ export const createSensorForm = () => {
     costPerMinute: "",
     costPerKB: "",
     integrationBroker: "",  
-    extraNodes: [{
+      extraNodes: [{
 	rdfSubject: "",
 	rdfPredicate: "",
 	rdfObject: "",
@@ -38,10 +38,11 @@ export const createSensorForm = () => {
   });
     let nodeId = 0;
     let nodeFlag = false;
+    let nodeCount = 0
     const [node, setNode] = createStore([]);
 
     const addNode = () => {
-	setNode([...node, { nodeId: ++nodeId }]);
+	setForm('extraNodes', eN => [...eN, {rdfSubject: "", rdfPredicate: "", rdfObject: ""}]);
 	console.log("Adding node...")
     }
 
@@ -84,45 +85,42 @@ export const createSensorForm = () => {
       });
     }
 
-     
-      if (inputElement.name === "rdfSubject" && !(node)) {
-	setForm('extraNodes', 0, {rdfSubject: inputElement.value});
-	if (!(nodeFlag) &&
-	    !(form.extraNodes[0].rdfPredicate) &&
-	    !(form.extraNodes[0].rdfObject)) {
+      if (inputElement.name === "rdfSubject") {
+	setForm('extraNodes', inputElement.id, {rdfSubject: inputElement.value});
+	  if ((!(nodeFlag) || nodeCount === parseInt(inputElement.id)) &&
+	    !(form.extraNodes[inputElement.id].rdfPredicate) &&
+	    !(form.extraNodes[inputElement.id].rdfObject)) {
 	    console.log(nodeFlag);
 	    addNode();
+	    ++nodeCount;
 	    nodeFlag = true;
 	}
-    } else if (inputElement.name === "rdfPredicate" && !(node)) {
-	setForm('extraNodes', 0, {rdfPredicate: inputElement.value});
-	if (!(nodeFlag) &&
-	    !(form.extraNodes[0].rdfSubject) &&
-	    !(form.extraNodes[0].rdfObject)) {
+    } else if (inputElement.name === "rdfPredicate") {
+	setForm('extraNodes', inputElement.id, {rdfPredicate: inputElement.value});
+	if ((!(nodeFlag) || nodeCount === parseInt(inputElement.id)) &&
+	    !(form.extraNodes[inputElement.id].rdfSubject) &&
+	    !(form.extraNodes[inputElement.id].rdfObject)) {
 	    addNode();
+	    ++nodeCount;
 	    nodeFlag = true;
 	}
-    } else if (inputElement.name === "rdfObject" && !(node)) {
-	setForm('extraNodes', 0, {rdfObject: inputElement.value});
-	if (!(nodeFlag) &&
-	    !(form.extraNodes[0].rdfSubject) &&
-	    !(form.extraNodes[0].rdfPredicate)) {
+    } else if (inputElement.name === "rdfObject") {
+	setForm('extraNodes', inputElement.id, {rdfObject: inputElement.value});
+	if ((!(nodeFlag) || nodeCount === parseInt(inputElement.id)) &&
+	    !(form.extraNodes[inputElement.id].rdfSubject) &&
+	    !(form.extraNodes[inputElement.id].rdfPredicate)) {
 	    addNode();
+	    ++nodeCount;
 	    nodeFlag = true;
 	}
-      }
-
-      // if (inputElement.name === "rdfSubject") {
-      // 	  setForm('extraNodes', 0, {rdfSubject: inputElement.value});
-      // 	  addNode();
+    }
+      //I need a way to get rid of unwanted extraNode items
+      // if (!(form.extraNodes[0].rdfSubject) &&
+      // 	  !(form.extraNodes[0].rdfPredicate) &&
+      // 	  !(form.extraNodes[0].rdfObject)){
+      // 	  removeNode();
+      // 	  nodeFlag = false;
       // }
-
-      if (!(form.extraNodes[0].rdfSubject) &&
-	  !(form.extraNodes[0].rdfPredicate) &&
-	  !(form.extraNodes[0].rdfObject)){
-	  removeNode();
-	  nodeFlag = false;
-      }
       
   };
 
