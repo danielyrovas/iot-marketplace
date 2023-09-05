@@ -1,15 +1,34 @@
-import { createContext, useContext } from "solid-js";
+import { createContext, createResource, createSignal, onMount, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
+import Wallet from "senshamartproject/wallet/wallet";
+import ChainUtil from "senshamartproject/util/chain-util";
+import { load_config } from "./config";
 
-const AppContext = createContext();
+export const AppContext = createContext();
 
-export function ContextProvider(props) {
-    const [config, setConfig] = createStore({
-        wallet_key: ""
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+export function AppContextProvider(props) {
+    const [state, setState] = createStore({
+        loading: true,
+        config: {},
+        keyPair: {},
+        wallet: {},
     });
-    const appState = [
-        config, {}
-    ];
+
+    const appState = [state];
+
+    onMount(async () => {
+        // await sleep(3000);
+        const config = await load_config();
+        setState("config", config);
+        const keyPair = ChainUtil.deserializeKeyPair(config.wallet_key);
+        setState("keyPair", keyPair);
+        const wallet = new Wallet(keyPair);
+        setState("wallet", wallet);
+
+        setState("loading", false); // finished all main loading activity
+    });
 
     return (
         <AppContext.Provider value={appState}>

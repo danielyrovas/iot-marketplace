@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import ChainUtil from "senshamartproject/util/chain-util";
+import { lazy } from "solid-js";
 
 export async function load_config() {
     let config = await invoke("load_config");
@@ -8,7 +9,7 @@ export async function load_config() {
 }
 
 export async function save_config(config) {
-    console.log(JSON.stringify(config));
+    console.log("saving config to disk", JSON.stringify(config));
     return await invoke("save_config", { config: config });
 }
 
