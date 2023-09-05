@@ -3,7 +3,6 @@
 
 use directories::ProjectDirs;
 use serde::{Deserialize, Serialize};
-pub(crate) use std::format as f;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Config {

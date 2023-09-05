@@ -1,11 +1,12 @@
-// import { invoke } from "@tauri-apps/api/tauri";
 import { createSignal } from "solid-js";
 import { TextInput } from "../components/basic";
 import { save_config, load_config } from "../logic/config";
-import { clear_field_message, set_field_message } from "../logic/form";
+import { createForm } from '@felte/solid';
+import { reporter } from '@felte/reporter-solid';
 
 export default function Settings() {
     const [key, setKey] = createSignal("");
+    const [viewEdit, setViewEdit] = createSignal(false);
     const [saveMsg, setSaveMsg] = createSignal("");
     const [loadMsg, setLoadMsg] = createSignal("");
 
@@ -13,48 +14,48 @@ export default function Settings() {
         setSaveMsg(await save_config({ wallet_key: key() }));
     }
     async function load() {
+        console.log('loading');
         setLoadMsg(JSON.stringify(await load_config()));
     }
 
-    const wallet_key_handler = (event) => {
-        const e = event.currentTarget;
-        setKey(e.value)
-        if (key().length > 0 && key().length < 60) {
-            set_field_message(e, "Key is too short");
-        } else if (key().length > 80) {
-            set_field_message(e, "Key is too long");
-        } else {
-            clear_field_message(e)
-        }
-    }
-
+    const { form, errors } = createForm({
+        validate(values) {
+            const errors = {};
+            if (!values.wallet_key) {
+            } else if (values.email.length < 5) {
+                errors.wallet_key = 'your wallet key does not look correct';
+            }
+            return errors;
+        },
+        onSubmit: (values) => {
+            setLoadMsg(JSON.stringify(values));
+        },
+        extend: reporter
+    });
     return (
         <div class="m-[10px]">
+            {load()}
             <div class="flex-row justify-between">
-                <div class="flex justify-center m-4">
-                    <TextInput
-                        label="Wallet Key"
-                        name="wallet_key"
-                        class="w-[30rem]"
-                        key={key()}
-                        onChange={wallet_key_handler}
-                    />
-                </div>
-                <div class="flex justify-center m-4">
-                    <button class="btn" type="button" onClick={() => save()}>
-                        Save
+                {!viewEdit() &&
+                    <button class="btn" onClick={() => setViewEdit(true)}>
+                        Edit
+                        <i class="fa-regular fa-pen-to-square" />
                     </button>
-                </div>
-                <div class="flex justify-center m-4">
-                    <button class="btn" type="button" onClick={() => load()}>
-                        Load Config
-                    </button>
-                </div>
+                }
+                {viewEdit() &&
+                    <form class="flex justify-center m-4" use: form>
+                        <TextInput
+                            label="Wallet Key"
+                            name="wallet_key"
+                            class="w-[30rem]" />
+                        <input class="btn m-4" type="submit" value="Save" />
+                    </form>
+                }
             </div>
 
-            <p>{saveMsg()}</p>
-            <h1>Config:</h1>
-            <p>{loadMsg()}</p>
+            {/* <p>{saveMsg()}</p> */}
+            {/* <h1>Current Config:</h1> */}
+            {/* <p>{loadMsg()}</p> */}
         </div>
     );
 }

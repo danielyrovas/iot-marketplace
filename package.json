@@ -11,6 +11,8 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@felte/reporter-solid": "^1.2.9",
+    "@felte/solid": "^1.2.11",
     "@tauri-apps/api": "^1.4.0",
     "senshamartproject": "file:../SenShaMart",
     "solid-js": "^1.7.8"
