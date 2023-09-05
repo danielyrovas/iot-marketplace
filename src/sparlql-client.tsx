@@ -1,57 +1,43 @@
-import { createSignal } from 'solid-js';
-import * as jsonld from 'jsonld';
+import { createMemo, createSignal, Component, JSX } from 'solid-js';
+
 import { QueryInput } from './QueryInput';
 import { RdfDataDisplay } from './RdfDataDisplay';
-import { N3Parser } from 'rdflib';
-import * as rdf from 'rdflib';
-import { json } from 'stream/consumers';
-const sQL = () => {
-  const [rdfData, setRdfData] = createSignal<any[]>([]);
+import { JsonLdArray } from 'jsonld/jsonld-spec';
 
+const sQL: Component = () => {
+  const [rdfData, setRdfData] = createSignal<JsonLdArray | null>(null);
 
   const fetchRdfData = async (query: string) => {
     try {
-        console.log(query);
       const encodedQuery = encodeURIComponent(query);
       const endpointurl = 'https://query.wikidata.org/sparql';
       const headers = { 'Accept': 'application/sparql-results+json' };
-      const fullUrl = endpointurl + '?query=' + encodeURIComponent( query );
-      const response =  fetch( fullUrl, { headers } ).then( body => body.json() );
-  
-    //   if (!response.ok) {
-    //     throw new Error(`HTTP error ${response.status}`);
-    //   }
-      const rdfString =  response;
-      console.log(rdfString);
-    //   const abc = response.body;
-      
-    // fetchRdfData(query ).then(response => {console.log(JSON.stringify(rdfString, null, 2))});
+      const fullUrl = endpointurl + '?query=' + encodeURIComponent(query);
+      const response = await fetch(fullUrl, { headers });
 
-      
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
 
-      // Convert RDF data to JSON-LD format
-    //   const jsonldData = await jsonld.fromRDF(rdfString, { format: 'application/n-quads' });
-
-      setRdfData(await rdfString);
-    //   console.log(jsonldData);
+      const jsonResponse = await response.json();
+      setRdfData(jsonResponse);
     } catch (error) {
       console.error('Error fetching RDF data:', error);
     }
   };
-
+  const memoRdfData = createMemo(() => rdfData());
   return (
     <div>
       <h1>RDF Data Viewer</h1>
-        <p></p>
-      <RdfDataDisplay rdfData={rdfData()} />
+      <h2> &nbsp </h2>
       <QueryInput executeQuery={fetchRdfData} />
+      {rdfData() !== null ? (
+        <RdfDataDisplay rdfData={memoRdfData()} />
+      ) : (
+        <div>No query have been executed...</div>
+      )}
     </div>
   );
 };
 
 export default sQL;
-
-
-
-
-
