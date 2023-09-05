@@ -1,93 +1,310 @@
 import { createSignal } from "solid-js";
-import { QueryEngine } from "../commuica/comunica/engines/query-sparql-rdfjs/lib";
-import { QueryEngineFactory } from "../commuica/comunica/engines/query-sparql/lib";
-import { Namespace, NamedNode, literal } from 'rdflib';
-import auth from 'solid-auth-client';
-
+import { QueryInput } from './QueryInput';
+import { RdfDataDisplay } from './RdfDataDisplay';
+import { GridRdfDataDisplay } from "./grid-data-display";
 
 export default function Home() {
-
-  const SOSA = Namespace('http://www.w3.org/ns/sosa/');
-  const RDF = Namespace('http://www.w3.org/2000/01/rdf-schema#');
-  const GEO = Namespace('http://www.w3.org/2003/01/geo/wgs84_pos#');
-  
-  const queryEngine =  QueryEngineFactory;
-  const data = [
+ 
+  const datadummy = [
     {
-      image:"https://picsum.photos/id/42/200/200", 
-      title:"Sensor 1",
+      location: "Melbourne",
+      sensortype: "1",
+      person: "1",
     },
     {
-      image:"https://picsum.photos/id/43/200/200", 
-      title:"Sensor 2",
+      location: "Sydney",
+      sensortype: "2",
+      person: "2",
     },
     {
-      image:"https://picsum.photos/id/44/200/200", 
-      title:"Sensor 3",
-    }
-  ]
-const [queryResult, setQueryResult] = createSignal(null);
+      location: "Canberra",
+      sensortype: "3",
+      person: "3",
+    },
+    {
+      location: "Hobart",
+      sensortype: "4",
+      person: "4",
+    },
+    {
+      location: "Brisbane",
+      sensortype: "5",
+      person: "5",
+    },
+    {
+      location: "Queensland",
+      sensortype: "6",
+      person: "6",
+    },
+    {
+      location: "Brisbane",
+      sensortype: "2",
+      person: "7",
+    },
+    {
+      location: "Perth",
+      sensortype: "6",
+      person: "8",
+    },
+    {
+      location: "Sydney",
+      sensortype: "2",
+      person: "9",
+    },
+    {
+      location: "Darwin",
+      sensortype: "2",
+      person: "3",
+    },
+  ];
+  const [popup, setPopup] = createSignal(false);
 
-  async function executeSPARQLQuery() {
-    const query = `
-      SELECT ?sensor ?lat ?long ?measures
-      WHERE {
-        ?sensor sosa:observes ?observes.
-        ?sensor sosa:hasFeatureOfInterest ?location.
-        ?observes rdf:label ?measures.
-        ?location geo:lat ?lat.
-        ?location geo:long ?long.
-        ?observes rdf:label "video".
-      }
-    `;
+  const togglePopup = () => {
+    setPopup(!popup());
+    console.log(popup());
+  };
+  const [popup2, setPopup2] = createSignal(false);
 
+  const togglePopup2 = () => {
+    setPopup2(!popup2());
+    console.log(popup2());
+  };
+
+  const [popup3, setPopup3] = createSignal(false);
+
+  const togglePopup3 = () => {
+    setPopup3(!popup3());
+    console.log(popup3());
+  };
+
+  const citylocation = [
+    {
+      value: "Melbourne",
+      label: "Melbourne",
+    },
+    { value: "Sydney", label: "Sydney" },
+    {
+      value: "Darwin",
+      label: "Darwin",
+    },
+    {
+      value: "Canberra",
+      label: "Canberra",
+    },
+    {
+      value: "Perth",
+      label: "Perth",
+    },
+    {
+      value: "Brisbane",
+      label: "Brisbane",
+    },
+    {
+      value: "Hobart",
+      label: "Hobart",
+    },
+    {
+      value: "Cairns",
+      label: "Cairns",
+    },
+  ];
+
+  const sensortype = [
+    {
+      value: "1",
+      label: "Weather Sensors",
+    },
+    {
+      value: "2",
+      label: "Camera Sensors",
+    },
+    {
+      value: "3",
+      label: "Milk Pressure Sensors",
+    },
+    {
+      value: "4",
+      label: "Air Humidity Sensors",
+    },
+    {
+      value: "5",
+      label: "Air Temperature Sensors",
+    },
+    {
+      value: "6",
+      label: "Milk Temperature Sensors",
+    },
+  ];
+
+  const [filterlocation, setfilterlocation] = createSignal("");
+  const [filtersensor, setfiltersensor] = createSignal("");
+
+  const [rdfData, setRdfData] = createSignal<any[]>([]);
+  const fetchRdfData = async (query: string) => {
     try {
-      const result = await queryEngine.query(query);
-      setQueryResult(result);
+        console.log(query);
+      const encodedQuery = encodeURIComponent(query);
+      const endpointurl = 'https://query.wikidata.org/sparql';
+      const headers = { 'Accept': 'application/sparql-results+json' };
+      const fullUrl = endpointurl + '?query=' + encodeURIComponent( query );
+      const response =  fetch( fullUrl, { headers } ).then( body => body.json() )
+  
+    //   if (!response.ok) {
+    //     throw new Error(`HTTP error ${response.status}`);
+    //   }
+      const rdfString =  response;
+      console.log(await rdfString);
+    //   const abc = response.body;
+      
+    // fetchRdfData(query ).then(response => {console.log(JSON.stringify(rdfString, null, 2))});
+
+      
+
+      // Convert RDF data to JSON-LD format
+    //   const jsonldData = await jsonld.fromRDF(rdfString, { format: 'application/n-quads' });
+
+      setRdfData(await rdfString);
+    //   console.log(jsonldData);
     } catch (error) {
-      console.error('Error executing SPARQL query:', error);
+      console.error('Error fetching RDF data:', error);
     }
-  }
-
-
+  };
+  
   return (
-    <div className="mx-auto p-8 w-full max-w-[1200px] flex flex-col gap-8">
-    <div className="flex flex-row gap-4">
-        <button>Get All Camera Sensors</button>
-        <button>Get All Milk Pressure Sensors</button>
-        <button>Get All Air Temperature Sensors</button>
-        <button>Get All Air Humidity Sensors</button>
-        <button>Get All Milk Temperature Sensors</button>
-        <button>Get All Sensors in Australia</button>
-    </div>       
-     <div className="grid grid-cols-4 gap-4">
-      {data.map((data,index) => (
-                    <div className="bg-white p-4 rounded-lg flex flex-col gap-4" key={index}>
-                    <img src={data.image} />
-                    <p>{data.title}</p>
-                </div>
-      ))}
-
+    <>
+      <div className="mx-auto w-full max-w-[1200px] flex flex-row gap-4 min-h-screen">
+        <div className="w-[300px] p-4 flex flex-col gap-4">
+          <button className="border rounded px-4 py-2" onClick={togglePopup}>
+            Location
+          </button>
+          <button className="border rounded px-4 py-2" onClick={togglePopup2}>
+            Sensor Type
+          </button>
+          <button className="border rounded px-4 py-2" onClick={togglePopup3}>
+            Execute Query
+          </button>
         </div>
-    <div className="sen"></div>
-    <div>
-      <button onClick={executeSPARQLQuery}>Execute Query</button>
-      <div>
-        {queryResult() && (
-          <ul>
-            {queryResult().bindings.map((binding, index) => (
-              <li key={index}>
-                <strong>Sensor:</strong> {binding.sensor.value}<br />
-                <strong>Latitude:</strong> {binding.lat.value}<br />
-                <strong>Longitude:</strong> {binding.long.value}<br />
-                <strong>Measures:</strong> {binding.measures.value}
-              </li>
-            ))}
-          </ul>
-        )}
+        <div className="grow p-4">
+          <div className="grid grid-cols-4 w-full gap-4">
+            {JSON.stringify(rdfData().results, null, 2)}
+          {/* <GridRdfDataDisplay rdfData={rdfData()}/> */}
+          {/* {rdfData() && rdfData().map((data) => (
+                <>
+                  <div className="flex flex-col gap-4 border rounded p-4">
+                    <span>{data.location}</span>
+                    <span>{data.sensortype}</span>
+                  </div>
+                </>
+              ))
+            } */}
+            {/* {!filterlocation
+              ? datadummy.map((data) => (
+                  <>
+                    <div className="flex flex-col gap-4 border rounded p-4">
+                      <span>{data.location}</span>
+                      <span>{data.sensortype}</span>
+                    </div>
+                  </>
+                ))
+              : datadummy
+                  .filter((data) => data.location === filterlocation())
+                  .filter((data) => data.sensortype === filtersensor())
+                  .map((data) => (
+                    <>
+                      <div className="flex flex-col gap-4 border rounded p-4">
+                        <span>{data.location}</span>
+                        <span>{data.sensortype}</span>
+                      </div>
+                    </>
+                  ))} */}
+          </div>
+        </div>
       </div>
+      {popup() && (
+        <div
+          className={`flex items-center justify-center fixed inset-0 backdrop-blur`}
+        >
+          <div className="flex flex-col gap-4 w-full max-w-sm border rounded p-4 bg-white">
+            <div className="flex justify-between">
+              <div>Location</div>
+              <button onClick={togglePopup}>Close</button>
+            </div>
+            <div className="flex flex-col gap-4">
+              <select className="p-2 border" name="" id="">
+                <option value="Australia">Australia</option>
+              </select>
+              {/* <select className="p-2 border" name="" id="">
+                <option value="State">State</option>
+              </select> */}
+              <select
+                className="p-2 border"
+                name=""
+                id=""
+                onChange={(data) => {
+                  setfilterlocation(data.target.value);
+                  console.log(filterlocation());
+                }}
+              >
+                {citylocation.map((data) => (
+                  <option key={data.value} value={data.value}>
+                    {data.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+      )}
+      {popup2() && (
+        <div
+          className={`flex items-center justify-center fixed inset-0 backdrop-blur`}
+        >
+          <div className="flex flex-col gap-4 w-full max-w-sm border rounded p-4 bg-white">
+            <div className="flex justify-between">
+              <div>Sensor Type</div>
+              <button onClick={togglePopup2}>Close</button>
+            </div>
+            <div className="flex flex-col gap-4">
+              <select
+                className="p-2 border"
+                name=""
+                id=""
+                onChange={(data) => {
+                  setfiltersensor(data.target.value);
+                  console.log(filtersensor());
+                }}
+              >
+                {sensortype.map((data) => (
+                  <option key={data.value} value={data.value}>
+                    {data.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+      )}
+      {popup3() && (
+        <div
+          className={`flex items-center justify-center fixed inset-0 backdrop-blur`}
+        >
+          <div className="flex flex-col gap-4 w-full max-w-sm border rounded p-4 bg-white">
+            <div className="flex justify-between">
+              <div>Execute Query</div>
+              <button onClick={togglePopup3}>Close</button>
+            </div>
+            <div className="flex flex-col gap-4">
+            <QueryInput executeQuery={fetchRdfData} />
+            </div>
+          </div>
+        </div>
+      )}
+        <div>
+      <h1>RDF Data Viewer</h1>
+        <p></p>
+      <RdfDataDisplay rdfData={rdfData()} />
+      <QueryInput executeQuery={fetchRdfData} />
     </div>
-</div>
-
+    </>
   );
 }
