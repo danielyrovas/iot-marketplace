@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js";
+import { createSignal, createEffect } from "solid-js"; 
 import { QueryInput } from './QueryInput';
 import { RdfDataDisplay } from './RdfDataDisplay';
 import { GridRdfDataDisplay } from "./grid-data-display";
@@ -140,6 +140,7 @@ export default function Home() {
   const [filtersensor, setfiltersensor] = createSignal("");
 
   const [rdfData, setRdfData] = createSignal<any[]>([]);
+  const [mapData, setMapData] = createSignal([]);
   const fetchRdfData = async (query: string) => {
     try {
         console.log(query);
@@ -169,7 +170,11 @@ export default function Home() {
       console.error('Error fetching RDF data:', error);
     }
   };
-  
+  createEffect(() => {
+    let forMap = JSON.parse(JSON.stringify(rdfData()));
+    console.log(forMap.results.bindings);
+    setMapData(forMap.results.bindings);
+  });
   return (
     <>
       <div className="mx-auto w-full max-w-[1200px] flex flex-row gap-4 min-h-screen">
@@ -186,7 +191,30 @@ export default function Home() {
         </div>
         <div className="grow p-4">
           <div className="grid grid-cols-4 w-full gap-4">
-            {JSON.stringify(rdfData().results, null, 2)}
+          {mapData() !== null
+          ? mapData().map((data) => {
+              if (data.personLabel) {
+                return (
+                  <div className="p-4 border rounded bg-white">
+                    {data.personLabel.value}
+                  </div>
+                );
+              } else if (data.cityLabel) {
+                return (
+                  <div className="p-4 border rounded bg-white">
+                    {data.cityLabel.value}
+                  </div>
+                );
+              } else if (data.countryLabel) {
+                return (
+                  <div className="p-4 border rounded bg-white">
+                    {data.countryLabel.value}
+                  </div>
+                );
+              }
+            })
+          : "No Data"}
+            {/* {JSON.stringify(rdfData().results, null, 2)} */}
           {/* <GridRdfDataDisplay rdfData={rdfData()}/> */}
           {/* {rdfData() && rdfData().map((data) => (
                 <>
@@ -217,7 +245,7 @@ export default function Home() {
                       </div>
                     </>
                   ))} */}
-          </div>
+            </div>
         </div>
       </div>
       {popup() && (
