@@ -1,6 +1,44 @@
-import { Component, createEffect } from "solid-js";
+// SingleFile.tsx
+
+import { Component, createEffect, createSignal } from "solid-js";
 import { TextInput } from "@/components";
 import { createBrokerForm } from "@/logic";
+
+interface ConfirmationBoxProps {
+  message: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
+function ConfirmationBox({
+  message,
+  onConfirm,
+  onCancel,
+}: ConfirmationBoxProps) {
+  const [isVisible, setIsVisible] = createSignal(true);
+
+  const handleConfirm = () => {
+    onConfirm();
+    setIsVisible(false);
+  };
+
+  const handleCancel = () => {
+    onCancel();
+    setIsVisible(false);
+  };
+
+  return (
+    <>
+      {isVisible() && (
+        <div class="confirmation-box">
+          <p>{message}</p>
+          <button onClick={handleConfirm}>Confirm</button>
+          <button onClick={handleCancel}>Cancel</button>
+        </div>
+      )}
+    </>
+  );
+}
 
 export default function BrokerRegister() {
   const {
@@ -12,19 +50,35 @@ export default function BrokerRegister() {
     removeCustomAttribute,
   } = createBrokerForm();
 
-  const handleSubmit = (event: Event): void => {
+  const [showConfirmation, setShowConfirmation] = createSignal(false);
+
+  const handleSubmit = (event: Event) => {
     event.preventDefault();
-    submit(form);
+    setShowConfirmation(true);
   };
 
-  const handleReset = (): void => {
-    clearField(); // Add a function to clear all form fields in your logic.
+  const handleConfirmSubmit = () => {
+    submit(form);
+    setShowConfirmation(false);
+  };
+  const handleCancel = () => {
+    clearAllFields();
+    setShowConfirmation(false);
+  };
+
+  const handleReset = () => {
+    clearField();
+  };
+
+  const clearAllFields = () => {
+    clearField();
+    // Add any additional clearing logic here
   };
 
   return (
     <div>
       <form onSubmit={handleSubmit} class="p-8">
-        <TextInput
+      <TextInput
           label=" Broker name"
           placeholder="e.g. Farm Broker"
           name="Name"
@@ -42,9 +96,9 @@ export default function BrokerRegister() {
         {form.customAttributes.map((attr, index) => (
           <div class="flex">
             <TextInput
-              label={`Other information`}
+              label={'Other information'}
               placeholder="Fill in any other information that you would like to add"
-              name={`Custom Attribute ${index + 1}`}
+              name={'Custom Attribute ${index + 1}'}
               value={attr}
               onChange={updateFormField("customAttributes", index)}
             />
@@ -68,7 +122,16 @@ export default function BrokerRegister() {
           </button>
         </div>
       </form>
+
       <pre>{JSON.stringify(form, null, 2)}</pre>
+
+      {showConfirmation() && (
+        <ConfirmationBox
+          message="Are you sure you want to submit this form?"
+          onConfirm={handleConfirmSubmit}
+          onCancel={handleCancel}
+        />
+      )}
     </div>
   );
 }
