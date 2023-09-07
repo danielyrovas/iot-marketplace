@@ -16,6 +16,10 @@ const tabs = [
     component: lazy(() => import("./pages/registerBroker")),
   },
   {
+    name: 'Query', title: 'IoT Marketplace: Query Engine',
+    component: lazy(() => import("./pages/sparlql-client")),
+  },
+  {
     name: 'Garbungo', title: 'EXPERIMENT: GARBUNGO',
     component: lazy(() => import("./pages/experiment")),
   },
