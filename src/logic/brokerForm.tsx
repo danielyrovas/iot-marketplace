@@ -22,9 +22,11 @@ export const createBrokerForm = () => {
     customAttributes: [],
   });
 
-  const clearField = (fieldName: string) => {
+  const clearField = () => {
     setForm({
-      [fieldName]: "",
+      name: '',
+      endpoint: '',
+      customAttributes: [],
     });
   };
 
@@ -49,18 +51,21 @@ export const createBrokerForm = () => {
     if (fieldName === "customAttributes" && index !== undefined) {
       const updatedAttributes = [...form.customAttributes];
       updatedAttributes[index] = inputElement.value;
-      setForm({
+      setForm((prevForm) => ({
+        ...prevForm,
         customAttributes: updatedAttributes,
-      });
+      }));
     } else {
-      setForm({
+      setForm((prevForm) => ({
+        ...prevForm,
         [fieldName]: inputElement.value,
-      });
+      }));
     }
   };
 
   const addCustomAttribute = () => {
     setForm((prevForm) => ({
+      ...prevForm,
       customAttributes: [...prevForm.customAttributes, ""],
     }));
   };
@@ -68,8 +73,17 @@ export const createBrokerForm = () => {
   const removeCustomAttribute = (index: number) => {
     const updatedAttributes = [...form.customAttributes];
     updatedAttributes.splice(index, 1);
-    setForm({
+    setForm((prevForm) => ({
+      ...prevForm,
       customAttributes: updatedAttributes,
+    }));
+  };
+
+  const clearAllFields = () => {
+    setForm({
+      name: "",
+      endpoint: "",
+      customAttributes: [],
     });
   };
 
@@ -80,5 +94,6 @@ export const createBrokerForm = () => {
     clearField,
     addCustomAttribute,
     removeCustomAttribute,
+    clearAllFields, // Add this function to clear all fields
   };
 };

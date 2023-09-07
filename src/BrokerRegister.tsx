@@ -9,12 +9,16 @@ export default function BrokerRegister() {
     submit,
     clearField,
     addCustomAttribute,
-    removeCustomAttribute, 
+    removeCustomAttribute,
   } = createBrokerForm();
 
   const handleSubmit = (event: Event): void => {
     event.preventDefault();
     submit(form);
+  };
+
+  const handleReset = (): void => {
+    clearField(); // Add a function to clear all form fields in your logic.
   };
 
   return (
@@ -59,6 +63,9 @@ export default function BrokerRegister() {
             Add other desired information
           </button>
           <input class="btn ml-2" type="submit" value="Register Broker" />
+          <button class="btn ml-2" type="button" onClick={handleReset}>
+            Reset
+          </button>
         </div>
       </form>
       <pre>{JSON.stringify(form, null, 2)}</pre>
