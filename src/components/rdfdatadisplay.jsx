@@ -1,19 +1,17 @@
 import { createStore } from 'solid-js/store';
 
 export const RdfDataDisplay = (props) => {
-  if (props.rdfData === null) {
-    return <div>Loading RDF data...</div>;
+  if (props.rdfData === null|| props.rdfData === undefined) {
+    return <div>No data available...</div>;
   }
-  console.log(props.rdfData);
+
   const results = props.rdfData?.results?.bindings;
   if (!results || results.length === 0) {
     return <div>No RDF data to display.</div>;
   }
-  console.log(results);
-  const [ts, setTs] = createStore();
-  const headers = Object.keys(results[0]);
 
-  console.log(headers);
+  console.log(props.rdfData);
+  const [ts, setTs] = createStore();
   setTs(props.rdfData);
 
   return (
@@ -27,7 +25,7 @@ export const RdfDataDisplay = (props) => {
       <table>
         <thead>
           <tr>
-            {Object.keys(props.rdfData?.results?.bindings[0]).map((header) => (
+            {Object.keys(props.rdfData?.results?.bindings[0]||{'no data available':'value'}).map((header) => (
               <th key={header}>{header}</th>
             ))}
           </tr>
@@ -35,9 +33,9 @@ export const RdfDataDisplay = (props) => {
         <tbody>
           {props.rdfData?.results?.bindings.map((binding, rowIndex) => (
             <tr key={rowIndex}>
-              {Object.keys(props.rdfData?.results?.bindings[0]).map((header) => (
+              {Object.keys(props.rdfData?.results?.bindings[0]||{'no data available':'value'}).map((header) => (
                 <td key={header}>
-                  {binding[header]?.value} &nbsp; &nbsp; 
+                  {binding[header]?.value ?? 'N/A'} &nbsp; &nbsp; 
                 </td>
               ))}
             </tr>
