@@ -35,7 +35,7 @@ export default function App() {
       .matches ? true : false
   );
   const [tabIndex, setTabIndex] = createSignal(0);
-  const [appState] = useAppContext();
+  const [appState, { updateConfig }] = useAppContext();
 
   return (
     <div class="w-full h-full">
