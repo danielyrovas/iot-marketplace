@@ -16,10 +16,6 @@ const tabs = [
     component: lazy(() => import("./pages/registerBroker")),
   },
   {
-    name: 'Garbungo', title: 'EXPERIMENT: GARBUNGO',
-    component: lazy(() => import("./pages/experiment")),
-  },
-  {
     name: 'Configuration', title: 'IoT Marketplace: Configuration',
     component: lazy(() => import("./pages/settings")),
   },
