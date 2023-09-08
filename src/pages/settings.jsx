@@ -1,7 +1,7 @@
 import { createSignal } from "solid-js";
 import { TextInput } from "../components/basic";
 import { createForm } from '@felte/solid';
-import { reporter } from '@felte/reporter-solid';
+import { reporter, ValidationMessage } from '@felte/reporter-solid';
 import { useAppContext } from "../logic/context";
 import ChainUtil from "senshamartproject/util/chain-util";
 

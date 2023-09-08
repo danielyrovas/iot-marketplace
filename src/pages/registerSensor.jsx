@@ -5,27 +5,41 @@ import { reporter } from '@felte/reporter-solid';
 import { TextInput } from "../components/basic";
 import { createStore } from 'solid-js/store';
 
+const isNumeric = (str) => {
+    if (typeof str != "string") return false
+    return !isNaN(str) && !isNaN(parseFloat(str))
+}
+
 export default function RegisterSensor() {
     // const [state, { updateConfig }] = useAppContext();
     const [extraNodes, setExtraNodes] = createStore([]);
     const [data, setData] = createSignal('');
     const { form, errors, setFields, createSubmitHandler } = createForm({
         validate(values) {
+
             const errors = {};
+            if (!values.name) {
+            } else if (values.name.length < 5) {
+                errors.name = "please add a descriptive name";
+            }
+            if (!values.costPerMinute) {
+            } else if (!isNumeric(values.costPerMinute)) {
+                errors.costPerMinute = "please use integers";
+            }
             return errors;
         },
         onSubmit: (values) => {
-            console.log(JSON.stringify(values));
-            console.log(JSON.stringify(extraNodes));
-            setData(JSON.stringify(values, null, 2));
-            // updateConfig("wallet_key", values.wallet_key);
-            // setViewEdit(false);
+            // console.log(JSON.stringify(values));
+            // console.log(JSON.stringify(extraNodes));
         },
         extend: reporter,
     });
 
     const realSubmit = createSubmitHandler({
-        onSubmit: (values) => console.log('Alternative onSubmit', JSON.stringify(values, null, 2)),
+        onSubmit: (values) => {
+            console.log('Alternative onSubmit', JSON.stringify(values, null, 2))
+            setData(JSON.stringify(values, null, 2));
+        }
     });
 
     return (
