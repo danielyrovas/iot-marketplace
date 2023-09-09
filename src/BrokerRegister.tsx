@@ -1,5 +1,3 @@
-// SingleFile.tsx
-
 import { Component, createEffect, createSignal } from "solid-js";
 import { TextInput } from "@/components";
 import { createBrokerForm } from "@/logic";
