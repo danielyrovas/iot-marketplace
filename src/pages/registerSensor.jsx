@@ -1,9 +1,10 @@
 import { createForm } from '@felte/solid';
 import { createSignal, For, Show } from "solid-js";
 import { reporter } from '@felte/reporter-solid';
-// import { useAppContext } from "../logic/context";
+import { useAppContext } from "../logic/context";
 import { TextInput } from "../components/basic";
 import { createStore } from 'solid-js/store';
+import ChainUtil from "senshamartproject/util/chain-util";
 
 const isNumeric = (str) => {
     if (typeof str != "string") return false
@@ -11,7 +12,7 @@ const isNumeric = (str) => {
 }
 
 export default function RegisterSensor() {
-    // const [state, { updateConfig }] = useAppContext();
+    const [state, { updateConfig }] = useAppContext();
     const [extraNodes, setExtraNodes] = createStore([]);
     const [data, setData] = createSignal('');
     const { form, errors, setFields, createSubmitHandler } = createForm({
@@ -39,6 +40,46 @@ export default function RegisterSensor() {
         onSubmit: (values) => {
             console.log('Alternative onSubmit', JSON.stringify(values, null, 2))
             setData(JSON.stringify(values, null, 2));
+
+            values.costPerMinute = parseInt(values.costPerMinute);
+            values.costPerKB = parseInt(values.costPerKB);
+
+            const sensorRegistrationValidators = {
+                sensorName: ChainUtil.validateIsString,
+                costPerMinute: ChainUtil.createValidateIsIntegerWithMin(0),
+                costPerKB: ChainUtil.createValidateIsIntegerWithMin(0),
+                integrationBroker: ChainUtil.validateIsString,
+                rewardAmount: ChainUtil.createValidateIsIntegerWithMin(0),
+                extraNodeMetadata: ChainUtil.createValidateOptional(
+                    ChainUtil.validateIsObject),
+                extraLiteralMetadata: ChainUtil.createValidateOptional(
+                    ChainUtil.validateIsObject)
+            };
+            const validateRes = ChainUtil.validateObject(values, sensorRegistrationValidators);
+
+            if (!validateRes.result) {
+                setData(`${data()}\n${validateRes.reason}`);
+                return;
+            }
+
+            // try {
+            //     const reg = wallet.createSensorRegistrationAsTransaction(
+            //         blockchain,
+            //         values.rewardAmount,
+            //         values.sensorName,
+            //         values.costPerMinute,
+            //         values.costPerKB,
+            //         values.integrationBroker,
+            //         values.extraNodeMetadata,
+            //         values.extraLiteralMetadata
+            //     );
+            //     chainServer.sendTx(reg);
+            //
+            //     // tx: reg.transaction
+            // } catch (err) {
+            //     console.log(err);
+            //     setData(`${data()}\n${err.message}`);
+            // }
         }
     });
 
@@ -49,7 +90,7 @@ export default function RegisterSensor() {
                     <TextInput
                         class="w-[40rem]"
                         label="Name"
-                        name="name"
+                        name="sensorName"
                     />
                     <TextInput
                         class="w-[40rem]"
@@ -95,7 +136,7 @@ export default function RegisterSensor() {
                 </For>
                 <div class="flex flex-col place-items-center m-2">
                     <div class="flex flex-row justify-end w-[40rem] ">
-                        <Show when={extraNodes.length > 1}>
+                        <Show when={extraNodes.length > 0}>
                             <button class="btn btn-primary p-4" onClick={
                                 () => {
                                     setExtraNodes(extraNodes.slice(0, -1));

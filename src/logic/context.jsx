@@ -3,15 +3,23 @@ import { createStore } from "solid-js/store";
 import Wallet from "senshamartproject/wallet/wallet";
 import ChainUtil from "senshamartproject/util/chain-util";
 import { load_config, save_config } from "./config";
+import Blockchain from "senshamartproject/blockchain/blockchain";
+import BlockchainProp from "senshamartproject/network/blockchain-prop";
+import { invoke } from "@tauri-apps/api";
+
+'use strict';
 
 export const AppContext = createContext();
 
 export function AppContextProvider(props) {
     const [state, setState] = createStore({
         loading: true,
-        config: {},
-        keyPair: {},
-        wallet: {},
+        config: null,
+        keyPair: null,
+        wallet: null,
+        blockchain: null,
+        chainServer: null,
+        raw_persisted_chain: null,
     });
 
     const updateConfig = (key, value) => {
@@ -32,8 +40,26 @@ export function AppContextProvider(props) {
         const wallet = new Wallet(keyPair);
         setState("wallet", wallet);
 
+        // TODO: save if there is an existing chain
+        //
+        // if (state.blockchain !== null) {
+        // Blockchain.saveToDisk(state.config.blockchain_location)
+        // }
+        const raw_persisted_chain = await invoke("load_blockchain");
+        setState("raw_persisted_chain", raw_persisted_chain);
+        const loadChain = (location) => {
+            return state.raw_persisted_chain;
+        }
+        const saveChain = (async (location, serialized_chain) => {
+            invoke("save_blockchain", { serialized_chain: serialized_chain });
+        });
+        const blockchain = Blockchain.loadFromDiskOverrideFS(state.config.blockchain_location, saveChain, loadChain);
+        const chainServer = new BlockchainProp("Wallet-chain-server", blockchain);
+        setState("blockchain", blockchain);
+        setState("chainServer", chainServer);
+
         setState("loading", false); // finished all main loading activity
-    })
+    });
 
     const appState = [state, { updateConfig }];
 

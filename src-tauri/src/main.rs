@@ -37,8 +37,30 @@ fn load_config() -> Config {
 }
 
 #[tauri::command(rename_all = "snake_case")]
+fn load_blockchain() -> String {
+    let dirs = ProjectDirs::from("org", "IoT Marketplace", "SenShaMart")
+        .expect("Could not configure cache directory");
+    std::fs::create_dir_all(dirs.cache_dir()).expect("Could not create cache directory");
+
+    if let Ok(file_str) = std::fs::read_to_string(dirs.cache_dir().join("blockchain.json")) {
+        file_str
+    } else {
+        "{}".into()
+    }
+}
+
+#[tauri::command(rename_all = "snake_case")]
+fn save_blockchain(serialized_chain: String) {
+    let dirs = ProjectDirs::from("org", "IoT Marketplace", "SenShaMart")
+        .expect("Could not configure cache directory");
+    std::fs::create_dir_all(dirs.cache_dir()).expect("Could not create cache directory");
+    std::fs::write(dirs.cache_dir().join("blockchain.json"), serialized_chain)
+        .expect("Could not write to file");
+}
+
+#[tauri::command(rename_all = "snake_case")]
 fn save_config(config: Config) {
-    println!("Saving config {:?}", config);
+    // println!("Saving config {:?}", config);
     let dirs = ProjectDirs::from("org", "IoT Marketplace", "SenShaMart")
         .expect("Could not configure cache directory");
     std::fs::create_dir_all(dirs.cache_dir()).expect("Could not create cache directory");
@@ -49,7 +71,12 @@ fn save_config(config: Config) {
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![load_config, save_config])
+        .invoke_handler(tauri::generate_handler![
+            load_config,
+            save_config,
+            load_blockchain,
+            save_blockchain,
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

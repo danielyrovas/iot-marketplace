@@ -8,6 +8,10 @@ const tabs = [
     component: lazy(() => import("./pages/home")),
   },
   {
+    name: 'Query Sensors', title: 'IoT Marketplace: Sensor Query',
+    component: lazy(() => import("./pages/querySensor")),
+  },
+  {
     name: 'Register a Sensor', title: 'IoT Marketplace: Sensor Registration',
     component: lazy(() => import("./pages/registerSensor")),
   },
