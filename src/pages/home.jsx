@@ -4,7 +4,7 @@ import { TextInput } from "../components/basic";
 
 export default function Config() {
     return (
-        <div><p>Welcome Home</p>
+        <div><p>Welcome Home 2</p>
         </div>
     )
 }
