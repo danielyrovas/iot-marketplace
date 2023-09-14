@@ -20,6 +20,8 @@ export function AppContextProvider(props) {
         blockchain: null,
         chainServer: null,
         raw_persisted_chain: null,
+        // TODO: save to disk queue
+        // TODO: add peer: 136.186.108.241:3002
     });
 
     const updateConfig = (key, value) => {
