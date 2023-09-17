@@ -17,6 +17,10 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          repository: 'https://git.danielyrovas.com/dev/SenShaMart'
+          token: ${{ github.senshatoken }}
       - uses: pnpm/action-setup@v2
         with:
           version: 8
