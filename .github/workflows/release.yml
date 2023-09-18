@@ -17,14 +17,8 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v3
-      - name: echo SenShaMart
-        run: echo $EXTERNAL_TOKEN | head -c 4
-        env:
-          EXTERNAL_TOKEN : ${{ github.senshatoken }}
       - name: clone SenShaMart
-        run: git clone "https://$EXTERNAL_TOKEN@git.danielyrovas.com/dev/SenShaMart" ../SenShaMart
-        env:
-          EXTERNAL_TOKEN : ${{ github.senshatoken }}
+        run: git clone "https://${{ github.senshatoken }}@git.danielyrovas.com/dev/SenShaMart" ../SenShaMart
       - uses: pnpm/action-setup@v2
         with:
           version: 8
