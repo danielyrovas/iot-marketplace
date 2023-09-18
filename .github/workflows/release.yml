@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: clone SenShaMart
-        run: git clone "https://guest:${{ github.SENSHATOKEN }}@git.danielyrovas.com/dev/SenShaMart" ../SenShaMart
+        run: git clone "https://git.danielyrovas.com/dev/SenShaMart" ../SenShaMart
       - uses: pnpm/action-setup@v2
         with:
           version: 8
