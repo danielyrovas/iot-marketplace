@@ -7,29 +7,42 @@ import { createStore } from 'solid-js/store';
 const isString = (str) => {
     return typeof str === 'string' && isNaN(str);
   };
-
-  
   
 
 export default function RegisterBroker() {
+
     const [showConfirmation, setShowConfirmation] = createSignal(false);
     const [extraNodes, setExtraNodes] = createStore([]);
+    const [extraLiterals, setExtraLiterals] = createStore([]);
+    const [showBrokerLocation, setShowBrokerLocation] = createSignal(false);
+    const [brokerLocation, setBrokerLocation] = createSignal('');
+    const [showBrokerType, setShowBrokerType] = createSignal(false);
+    const [brokerType, setBrokerType] = createSignal('');
     const [data, setData] = createSignal('');
     const { form, errors, setFields, createSubmitHandler } = createForm({
+        
         validate(values) {
 
             const errors = {};
             if (!values.name) {
-            } else if (values.name.length < 3) {
+            } else if (values.name.length < 5) {
                 errors.name = "please add a broker name, broker name can't be empty";
             }
             if (!values.name) {
             } else if (!isString(values.name)) {
-                errors.name = "please use alphabets, integers format are not allowed";
+                errors.endPoint = "please use alphabets, integers format are not allowed";
             }
             if (!values.endPoint) {
-            } else if (values.endPoint.length < 5) {
-                errors.endPoint = "please add a endpoint, endpoint can't be empty";
+            } else if (!isString(values.endPoint)) {
+                errors.endPoint = "please use alphabets, integers format are not allowed";
+            }
+            if (!values.brokerLocation) {
+            } else if (values.brokerLocation.length < 5) {
+                errors.brokerLocation = "Broker Location should be filled";
+            }
+            if (!values.brokerType) {
+            } else if (values.brokerType.length < 5) {
+                errors.brokerType = "Broker Type should be filled";
             }
             return errors;
         },
@@ -52,6 +65,10 @@ export default function RegisterBroker() {
         if (confirmed) {
         form.reset();
         setExtraNodes([]);
+        setBrokerLocation('');
+        setShowBrokerLocation(false);
+        setBrokerType('');
+        setShowBrokerType(false);
         setData('');
         }
       };
@@ -78,15 +95,41 @@ export default function RegisterBroker() {
                         label="Endpoint"
                         name="endPoint"
                     />
-                    
-                   
-                    <h1 class="text-2xl font-bold text-center">Additional attribute</h1>
+                
+                <button class="btn p-4 ml-4" onClick={() => setShowBrokerLocation(!showBrokerLocation())}>
+                    Add Broker Location
+                 </button>
+                <Show when={showBrokerLocation()}>
+                    <TextInput
+                        class="w-[40rem]"
+                        label="Broker Location"
+                        name="brokerLocation"
+                        value={brokerLocation()} 
+                        onInput={(e) => setBrokerLocation(e.target.value)} 
+                    />
+                </Show>
+
+                <button class="btn p-4 ml-4" onClick={() => setShowBrokerType(!showBrokerType())}>
+                    Add Broker Type
+                 </button>
+                <Show when={showBrokerType()}>
+                    <TextInput
+                        class="w-[40rem]"
+                        label="Broker Type"
+                        name="brokerType"
+                        value={brokerType()} 
+                        onInput={(e) => setBrokerType(e.target.value)} 
+                    />
+                </Show>
+
+
+                    <h1 class="text-2xl font-bold text-center"> RDF Triples</h1>
                 </div>
                 <For each={extraNodes}>
                     {(_, i) => {
                         return (
                             <div class="flex flex-col place-items-center m-2">
-                                <h1 class="text-center divider">Additional attribute {i() + 1}</h1>
+                                <h1 class="text-center divider">RDF Triples {i() + 1}</h1>
                                 <TextInput
                                     class="w-[40rem]"
                                     label={`RDF Subject ${i() + 1}`}
@@ -107,32 +150,81 @@ export default function RegisterBroker() {
                         )
                     }}
                 </For>
+
                 <div class="flex flex-col place-items-center m-2">
                     <div class="flex flex-row justify-end w-[40rem] ">
-                        <Show when={extraNodes.length > 1}>
+                        <Show when={extraLiterals.length > 1}>
                             <button class="btn btn-primary p-4" onClick={
                                 () => {
-                                    setExtraNodes(extraNodes.slice(0, -1));
+                                    setExtraLiterals(extraLiterals.slice(0, -1));
                                 }}>
                                 <i class="fa-solid fa-minus"></i>
                             </button>
                         </Show>
                         <button class="btn p-4 ml-4" onClick={
-                            () => setExtraNodes([...extraNodes, {}])}>
-                            Add custom attributes<i class="fa-solid fa-plus"></i>
+                            () => setExtraLiterals([...extraLiterals, {}])}>
+                            Add RDF Literals <i class="fa-solid fa-plus"></i>
                         </button>
                     </div>
                 </div>
+                <For each={extraLiterals}>
+                    {(_, i) => {
+                        return (
+                            <div class="flex flex-col place-items-center m-2">
+                                <h1 class="text-center divider">RDF Literals {i() + 1}</h1>
+                                <TextInput
+                                    class="w-[40rem]"
+                                    label={`RDF Subject ${i() + 1}`}
+                                    name={`extraLiterals.${i()}.rdfSubject`}
+
+                                />
+                                <TextInput
+                                    class="w-[40rem]"
+                                    label={`RDF Predicate ${i() + 1}`}
+                                    name={`extraLiterals.${i()}.rdfPredicate`}
+                                />
+                                <TextInput
+                                    class="w-[40rem]"
+                                    label={`RDF Object ${i() + 1}`}
+                                    name={`extraLiterals.${i()}.rdfObject`}
+                                />
+                            </div>
+                        )
+                    }}
+                </For>
+                <div class="flex flex-col place-items-center m-2">
+                    <div class="flex flex-row justify-end w-[40rem] ">
+                        <Show when={extraLiterals.length > 1}>
+                            <button class="btn btn-primary p-4" onClick={
+                                () => {
+                                    setExtraLiterals(extraLiterals.slice(0, -1));
+                                }}>
+                                <i class="fa-solid fa-minus"></i>
+                            </button>
+                        </Show>
+                        <button class="btn p-4 ml-4" onClick={
+                            () => setExtraLiterals([...extraLiterals, {}])}>
+                            Add RDF Triples <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+
                 <div class="flex justify-center m-4">
-                    <button class="btn" type="button" onClick={() => setShowConfirmation(true)}>
+                    <button class="btn" type="submit" onClick={realSubmit}>
                         Register Broker <i class="fa-solid fa-paper-plane"></i>
-                     </button>
+                    </button>
                 </div>
                 
                 <div class="flex justify-center m-4">
                     <button class="btn" type="reset" onClick={resetForm} >
                         Reset form <i class="fa-solid fa-paper-plane"></i>
                     </button>
+                </div>
+                <div class="flex justify-center m-4">
+                    <button class="btn" type="button" onClick={() => setShowConfirmation(true)}>
+                        Confirmation <i class="fa-solid fa-paper-plane"></i>
+                     </button>
                 </div>
                
                 {showConfirmation() && (
