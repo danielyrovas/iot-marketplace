@@ -126,7 +126,6 @@ export const QueryInput = (props) => {
         <p></p>
         <button type="button" onClick={handleClear}>Clear</button>
       </form>
-      {/* Rest of the code */}
     </div>
   );
 };
