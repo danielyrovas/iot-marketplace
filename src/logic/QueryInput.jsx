@@ -2,128 +2,131 @@ import { createSignal } from 'solid-js';
 
 const presetQueries = [
   {
-    label: 'Person',
-    property: 'P31',
-    value: 'Q5',
+    label: 'All Sensor',
+    property: 'observes',
+    value: '',
   },
   {
-    label: 'City',
-    property: 'P31',
-    value: 'Q515',
+    label: 'Camera Sensors',
+    property: 'observes',
+    value: 'FILTER (?measures = "video")',
   },
   {
-    label: 'Country',
-    property: 'P31',
-    value: 'Q6256',
+    label: 'Milk temperature',
+    property: 'observes',
+    value: 'FILTER (?measures = "Milk Temperature")',
   },
   {
-    label: 'Occupation',
-    property: 'P106',
-    value: 'Q937857',
+    label: 'Milk Pressure',
+    property: 'observes',
+    value: 'FILTER (?measures = "milk pressure")',
   },
   {
-    label: 'Genre',
-    property: 'P136',
-    value: 'Q188442',
+    label: 'Relative air Humidity',
+    property: 'observes',
+    value: 'FILTER (?measures = "relative air Humidity")',
   },
-  {
-    label: 'Founder',
-    property: 'P112',
-    value: 'Q937',
-  },
+
+
 ];
+const queryAllData = `
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+
+SELECT ?sensor ?lat ?long ?measures
+WHERE {
+  ?sensor a sosa:Sensor ;
+          sosa:observes ?observes ;
+          sosa:hasFeatureOfInterest ?location .
+  ?observes rdfs:label ?measures .
+  ?location geo:lat ?lat ;
+           geo:long ?long .
+}`;
 
 export const QueryInput = (props) => {
-  const [selectedQuery, setSelectedQuery] = createSignal(0);
-  const [selectedProperty, setSelectedProperty] = createSignal(
-    presetQueries[0].property
-  );
+  const [selectedQuery, setSelectedQuery] = createSignal('');
   const [customQuery, setCustomQuery] = createSignal('');
-  const [loading, setLoading] = createSignal(false); 
+  const [selectAllQuery, setSelectAllQuery] = createSignal(queryAllData)
+  const [loading, setLoading] = createSignal(false);
 
-  // predicates 
-  const updateAvailableQueryOptions = () => {
-    const availableQueryOptions = presetQueries
-      .filter((preset) => preset.property === selectedProperty())
-      .map((preset, index) => (
-        <option key={index} value={index}>
-          {preset.label}
-        </option>
-      ));
-    return availableQueryOptions;
+  const executeQuery = () => {
+    setLoading(true);
+    
+
+
+    
+    // Check if the user entered a custom query; if yes, use it, otherwise, use the selected preset query
+    const queryToExecute = customQuery() || `
+    PREFIX sosa: <http://www.w3.org/ns/sosa/>
+    PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+    
+    SELECT ?sensor ?lat ?long ?measures
+    WHERE {
+      ?sensor a sosa:Sensor ;
+              sosa:observes ?observes ;
+              sosa:hasFeatureOfInterest ?location .
+      ?observes rdfs:label ?measures .
+      ?location geo:lat ?lat ;
+               geo:long ?long .
+      ${selectedQuery()}
+    }`;
+
+    // Trigger the query using props.executeQuery
+    props.executeQuery(queryToExecute)
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.error(error);
+      });
   };
-
-  const availableQueryOptions = updateAvailableQueryOptions();
 
   const handleQueryChange = (event) => {
-    const selectedIndex = parseInt(event.target.value);
-    setSelectedQuery(selectedIndex);
+    const selectedQueryValue = event.target.value;
+    setSelectedQuery(selectedQueryValue);
   };
 
-  const handlePropertyChange = (event) => {
-    const selectedPropertyCode = event.target.value;
-    setSelectedProperty(selectedPropertyCode);
+  const handleCustomQueryChange = (event) => {
+    const customQueryValue = event.target.value;
+    setCustomQuery(customQueryValue);
   };
 
-  const handlePresetQuerySubmit = async (event) => {
+  const handleClear = () => {
+    setSelectedQuery('');
+    setCustomQuery('');
+  };
+
+  const handlePresetQuerySubmit = (event) => {
     event.preventDefault();
-    setLoading(true); 
-    const selectedPresetQuery = `SELECT ?item ?itemLabel WHERE {
-      ?item wdt:${selectedProperty()} wd:${presetQueries[selectedQuery()].value};
-      SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-    } LIMIT 10`;
-    try {
-      await props.executeQuery(selectedPresetQuery);
-    } finally {
-      setLoading(false); 
-    }
+    executeQuery();
   };
-
-  const handleCustomQuerySubmit = async (event) => {
-    event.preventDefault();
-    setLoading(true); 
-    try {
-      await props.executeQuery(customQuery());
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const sampleQuery = `SELECT ?item ?itemLabel WHERE {
-    ?item wdt:${presetQueries[0].property} wd:${presetQueries[0].value};
-    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-  } LIMIT 10`;
 
   return (
     <div>
-      <h2>SPARQL Query</h2>
+      <h2>Select sensor type</h2>
       <form onSubmit={handlePresetQuerySubmit}>
-        <select onChange={handleQueryChange}>
-          {availableQueryOptions}
-        </select>
-        <select onChange={handlePropertyChange}>
+        <select onChange={handleQueryChange} value={selectedQuery()}>
           {presetQueries.map((preset, index) => (
-            <option key={index} value={preset.property}>
+            <option key={index} value={preset.value}>
               {preset.label}
             </option>
           ))}
         </select>
-        <button type="submit">Execute Preset Query</button>
-      </form>
-      <form onSubmit={handleCustomQuerySubmit}>
+        <p>or</p>
+        <h2>Enter custom query</h2>
         <textarea
+          rows="4"
+          placeholder="Enter your custom SPARQL query here..."
+          onChange={handleCustomQueryChange}
           value={customQuery()}
-          onInput={(e) => setCustomQuery(e.target.value)}
-          placeholder="SELECT ?item ?itemLabel WHERE { ?item wdt:P31 wd:Q5; SERVICE wikibase:label { bd:serviceParam wikibase:language '[AUTO_LANGUAGE],en'. }} LIMIT 2"
-          rows={5}
-          cols={40}
         ></textarea>
         <p></p>
-        <button type="submit">Execute Custom Query</button>
-        {loading() && <div>Loading...</div>} {/* Display loading icon if loading is true */}
-
-        
+        <button type="submit">Execute Query</button>
+        <p></p>
+        <button type="button" onClick={handleClear}>Clear</button>
       </form>
+      {/* Rest of the code */}
     </div>
   );
 };
