@@ -116,10 +116,24 @@ export const QueryInput = (props) => {
         <p>or</p>
         <h2>Enter custom query</h2>
         <textarea
-          rows="4"
+          rows="10"
+          cols="60"
           placeholder="Enter your custom SPARQL query here..."
           onChange={handleCustomQueryChange}
           value={customQuery()}
+          title="Sample query = PREFIX sosa: <http://www.w3.org/ns/sosa/>
+          PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+          
+          SELECT ?sensor ?lat ?long ?measures
+          WHERE {
+            ?sensor a sosa:Sensor ;
+                    sosa:observes ?observes ;
+                    sosa:hasFeatureOfInterest ?location .
+            ?observes rdfs:label ?measures .
+            ?location geo:lat ?lat ;
+                     geo:long ?long .
+            FILTER (?measures = 'video')
+          }"
         ></textarea>
         <p></p>
         <button class= "btn" type="submit">Execute Query</button>
