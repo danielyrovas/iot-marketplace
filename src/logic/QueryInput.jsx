@@ -44,7 +44,7 @@ WHERE {
 }`;
 
 export const QueryInput = (props) => {
-  const [selectedQuery, setSelectedQuery] = createSignal('');
+  const [selectedQuery, setSelectedQuery] = createSignal(null);
   const [customQuery, setCustomQuery] = createSignal('');
   const [selectAllQuery, setSelectAllQuery] = createSignal(queryAllData)
   const [loading, setLoading] = createSignal(false);
@@ -93,7 +93,7 @@ export const QueryInput = (props) => {
   };
 
   const handleClear = () => {
-    setSelectedQuery('');
+    setSelectedQuery(null);
     setCustomQuery('');
   };
 
