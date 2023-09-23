@@ -15,6 +15,20 @@ export default function RegisterSensor() {
     const [state, { updateConfig }] = useAppContext();
     const [extraNodes, setExtraNodes] = createStore([]);
     const [data, setData] = createSignal('');
+
+    const [presets, setPresets] = createStore([
+        {
+            name: 'Location',
+            icon: 'location-dot',
+            visible: true,
+        },
+        {
+            name: 'Type',
+            icon: 'tag',
+            visible: true,
+        }
+    ]);
+
     const { form, errors, setFields, createSubmitHandler } = createForm({
         validate(values) {
 
@@ -38,11 +52,83 @@ export default function RegisterSensor() {
 
     const realSubmit = createSubmitHandler({
         onSubmit: (values) => {
-            console.log('Alternative onSubmit', JSON.stringify(values, null, 2))
-            setData(JSON.stringify(values, null, 2));
+            // console.log('Alternative onSubmit', JSON.stringify(values, null, 2))
 
-            values.costPerMinute = parseInt(values.costPerMinute);
-            values.costPerKB = parseInt(values.costPerKB);
+            let sensorData = {}
+
+            sensorData.sensorName = values.sensorName;
+            sensorData.integrationBroker = values.integrationBroker;
+            sensorData.costPerMinute = parseInt(values.costPerMinute);
+            sensorData.costPerKB = parseInt(values.costPerKB);
+            sensorData.extraNodes = [];
+            sensorData.extraLiterals = [];
+            if (values.longtitude !== 'undefined' || values.longtitude !== null) {
+                sensorData.extraNodes.push(
+                    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
+                        rdfPredicate: 'http://www.w3.org/ns/sosa/hasFeatureOfInterest',
+                        rdfObject: `SSMS://#${sensorData.sensorName}#location`,
+                    },
+                    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}#location`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: `http://www.w3.org/ns/sosa/hasFeatureOfInterest`,
+                    },
+                    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}#location`,
+                        rdfPredicate: 'http://www.w3.org/ns/sosa/isSampleOf',
+                        rdfObject: `SSMS://earth`,
+                    },
+                    {
+                        rdfSubject: `SSMS://earth`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: `http://www.w3.org/ns/sosa/hasFeatureOfInterest`,
+                    },
+                );
+                sensorData.extraLiterals.push(
+                    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}#location`,
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#label',
+                        rdfObject: `location of #${sensorData.sensorName}`,
+                    },
+                    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}#location`,
+                        rdfPredicate: 'http://www.w3.org/2003/01/geo/wgs84_pos#lat',
+                        rdfObject: `${values.latitude}`,
+                    },
+                    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}#location`,
+                        rdfPredicate: 'http://www.w3.org/2003/01/geo/wgs84_pos#long',
+                        rdfObject: `${values.longtitude}`,
+                    },
+                    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}#location`,
+                        rdfPredicate: 'http://www.w3.org/2003/01/geo/wgs84_pos#alt',
+                        rdfObject: `${values.altitude}`,
+                    },
+                    {
+                        rdfSubject: 'SSMS://earth',
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#label',
+                        rdfObject: 'earth',
+                    },
+                );
+            }
+
+            values.extras?.forEach((extra) => {
+                if (extra.literal) {
+                    sensorData.extraLiterals.push({
+                        rdfSubject: extra.rdfSubject,
+                        rdfPredicate: extra.rdfPredicate,
+                        rdfObject: extra.rdfObject,
+                    });
+                } else {
+                    sensorData.extraNodes.push({
+                        rdfSubject: extra.rdfSubject,
+                        rdfPredicate: extra.rdfPredicate,
+                        rdfObject: extra.rdfObject,
+                    });
+                }
+            })
 
             const sensorRegistrationValidators = {
                 sensorName: ChainUtil.validateIsString,
@@ -55,33 +141,34 @@ export default function RegisterSensor() {
                 extraLiteralMetadata: ChainUtil.createValidateOptional(
                     ChainUtil.validateIsObject)
             };
-            const validateRes = ChainUtil.validateObject(values, sensorRegistrationValidators);
+            const validateRes = ChainUtil.validateObject(sensorData, sensorRegistrationValidators);
 
             if (!validateRes.result) {
-                setData(`${data()}\n${validateRes.reason}`);
+                setData(`${JSON.stringify(sensorData, null, 2)}\n${validateRes.reason}`);
+                // setData(JSON.stringify(sensorData, null, 2));
                 return;
             }
-
-            // try {
-            //     const reg = wallet.createSensorRegistrationAsTransaction(
-            //         blockchain,
-            //         values.rewardAmount,
-            //         values.sensorName,
-            //         values.costPerMinute,
-            //         values.costPerKB,
-            //         values.integrationBroker,
-            //         values.extraNodeMetadata,
-            //         values.extraLiteralMetadata
-            //     );
-            //     chainServer.sendTx(reg);
-            //
-            //     // tx: reg.transaction
-            // } catch (err) {
-            //     console.log(err);
-            //     setData(`${data()}\n${err.message}`);
-            // }
         }
-    });
+    })
+
+    // try {
+    //     const reg = wallet.createSensorRegistrationAsTransaction(
+    //         blockchain,
+    //         values.rewardAmount,
+    //         values.sensorName,
+    //         values.costPerMinute,
+    //         values.costPerKB,
+    //         values.integrationBroker,
+    //         values.extraNodeMetadata,
+    //         values.extraLiteralMetadata
+    //     );
+    //     chainServer.sendTx(reg);
+    //
+    //     // tx: reg.transaction
+    // } catch (err) {
+    //     console.log(err);
+    //     setData(`${data()}\n${err.message}`);
+    // }
 
     return (
         <div>
@@ -108,6 +195,58 @@ export default function RegisterSensor() {
                         name="integrationBroker"
                     />
                     <h1 class="text-2xl font-bold text-center">RDF Triples</h1>
+                    <div class="flex flex-row space-x-4 justify-center w-[40rem] p-4">
+                        <For each={presets}>
+                            {(preset, i) => {
+                                return (
+                                    <Show when={preset.visible}>
+                                        <button class="btn btn-primary p-4" onClick={() => {
+                                            // set(i(), { visible: false })
+                                            setPresets(i(), { visible: false })
+                                        }}>
+                                            <i class={`fa-solid fa-${preset.icon}`}></i>
+                                            {preset.name}
+                                            <i class={`fa-solid fa-plus`}></i>
+                                        </button>
+                                    </Show>
+                                )
+                            }}
+                        </For>
+                        {/* <Show when={presets[0].visible}> */}
+                        {/*     <button class="btn btn-primary p-4" onClick={() => setPresets(0, { visible: false })}> */}
+                        {/*         Add Location <i class="fa-solid fa-plus"></i> */}
+                        {/*     </button> */}
+                        {/* </Show> */}
+                        {/* <Show when={presets[1].visible}> */}
+                        {/*     <button class="btn btn-primary p-4" onClick={() => AddPresetSensor(1, 'type')}> */}
+                        {/*         Add Sensor Type <i class="fa-solid fa-plus" ></i> */}
+                        {/*     </button> */}
+                        {/* </Show> */}
+                        {/* <Show when={presets[2].visible}> */}
+                        {/*     <button class="btn btn-primary p-4" onClick={() => AddPresetSensor(2, 'exam')}> */}
+                        {/*         Add RDF Example <i class="fa-solid fa-plus" ></i> */}
+                        {/*     </button> */}
+                        {/* </Show> */}
+                    </div>
+                    <Show when={!presets[0].visible}>
+                        <div class="flex flex-row place-items-center w-[40rem] m-2">
+                            <TextInput
+                                class="w-[33.3333%] p-4"
+                                label='Longtitude'
+                                name='longtitude'
+                            />
+                            <TextInput
+                                class="w-[33.3333%] p-4"
+                                label='Latitude'
+                                name='latitude'
+                            />
+                            <TextInput
+                                class="w-[33.3333%] p-4"
+                                label='Altitude'
+                                name='altitude'
+                            />
+                        </div>
+                    </Show>
                 </div>
                 <For each={extraNodes}>
                     {(_, i) => {
@@ -117,19 +256,23 @@ export default function RegisterSensor() {
                                 <TextInput
                                     class="w-[40rem]"
                                     label={`RDF Subject ${i() + 1}`}
-                                    name={`extraNodes.${i()}.rdfSubject`}
+                                    name={`extras.${i()}.rdfSubject`}
 
                                 />
                                 <TextInput
                                     class="w-[40rem]"
                                     label={`RDF Predicate ${i() + 1}`}
-                                    name={`extraNodes.${i()}.rdfPredicate`}
+                                    name={`extras.${i()}.rdfPredicate`}
                                 />
                                 <TextInput
                                     class="w-[40rem]"
                                     label={`RDF Object ${i() + 1}`}
-                                    name={`extraNodes.${i()}.rdfObject`}
+                                    name={`extras.${i()}.rdfObject`}
                                 />
+                                <div class="flex flex-row place-items-start w-[40rem] m-2">
+                                    <input name={`extras.${i()}.literal`} type="checkbox" class="checkbox p-4" />
+                                    <label class='label ms-2' for={`extras.${i()}.literal`}>RDF Literal?</label>
+                                </div>
                             </div>
                         )
                     }}
@@ -155,8 +298,8 @@ export default function RegisterSensor() {
                         Register Sensor <i class="fa-solid fa-paper-plane"></i>
                     </button>
                 </div>
-            </form>
+            </form >
             <pre>{data()}</pre>
-        </div>
+        </div >
     );
 }
