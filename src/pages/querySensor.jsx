@@ -29,6 +29,7 @@ export default function QuerySensor() {
 
   return (
     <div>
+        <div class="flex flex-col place-items-center m-4">
       <h1>RDF Data Viewer</h1>
       <h2> &nbsp; </h2>
       <QueryInput executeQuery={fetchRdfData} />
@@ -37,6 +38,7 @@ export default function QuerySensor() {
       ) : (
         <div>No query has been executed...</div>
       )}
+      </div>
     </div>
   );
 }

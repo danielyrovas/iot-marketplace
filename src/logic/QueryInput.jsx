@@ -122,9 +122,9 @@ export const QueryInput = (props) => {
           value={customQuery()}
         ></textarea>
         <p></p>
-        <button type="submit">Execute Query</button>
+        <button class= "btn" type="submit">Execute Query</button>
         <p></p>
-        <button type="button" onClick={handleClear}>Clear</button>
+        <button class="btn btn-primary p-4" type="button" onClick={handleClear}>Clear</button>
       </form>
     </div>
   );

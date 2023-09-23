@@ -22,8 +22,8 @@ export const RdfDataDisplay = (props) => {
     // console.log(headers)
   
     return (
-      <div>
-        <h2>RDF Data</h2>
+      <div >
+        
         <table>
           <thead>
             <tr>
