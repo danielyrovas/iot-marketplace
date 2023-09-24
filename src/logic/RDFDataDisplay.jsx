@@ -1,47 +1,77 @@
-import { createStore } from 'solid-js/store';
+//rdfdatadisplay.jsx
 
 export const RdfDataDisplay = (props) => {
-    if (props.rdfData === null || props.rdfData === undefined) {
-        return <div>No data available...</div>;
+    if (!props.rdfData || !props.length ==='undefined' || !props.rdfData.sparql.results) {
+      return <div>No RDF data available...</div>;
     }
+    console.log(props.rdfData)
+    console.log(props)
+    console.log(props.rdfData)
+    const results = props?.rdfData?.sparql?.results[0].result;
+    const head = props.rdfData.sparql.head;
+  
+    // if (!props.rdfData || !props.rdfData.sparql.results[0].result || props.rdfData.sparql.results[0].result.length === 0) {
+    //   return <div>No RDF data to display.</div>;
+    // }
+  
+    // Extract the headers using the nested structure
+    const test = props?.rdfData?.sparql?.results[0]
+    // const headers = test?.binding?.map((binding) => binding.$.name);
+    console.log(results)
 
-    const results = props.rdfData?.results?.bindings;
-    if (!results || results.length === 0) {
-        return <div>No RDF data to display.</div>;
-    }
-
-    console.log(props.rdfData);
-    const [ts, setTs] = createStore();
-    setTs(props.rdfData);
-
+    // console.log(headers)
+  
     return (
-        <div>
-            {console.log(props.rdfData?.results?.bindings[0])}
-            <h2> &nbsp; </h2>
-            {/* <h2>RAW DATA RETURN</h2> */}
-            {/* <h2>{JSON.stringify(props.rdfData)}</h2> */}
-            <h2> &nbsp; </h2>
-            <h2>RDF Data</h2>
-            <table>
-                <thead>
-                    <tr>
-                        {Object.keys(props.rdfData?.results?.bindings[0] || { 'no data available': 'value' }).map((header) => (
-                            <th key={header}>{header}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {props.rdfData?.results?.bindings.map((binding, rowIndex) => (
-                        <tr key={rowIndex}>
-                            {Object.keys(props.rdfData?.results?.bindings[0] || { 'no data available': 'value' }).map((header) => (
-                                <td key={header}>
-                                    {binding[header]?.value ?? 'N/A'} &nbsp; &nbsp;
-                                </td>
-                            ))}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+      <div >
+        
+        <table>
+          <thead>
+            <tr>
+              {/* {props?.rdfData?.sparql?.results[0].result[0].binding[0].$.name?.map((header) =>(
+                <th key={header}>{header}</th>
+                
+              ))
+              
+              } */}
+              {/* {props?.rdfData?.sparql?.results[0]?.result?.binding?.map((binding) => (
+              <th key = {binding}>{binding.$.name}</th>
+              || ' Data not available'
+             ))} */}
+            </tr>
+
+
+            <tr>
+                {props?.rdfData?.sparql?.results[0]?.result?.[0]?.binding?.map((binding, colIndex) => (
+                    <th key={binding}>{binding.$.name}</th>
+                )) || <th>Data not available</th>}
+            </tr>
+          </thead>
+
+
+          
+          <tbody>
+            {props?.rdfData?.sparql?.results[0]?.result?.map((result, rowIndex) => (
+                
+              <tr key={rowIndex}>
+                {console.log(result)}
+                {result.binding.map((header, colIndex) => (
+                  <td key={colIndex}>
+                    {header.uri ? (
+                      Array.isArray(header.uri)
+                        ? header.uri[0] || 'N/A'
+                        : header.uri || 'N/A'
+                    ) : (
+                      Array.isArray(header.literal)
+                        ? header.literal[0] || 'N/A'
+                        : header.literal || 'N/A'
+                    )}
+                  </td>
+                ))}
+              </tr> || ' Data not available'
+            ))}
+          </tbody>
+        </table>
+      </div>
     );
-};
+  };
+  
