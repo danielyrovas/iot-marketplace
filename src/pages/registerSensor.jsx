@@ -76,58 +76,232 @@ export default function RegisterSensor() {
 	    sensorData.integrationBroker = values.integrationBroker;
             sensorData.extraNodes = [];
             sensorData.extraLiterals = [];
-	    console.log(values.longitude);
             if (typeof values.longtitude !== 'undefined') {
                 sensorData.extraNodes.push(
                     {
                         rdfSubject: `SSMS://#${sensorData.sensorName}`,
                         rdfPredicate: 'http://www.w3.org/ns/sosa/hasFeatureOfInterest',
-                        rdfObject: `SSMS://#${sensorData.sensorName}#location`,
+                        rdfObject: `SSMS://#${sensorData.sensorName}#location`
                     },
                     {
                         rdfSubject: `SSMS://#${sensorData.sensorName}#location`,
                         rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: `http://www.w3.org/ns/sosa/hasFeatureOfInterest`,
+                        rdfObject: `http://www.w3.org/ns/sosa/hasFeatureOfInterest`
                     },
                     {
                         rdfSubject: `SSMS://#${sensorData.sensorName}#location`,
                         rdfPredicate: 'http://www.w3.org/ns/sosa/isSampleOf',
-                        rdfObject: `SSMS://earth`,
+                        rdfObject: `SSMS://earth`
                     },
                     {
                         rdfSubject: `SSMS://earth`,
                         rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: `http://www.w3.org/ns/sosa/hasFeatureOfInterest`,
-                    },
+                        rdfObject: `http://www.w3.org/ns/sosa/hasFeatureOfInterest`
+                    }
                 );
                 sensorData.extraLiterals.push(
                     {
                         rdfSubject: `SSMS://#${sensorData.sensorName}#location`,
                         rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#label',
-                        rdfObject: `location of #${sensorData.sensorName}`,
+                        rdfObject: `location of #${sensorData.sensorName}`
                     },
                     {
                         rdfSubject: `SSMS://#${sensorData.sensorName}#location`,
                         rdfPredicate: 'http://www.w3.org/2003/01/geo/wgs84_pos#lat',
-                        rdfObject: `${values.latitude}`,
+                        rdfObject: `${values.latitude}`
                     },
                     {
                         rdfSubject: `SSMS://#${sensorData.sensorName}#location`,
                         rdfPredicate: 'http://www.w3.org/2003/01/geo/wgs84_pos#long',
-                        rdfObject: `${values.longtitude}`,
+                        rdfObject: `${values.longtitude}`
                     },
                     {
                         rdfSubject: `SSMS://#${sensorData.sensorName}#location`,
                         rdfPredicate: 'http://www.w3.org/2003/01/geo/wgs84_pos#alt',
-                        rdfObject: `${values.altitude}`,
+                        rdfObject: `${values.altitude}`
                     },
                     {
                         rdfSubject: 'SSMS://earth',
                         rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#label',
-                        rdfObject: 'earth',
-                    },
+                        rdfObject: 'earth'
+                    }
                 );
             }
+
+	    let selectedSensorType = "";
+	    for (let i = 0; i < typePresets.names.length; i++) {
+		if (typePresets.names[i].selected === true) {
+		    //console.log(i);
+		    //console.log(typePresets.names[i].name);
+		    selectedSensorType = typePresets.names[i].name;
+		    //console.log(selectedSensorType);
+		}
+	    }
+	    //console.log(JSON.stringify(typePresets, null, 2));
+
+	    console.log(typeof selectedSensorType);
+	    if (selectedSensorType === "Sensor type: camera") {
+                sensorData.extraNodes.push(
+                    {
+                        rdfSubject: 'SSMS://#Procedure',
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/sosa/Procedure'
+                    },
+                    {
+                        rdfSubject: 'SSMS://#Procedure',
+                        rdfPredicate: 'http://www.w3.org/ns/ssn/hasOutput',
+                        rdfObject: 'SSMS://#output'
+                    },
+                    {
+                        rdfSubject: 'SSMS://#output',
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/ssn/Output'
+                    },
+                    {
+                        rdfSubject: 'SSMS://#output',
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'https://w3id.org/rdfp/GraphDescription'
+                    },
+                    {
+                        rdfSubject: 'SSMS://',
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/ssn/System'
+                    },
+                    {
+                        rdfSubject: 'SSMS://',
+                        rdfPredicate: 'http://www.w3.org/ns/ssn/hasSubSystem',
+                        rdfObject: `SSMS://#${sensorData.sensorName}`
+                    },
+                    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/sosa/Sensor'
+                    },
+                    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/ssn/System'
+                    },
+                    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
+                        rdfPredicate: 'http://www.w3.org/ns/ssn/systems/hasOperatingRange',
+                        rdfObject: 'SSMS://#CameraSensorOperatingRange'
+                    },
+                    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
+                        rdfPredicate: 'http://www.w3.org/ns/sosa/observes',
+                        rdfObject: `SSMS://#${sensorData.sensorName}Video`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
+                        rdfPredicate: 'http://www.w3.org/ns/ssn/implements',
+                        rdfObject: 'SSMS://#Procedure'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/ssn/systems/OperatingRange',
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Video`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/sosa/ObservableProperty'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Video`,
+                        rdfPredicate: 'http://www.w3.org/ns/sosa/isObservedBy',
+                        rdfObject: `SSMS://#${sensorData.sensorName}`
+                    },
+		    {
+                        rdfSubject: 'SSMS://#MeasuringVideo',
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/sosa/Procedure'
+                    }
+                );
+                sensorData.extraLiterals.push(
+                    {
+                        rdfSubject: "SSMS://#output",
+                        rdfPredicate: "http://www.w3.org/2000/01/rdf-schema#comment",
+                        rdfObject: "The output video segments."
+                    },
+                    {
+                        rdfSubject: "SSMS://",
+                        rdfPredicate: "http://www.w3.org/2000/01/rdf-schema#comment",
+                        rdfObject: "Camera system contains a camera."
+                    },
+                    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
+                        rdfPredicate: "http://www.w3.org/2000/01/rdf-schema#comment",
+                        rdfObject: "The embedded camera sensor in the system."
+                    },
+                    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Video`,
+                        rdfPredicate: "http://www.w3.org/2000/01/rdf-schema#comment",
+                        rdfObject: 'Captures the light entering the camera through the lens so that it can be processed and turned into a digital video.'
+                    },
+                    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Video`,
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#label',
+                        rdfObject: 'Video'
+                    },
+		    {
+                        rdfSubject: 'SSMS://#MeasuringVideo',
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        rdfObject: 'Instructions for measuring Video'
+                    }
+                );
+	    }
+	    // } else if (selectedSensorType === "Sensor type: air temperature") {
+            //     sensorData.extraNodes.push(
+            //         {
+            //             rdfSubject: ,
+            //             rdfPredicate: ,
+            //             rdfObject: ,
+            //         },
+            //         {
+            //             rdfSubject: ,
+            //             rdfPredicate: ,
+            //             rdfObject: ,
+            //         },
+            //         {
+            //             rdfSubject: ,
+            //             rdfPredicate: ,
+            //             rdfObject: ,
+            //         },
+            //         {
+            //             rdfSubject: ,
+            //             rdfPredicate: ,
+            //             rdfObject: ,
+            //         },
+            //     );
+            //     sensorData.extraLiterals.push(
+            //         {
+            //             rdfSubject: ,
+            //             rdfPredicate: ,
+            //             rdfObject: ,
+            //         },
+            //         {
+            //             rdfSubject: ,
+            //             rdfPredicate: ,
+            //             rdfObject: ,
+            //         },
+            //         {
+            //             rdfSubject: ,
+            //             rdfPredicate: ,
+            //             rdfObject: ,
+            //         },
+            //         {
+            //             rdfSubject: ,
+            //             rdfPredicate: ,
+            //             rdfObject: ,
+            //         },
+            //         {
+            //             rdfSubject: ,
+            //             rdfPredicate: ,
+            //             rdfObject: ,
+            //         },
+            //     );
+	    // }
 
             values.extras?.forEach((extra) => {
                 if (extra.literal) {
@@ -157,11 +331,7 @@ export default function RegisterSensor() {
                     ChainUtil.validateIsObject)
             };
             const validateRes = ChainUtil.validateObject(values, sensorRegistrationValidators);
-
-            if (!validateRes.result) {
-                setData(`${data()}\n${validateRes.reason}`);
-                return;
-            }
+	    
             if (!validateRes.result && values.rawCheck) {
                 setData(`${JSON.stringify(sensorData, null, 2)}\n${validateRes.reason}`);
                 setRawCheck({visible: true});
@@ -223,8 +393,8 @@ export default function RegisterSensor() {
                                 return (
                                     <Show when={typePresets.visible}>
                                         <button class="btn btn-accent p-4" onClick={() => {
-                                            // set(i(), { visible: false })
-                                            setTypePresets({ visible: false })
+						    setTypePresets({ visible: false });
+						    setTypePresets('names', `${i()}`, 'selected', true);
                                         }}>
                                             <i class={`fa-solid fa-${typePresets.icon}`}></i>
                                             {typePresets.names[`${i()}`].name}
