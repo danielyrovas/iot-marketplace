@@ -15,19 +15,31 @@ export default function RegisterSensor() {
     const [state, { updateConfig }] = useAppContext();
     const [extraNodes, setExtraNodes] = createStore([]);
     const [data, setData] = createSignal('');
-
+    const [rawCheck, setRawCheck] = createStore({visible: false});
     const [presets, setPresets] = createStore([
         {
-            name: 'Location',
-            icon: 'location-dot',
-            visible: true,
-        },
-        {
-            name: 'Type',
-            icon: 'tag',
-            visible: true,
+            name: "Location",
+            icon: "location-dot",
+            visible: true
         }
     ]);
+    
+    const [typePresets, setTypePresets] = createStore(
+        {
+            names: [
+		{
+		    name: "Sensor type: camera",
+		    selected: false
+		},
+		{
+		    name: "Sensor type: air temperature",
+		    selected: false
+		}
+	    ],
+            icon: "tag",
+            visible: true
+        }
+    );
 
     const { form, errors, setFields, createSubmitHandler } = createForm({
         validate(values) {
@@ -52,17 +64,20 @@ export default function RegisterSensor() {
 
     const realSubmit = createSubmitHandler({
         onSubmit: (values) => {
-            // console.log('Alternative onSubmit', JSON.stringify(values, null, 2))
-
+            console.log('Alternative onSubmit', JSON.stringify(values, null, 2))
+            setData(JSON.stringify(values, null, 2));
+            values.costPerMinute = parseInt(values.costPerMinute);
+            values.costPerKB = parseInt(values.costPerKB);
             let sensorData = {}
 
             sensorData.sensorName = values.sensorName;
-            sensorData.integrationBroker = values.integrationBroker;
             sensorData.costPerMinute = parseInt(values.costPerMinute);
             sensorData.costPerKB = parseInt(values.costPerKB);
+	    sensorData.integrationBroker = values.integrationBroker;
             sensorData.extraNodes = [];
             sensorData.extraLiterals = [];
-            if (values.longtitude !== 'undefined' || values.longtitude !== null) {
+	    console.log(values.longitude);
+            if (typeof values.longtitude !== 'undefined') {
                 sensorData.extraNodes.push(
                     {
                         rdfSubject: `SSMS://#${sensorData.sensorName}`,
@@ -129,7 +144,7 @@ export default function RegisterSensor() {
                     });
                 }
             })
-
+	    
             const sensorRegistrationValidators = {
                 sensorName: ChainUtil.validateIsString,
                 costPerMinute: ChainUtil.createValidateIsIntegerWithMin(0),
@@ -141,34 +156,23 @@ export default function RegisterSensor() {
                 extraLiteralMetadata: ChainUtil.createValidateOptional(
                     ChainUtil.validateIsObject)
             };
-            const validateRes = ChainUtil.validateObject(sensorData, sensorRegistrationValidators);
+            const validateRes = ChainUtil.validateObject(values, sensorRegistrationValidators);
 
             if (!validateRes.result) {
-                setData(`${JSON.stringify(sensorData, null, 2)}\n${validateRes.reason}`);
-                // setData(JSON.stringify(sensorData, null, 2));
+                setData(`${data()}\n${validateRes.reason}`);
                 return;
             }
+            if (!validateRes.result && values.rawCheck) {
+                setData(`${JSON.stringify(sensorData, null, 2)}\n${validateRes.reason}`);
+                setRawCheck({visible: true});
+                return;
+            } else if (!values.rawCheck) {
+		setRawCheck({visible: false});
+		return;
+	    }
+	    
         }
     })
-
-    // try {
-    //     const reg = wallet.createSensorRegistrationAsTransaction(
-    //         blockchain,
-    //         values.rewardAmount,
-    //         values.sensorName,
-    //         values.costPerMinute,
-    //         values.costPerKB,
-    //         values.integrationBroker,
-    //         values.extraNodeMetadata,
-    //         values.extraLiteralMetadata
-    //     );
-    //     chainServer.sendTx(reg);
-    //
-    //     // tx: reg.transaction
-    // } catch (err) {
-    //     console.log(err);
-    //     setData(`${data()}\n${err.message}`);
-    // }
 
     return (
         <div>
@@ -176,7 +180,7 @@ export default function RegisterSensor() {
                 <div class="flex flex-col place-items-center m-4">
                     <TextInput
                         class="w-[40rem]"
-                        label="Name"
+                        label="Sensor name"
                         name="sensorName"
                     />
                     <TextInput
@@ -208,25 +212,28 @@ export default function RegisterSensor() {
                                             {preset.name}
                                             <i class={`fa-solid fa-plus`}></i>
                                         </button>
-                                    </Show>
+                                    </Show>				    
                                 )
                             }}
                         </For>
-                        {/* <Show when={presets[0].visible}> */}
-                        {/*     <button class="btn btn-primary p-4" onClick={() => setPresets(0, { visible: false })}> */}
-                        {/*         Add Location <i class="fa-solid fa-plus"></i> */}
-                        {/*     </button> */}
-                        {/* </Show> */}
-                        {/* <Show when={presets[1].visible}> */}
-                        {/*     <button class="btn btn-primary p-4" onClick={() => AddPresetSensor(1, 'type')}> */}
-                        {/*         Add Sensor Type <i class="fa-solid fa-plus" ></i> */}
-                        {/*     </button> */}
-                        {/* </Show> */}
-                        {/* <Show when={presets[2].visible}> */}
-                        {/*     <button class="btn btn-primary p-4" onClick={() => AddPresetSensor(2, 'exam')}> */}
-                        {/*         Add RDF Example <i class="fa-solid fa-plus" ></i> */}
-                        {/*     </button> */}
-                        {/* </Show> */}
+		    </div>
+		    <div class="flex flex-row space-x-4 justify-center w-[40rem] p-4">
+                        <For each={typePresets.names}>
+                            {(typePresetName, i) => {
+                                return (
+                                    <Show when={typePresets.visible}>
+                                        <button class="btn btn-accent p-4" onClick={() => {
+                                            // set(i(), { visible: false })
+                                            setTypePresets({ visible: false })
+                                        }}>
+                                            <i class={`fa-solid fa-${typePresets.icon}`}></i>
+                                            {typePresets.names[`${i()}`].name}
+                                            <i class={`fa-solid fa-plus`}></i>
+                                        </button>
+                                    </Show>			    
+                                )
+                            }}
+                        </For>			
                     </div>
                     <Show when={!presets[0].visible}>
                         <div class="flex flex-row place-items-center w-[40rem] m-2">
@@ -256,22 +263,21 @@ export default function RegisterSensor() {
                                 <TextInput
                                     class="w-[40rem]"
                                     label={`RDF Subject ${i() + 1}`}
-                                    name={`extras.${i()}.rdfSubject`}
-
+                                    name={`extraNodes.${i()}.rdfSubject`}
                                 />
                                 <TextInput
                                     class="w-[40rem]"
                                     label={`RDF Predicate ${i() + 1}`}
-                                    name={`extras.${i()}.rdfPredicate`}
+                                    name={`extraNodes.${i()}.rdfPredicate`}
                                 />
                                 <TextInput
                                     class="w-[40rem]"
                                     label={`RDF Object ${i() + 1}`}
-                                    name={`extras.${i()}.rdfObject`}
+                                    name={`extraNodes.${i()}.rdfObject`}
                                 />
                                 <div class="flex flex-row place-items-start w-[40rem] m-2">
                                     <input name={`extras.${i()}.literal`} type="checkbox" class="checkbox p-4" />
-                                    <label class='label ms-2' for={`extras.${i()}.literal`}>RDF Literal?</label>
+                                    <label class='label ms-2' for={`extras.${i()}.literal`}>RDF Literal</label>
                                 </div>
                             </div>
                         )
@@ -292,14 +298,23 @@ export default function RegisterSensor() {
                             Add RDF Triple<i class="fa-solid fa-plus"></i>
                         </button>
                     </div>
+		    <div class="flex flex-row space-x-4 justify-center w-[40rem] p-4">
+			<input name='rawCheck' type="checkbox" class="checkbox p-4" />
+			<label class='label ms-2'>Show raw data on submit</label>
+		    </div>
                 </div>
                 <div class="flex justify-center m-4">
                     <button class="btn" type="submit" onClick={realSubmit}>
                         Register Sensor <i class="fa-solid fa-paper-plane"></i>
                     </button>
                 </div>
-            </form >
-            <pre>{data()}</pre>
+            </form>
+	    <Show when={rawCheck.visible}>
+		<h1 class="text-center divider">Submitted raw data</h1>
+		<div class="mockup-code">
+		    <pre><code>{data()}</code></pre>
+		</div>
+	    </Show>
         </div >
     );
 }
