@@ -741,68 +741,88 @@ export default function RegisterSensor() {
                     </Show>
 		    <Show when={typePresets.names[1].selected}>
                         <div class="flex flex-row place-items-center w-[40rem] m-2">
-                            <TextInput
-                                class="w-[33.3333%] p-4"
-                                label='Normal sensor temperature range: minimum temperature (in degrees Celsius)'
-                                name='tempConMinTemp'
-                            />
-                            <TextInput
-                                class="w-[33.3333%] p-4"
-                                label='Normal sensor temperature range: maximum temperature (in degrees Celsius)'
-                                name='tempConMaxTemp'
-                            />
-                            <TextInput
-                                class="w-[33.3333%] p-4"
-                                label='Normal sensor humidity range: minimum percentage point (expressed as a decimal number)'
-                                name='humConMinPerc'
-                            />
+			    <div class='tooltip' data-tip='Normal sensor temperature range: minimum temperature (in degrees Celsius)'>
+				<TextInput
+				    class="w-[33.3333%] p-4"
+				    label='Minimum normal temperature'
+				    name='tempConMinTemp'
+				/>
+			    </div>
+			    <div class='tooltip' data-tip='Normal sensor temperature range: maximum temperature (in degrees Celsius)'>
+				<TextInput
+                                    class="w-[33.3333%] p-4"
+				    label='Maximum normal temperature'
+                                    name='tempConMaxTemp'
+				/>
+			    </div>
+			    <div class='tooltip' data-tip='Normal sensor humidity range: minimum percentage point (expressed as a decimal number)'>
+				<TextInput
+				    class="w-[33.3333%] p-4"
+				    label='Minimum normal humidity'
+				    name='humConMinPerc'
+				/>
+			    </div>
                         </div>
                     </Show>
 		     <Show when={typePresets.names[1].selected}>
-                        <div class="flex flex-row place-items-center w-[40rem] m-2">
-			    <TextInput
-                                class="w-[33.3333%] p-4"
-                                label='Normal sensor humidity range: maximum percentage point (expressed as a decimal number)'
-                                name='humConMaxPerc'
-                            />
-			    <TextInput
-                                class="w-[33.3333%] p-4"
-                                label='Sensor accuracy range: minimum accurate degree (in degrees Celsius)'
-                                name='sensorMinAcc'
-                            />
-			    <TextInput
-                                class="w-[33.3333%] p-4"
-                                label='Sensor accuracy range: maximum accurate degree (in degrees Celsius)'
-                                name='sensorMaxAcc'
-                            />
+                         <div class="flex flex-row place-items-center w-[40rem] m-2">
+			    <div class='tooltip' data-tip='Normal sensor humidity range: maximum percentage point (expressed as a decimal number)'>
+				<TextInput
+				    class="w-[33.3333%] p-4"
+				    label='Minimum normal humidity'
+				    name='humConMaxPerc'
+				/>
+			    </div>
+			    <div class='tooltip' data-tip='Sensor accuracy range: minimum accurate degree (in degrees Celsius)'>
+				<TextInput
+                                    class="w-[33.3333%] p-4"
+				    label='Minimum accuracy'
+                                    name='sensorMinAcc'
+				/>
+			    </div>
+			    <div class='tooltip' data-tip='Sensor accuracy range: maximum accurate degree (in degrees Celsius)'>
+				<TextInput
+				    class="w-[33.3333%] p-4"
+				    label='Maximum accuracy'
+				    name='sensorMaxAcc'
+				/>
+			    </div>			     
                         </div>
                      </Show>
 		    <Show when={typePresets.names[1].selected}>
                         <div class="flex flex-row place-items-center w-[40rem] m-2">
-			    <TextInput
-                                class="w-[33.3333%] p-4"
-                                label='Sensor sensitivity (in degrees Celsius)'
-                                name='sensorSen'
-                            />
-			    <TextInput
-                                class="w-[33.3333%] p-4"
-                                label='Sensor precision range: minimum degree (in degrees Celsius)'
-                                name='sensorMinPre'
-                            />
-			    <TextInput
-                                class="w-[33.3333%] p-4"
-                                label='Sensor precision range: maximum degree (in degrees Celsius)'
-                                name='sensorMaxPre'
-                            />
+			    <div class='tooltip' data-tip='Sensor sensitivity (in degrees Celsius)'>
+				<TextInput
+				    class="w-[33.3333%] p-4"
+				    label='Sensitivity'
+				    name='sensorSen'
+				/>
+			    </div>
+			    <div class='tooltip' data-tip='Sensor precision range: minimum degree (in degrees Celsius)'>
+				<TextInput
+                                    class="w-[33.3333%] p-4"
+				    label='Minimum precision'
+                                    name='sensorMinPre'
+				/>
+			    </div>
+			    <div class='tooltip' data-tip='Sensor precision range: maximum degree (in degrees Celsius))'>
+				<TextInput
+				    class="w-[33.3333%] p-4"
+				    label='Maximum precision'
+				    name='sensorMaxPre'
+				/>
+			    </div>			    
                         </div>
                     </Show>
 		    <Show when={typePresets.names[1].selected}>
                         <div class="flex flex-row place-items-center w-[40rem] m-2">
-			    <TextInput
-                                class="w-[33.3333%] p-4"
-                                label='Sensor frequency (in seconds)'
-                                name='sensorFre'
-                            />
+			    <div class='tooltip' data-tip='Sensor frequency (in seconds)'>
+				<TextInput
+				    class="w-[33.3333%] p-4"
+				    label='Frequency'
+				    name='sensorFre'
+				/>
+			    </div>			    
                         </div>
                     </Show>
                 </div>
