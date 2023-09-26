@@ -313,6 +313,11 @@ export default function RegisterSensor() {
                         rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         rdfObject: 'http://www.w3.org/ns/ssn/systems/OperatingRange',
                     },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
+                        rdfPredicate: 'http://www.w3.org/ns/sosa/observes',
+                        rdfObject: `SSMS://#${sensorData.sensorName}Temperature`
+                    },
                 );
                 sensorData.extraLiterals.push(
                     {
