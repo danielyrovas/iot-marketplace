@@ -28,7 +28,7 @@ export default function RegisterSensor() {
         {
             names: [
 		{
-		    name: "Sensor type: camera",
+		    name: "Sensor type: video camera",
 		    selected: false
 		},
 		{
@@ -136,7 +136,7 @@ export default function RegisterSensor() {
 	    }
 
 	    console.log(typeof selectedSensorType);
-	    if (selectedSensorType === "Sensor type: camera") {
+	    if (selectedSensorType === "Sensor type: video camera") {
                 sensorData.extraNodes.push(
                     {
                         rdfSubject: 'SSMS://#Procedure',
@@ -216,23 +216,23 @@ export default function RegisterSensor() {
                 );
                 sensorData.extraLiterals.push(
                     {
-                        rdfSubject: "SSMS://#output",
-                        rdfPredicate: "http://www.w3.org/2000/01/rdf-schema#comment",
-                        rdfObject: "The output video segments."
+                        rdfSubject: 'SSMS://#output',
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        rdfObject: 'The output video segments.'
                     },
                     {
-                        rdfSubject: "SSMS://",
-                        rdfPredicate: "http://www.w3.org/2000/01/rdf-schema#comment",
-                        rdfObject: "Camera system contains a camera."
+                        rdfSubject: 'SSMS://',
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        rdfObject: 'Camera system contains a camera.'
                     },
                     {
                         rdfSubject: `SSMS://#${sensorData.sensorName}`,
-                        rdfPredicate: "http://www.w3.org/2000/01/rdf-schema#comment",
-                        rdfObject: "The embedded camera sensor in the system."
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        rdfObject: 'The embedded camera sensor in the system.'
                     },
                     {
                         rdfSubject: `SSMS://#${sensorData.sensorName}Video`,
-                        rdfPredicate: "http://www.w3.org/2000/01/rdf-schema#comment",
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
                         rdfObject: 'Captures the light entering the camera through the lens so that it can be processed and turned into a digital video.'
                     },
                     {
@@ -496,29 +496,54 @@ export default function RegisterSensor() {
                 );
                 sensorData.extraLiterals.push(
                     {
-                        rdfSubject: ,
-                        rdfPredicate: ,
-                        rdfObject: ,
+                        rdfSubject: 'SSMS://#output',
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        rdfObject: 'The output is a RDF Graph that describes the temperature.'
                     },
                     {
-                        rdfSubject: ,
-                        rdfPredicate: ,
-                        rdfObject: ,
+                        rdfSubject: 'SSMS://',
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        rdfObject: `SSMS://#${sensorData.sensorName} measures the air temperature.`
                     },
-                    {
-                        rdfSubject: ,
-                        rdfPredicate: ,
-                        rdfObject: ,
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        rdfObject: 'The air temperature sensor, a specific instance of temperature sensor.'
                     },
-                    {
-                        rdfSubject: ,
-                        rdfPredicate: ,
-                        rdfObject: ,
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        rdfObject: 'The conditions in which the air temperature sensor is expected to operate.'
                     },
-                    {
-                        rdfSubject: ,
-                        rdfPredicate: ,
-                        rdfObject: ,
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        rdfObject: `A temperature range of ${values.tempConMinTemp} to ${values.tempConMaxTemp} degrees Celsius.`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
+                        rdfPredicate: 'http://schema.org/minValue',
+                        rdfObject: `${values.tempConMinTemp}`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
+                        rdfPredicate: 'http://schema.org/maxValue',
+                        rdfObject: `${values.tempConMaxTemp}`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        rdfObject: `A relative humidity range of ${values.humConMinPerc} to ${values.humConMaxPerc}%.`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
+                        rdfPredicate: 'http://schema.org/minValue',
+                        rdfObject: `${values.humConMinPerc}`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
+                        rdfPredicate: 'http://schema.org/maxValue',
+                        rdfObject: `${values.humConMaxPerc}`
                     },
                 );
 	    }
@@ -629,18 +654,84 @@ export default function RegisterSensor() {
                         <div class="flex flex-row place-items-center w-[40rem] m-2">
                             <TextInput
                                 class="w-[33.3333%] p-4"
-                                label='Longtitude'
+                                label='Sensor location: longtitude'
                                 name='longtitude'
                             />
                             <TextInput
                                 class="w-[33.3333%] p-4"
-                                label='Latitude'
+                                label='Sensor location: latitude'
                                 name='latitude'
                             />
                             <TextInput
                                 class="w-[33.3333%] p-4"
-                                label='Altitude'
+                                label='Sensor location: altitude'
                                 name='altitude'
+                            />
+                        </div>
+                    </Show>
+		    <Show when={typePresets.names[1].selected}>
+                        <div class="flex flex-row place-items-center w-[40rem] m-2">
+                            <TextInput
+                                class="w-[33.3333%] p-4"
+                                label='Normal sensor temperature range: minimum temperature (in degrees Celsius)'
+                                name='tempConMinTemp'
+                            />
+                            <TextInput
+                                class="w-[33.3333%] p-4"
+                                label='Normal sensor temperature range: maximum temperature (in degrees Celsius)'
+                                name='tempConMaxTemp'
+                            />
+                            <TextInput
+                                class="w-[33.3333%] p-4"
+                                label='Normal sensor humidity range: minimum percentage point (expressed as a decimal number)'
+                                name='humConMinPerc'
+                            />
+                        </div>
+                    </Show>
+		     <Show when={typePresets.names[1].selected}>
+                        <div class="flex flex-row place-items-center w-[40rem] m-2">
+			    <TextInput
+                                class="w-[33.3333%] p-4"
+                                label='Normal sensor humidity range: maximum percentage point (expressed as a decimal number)'
+                                name='humConMaxPerc'
+                            />
+			    <TextInput
+                                class="w-[33.3333%] p-4"
+                                label='Sensor accuracy range: minimum accurate degree (in degrees Celsius)'
+                                name='sensorMinAcc'
+                            />
+			    <TextInput
+                                class="w-[33.3333%] p-4"
+                                label='Sensor accuracy range: maximum accurate degree (in degrees Celsius)'
+                                name='sensorMaxAcc'
+                            />
+                        </div>
+                     </Show>
+		    <Show when={typePresets.names[1].selected}>
+                        <div class="flex flex-row place-items-center w-[40rem] m-2">
+			    <TextInput
+                                class="w-[33.3333%] p-4"
+                                label='Sensor sensitivity (in degrees Celsius)'
+                                name='sensorSen'
+                            />
+			    <TextInput
+                                class="w-[33.3333%] p-4"
+                                label='Sensor precision range: minimum degree (in degrees Celsius)'
+                                name='sensorMinPre'
+                            />
+			    <TextInput
+                                class="w-[33.3333%] p-4"
+                                label='Sensor precision range: maximum degree (in degrees Celsius)'
+                                name='sensorMaxPre'
+                            />
+                        </div>
+                    </Show>
+		    <Show when={typePresets.names[1].selected}>
+                        <div class="flex flex-row place-items-center w-[40rem] m-2">
+			    <TextInput
+                                class="w-[33.3333%] p-4"
+                                label='Sensor frequency (in seconds)'
+                                name='sensorFre'
                             />
                         </div>
                     </Show>
