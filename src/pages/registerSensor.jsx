@@ -533,7 +533,7 @@ export default function RegisterSensor() {
 		    {
                         rdfSubject: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
                         rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        rdfObject: `A relative humidity range of ${values.humConMinPerc} to ${values.humConMaxPerc}%.`
+                        rdfObject: `A relative humidity range of ${values.humConMinPerc}% to ${values.humConMaxPerc}%.`
                     },
 		    {
                         rdfSubject: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
@@ -545,6 +545,76 @@ export default function RegisterSensor() {
                         rdfPredicate: 'http://schema.org/maxValue',
                         rdfObject: `${values.humConMaxPerc}`
                     },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Capability`,
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        rdfObject: `The capabilities of the ${sensorData.sensorName} in normal temperature and humidity conditions.`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Accuracy`,
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        rdfObject: `The accuracy of the ${sensorData.sensorName} is ${values.sensorMinAcc}°C to ${values.sensorMaxAcc}°C in normal temperature and humidity conditions.`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Accuracy`,
+                        rdfPredicate: 'http://schema.org/minValue',
+                        rdfObject: `${values.sensorMinAcc}`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Accuracy`,
+                        rdfPredicate: 'http://schema.org/maxValue',
+                        rdfObject: `${values.sensorMaxAcc}`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Sensitivity`,
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        rdfObject: `The sensitivity and resolution of the ${sensorData.sensorName} is +-${values.sensorSen}°C in normal temperature and humidity conditions.`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Sensitivity`,
+                        rdfPredicate: 'http://schema.org/value',
+                        rdfObject: `${values.sensorSen}`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Precision`,
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        rdfObject: `The precision (= repeatability) of the ${sensorData.sensorName} is ${values.sensorMinPre}°C to ${values.sensorMaxPre}°C in normal temperature and humidity conditions.`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Precision`,
+                        rdfPredicate: 'http://schema.org/minValue',
+                        rdfObject: `${values.sensorMinPre}`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Precision`,
+                        rdfPredicate: 'http://schema.org/maxValue',
+                        rdfObject: `${values.sensorMaxPre}`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Frequency`,
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        rdfObject: `The smallest possible time between one observation and the next is ${values.sensorMaxPre}s on average.`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Frequency`,
+                        rdfPredicate: 'http://schema.org/value',
+                        rdfObject: `${values.sensorFre}`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Temperature`,
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        rdfObject: 'Temperature is a measure of the heat content of air.'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Temperature`,
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#label',
+                        rdfObject: 'Air Temperature'
+                    },
+		    {
+                        rdfSubject: 'SSMS://#MeasuringTemperature',
+                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        rdfObject: 'Instructions for measuring temperature'
+                    }
                 );
 	    }
 
