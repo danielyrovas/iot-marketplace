@@ -313,6 +313,106 @@ export default function RegisterSensor() {
                         rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         rdfObject: 'http://www.w3.org/ns/ssn/systems/OperatingRange',
                     },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
+                        rdfPredicate: 'http://www.w3.org/ns/ssn/systems/inCondition',
+                        rdfObject: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
+                        rdfPredicate: 'http://www.w3.org/ns/ssn/systems/inCondition',
+                        rdfObject: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/ssn/systems/Condition'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://schema.org/PropertyValue'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
+                        rdfPredicate: 'http://schema.org/unitCode',
+                        rdfObject: 'http://qudt.org/1.1/vocab/unit#DegreeCelsius'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/ssn/systems/Condition'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://schema.org/PropertyValue'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
+                        rdfPredicate: 'http://schema.org/unitCode',
+                        rdfObject: 'http://qudt.org/1.1/vocab/unit#Percent'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Capability`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/ssn/Property'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Capability`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/ssn/systems/SystemCapability'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Capability`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://schema.org/PropertyValue'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Capability`,
+                        rdfPredicate: 'http://www.w3.org/ns/ssn/systems/inCondition',
+                        rdfObject: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Capability`,
+                        rdfPredicate: 'http://www.w3.org/ns/ssn/systems/inCondition',
+                        rdfObject: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Capability`,
+                        rdfPredicate: 'http://www.w3.org/ns/ssn/systems/hasSystemProperty',
+                        rdfObject: `SSMS://#${sensorData.sensorName}Accuracy`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Capability`,
+                        rdfPredicate: 'http://www.w3.org/ns/ssn/systems/hasSystemProperty',
+                        rdfObject: `SSMS://#${sensorData.sensorName}Sensitivity`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Capability`,
+                        rdfPredicate: 'http://www.w3.org/ns/ssn/systems/hasSystemProperty',
+                        rdfObject: `SSMS://#${sensorData.sensorName}Frequency`
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Accuracy`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/ssn/Property'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Accuracy`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/ssn/systems/Accuracy'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Accuracy`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://schema.org/PropertyValue'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Accuracy`,
+                        rdfPredicate: 'http://schema.org/unitCode',
+                        rdfObject: 'http://qudt.org/1.1/vocab/unit#DegreeCelsius'
+                    },
                 );
                 sensorData.extraLiterals.push(
                     {
