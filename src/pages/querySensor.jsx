@@ -4,19 +4,29 @@ import { QueryInput } from "../logic/QueryInput";
 export default function QuerySensor() {
   const presetQueries = [
     {
-      label: "Person",
-      property: "P31",
-      value: "Q5",
+      label: "All Sensor",
+      property: "observes",
+      value: "",
     },
     {
-      label: "City",
-      property: "P31",
-      value: "Q515",
+      label: "Camera Sensors",
+      property: "observes",
+      value: 'FILTER (?measures = "video")',
     },
     {
-      label: "Country",
-      property: "P31",
-      value: "Q6256",
+      label: "Milk temperature",
+      property: "observes",
+      value: 'FILTER (?measures = "Milk Temperature")',
+    },
+    {
+      label: "Milk Pressure",
+      property: "observes",
+      value: 'FILTER (?measures = "milk pressure")',
+    },
+    {
+      label: "Relative air Humidity",
+      property: "observes",
+      value: 'FILTER (?measures = "relative air Humidity")',
     },
   ];
 
@@ -27,11 +37,35 @@ export default function QuerySensor() {
   const availableQueryOptions = [];
   const handlePresetQuerySubmit = (event) => {
     event.preventDefault();
-    const selectedPresetQuery = `SELECT ?item ?itemLabel WHERE {
-  ?item wdt:P31 wd:${selectedProperty()};
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-} LIMIT 10`;
-    fetchRdfData(selectedPresetQuery);
+    executeQuery();
+  };
+
+  const executeQuery = () => {
+    // Check if the user entered a custom query; if yes, use it, otherwise, use the selected preset query
+    const queryToExecute = `
+    PREFIX sosa: <http://www.w3.org/ns/sosa/>
+    PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+    
+    SELECT ?sensor ?lat ?long ?measures
+    WHERE {
+      ?sensor a sosa:Sensor ;
+              sosa:observes ?observes ;
+              sosa:hasFeatureOfInterest ?location .
+      ?observes rdfs:label ?measures .
+      ?location geo:lat ?lat ;
+               geo:long ?long .
+      ${selectedProperty()}
+    }`;
+
+    // Trigger the query using props.executeQuery
+    fetchRdfData(queryToExecute)
+      .then(() => {
+        console.log("fetching data");
+      })
+      .catch((error) => {
+        console.log("error fetching data");
+        console.error(error);
+      });
   };
 
   const handlePropertyChange = (event) => {
@@ -178,9 +212,9 @@ export default function QuerySensor() {
   const fetchRdfData = async (query) => {
     try {
       const encodedQuery = encodeURIComponent(query);
-      const endpointurl = "https://query.wikidata.org/sparql";
+      const endpointUrl = "http://localhost:3000/blazegraph-sparql";
       const headers = { Accept: "application/sparql-results+json" };
-      const fullUrl = endpointurl + "?query=" + encodeURIComponent(query);
+      const fullUrl = `${endpointUrl}?query=${encodedQuery}`;
       const response = await fetch(fullUrl, { headers });
 
       if (!response.ok) {
@@ -188,21 +222,28 @@ export default function QuerySensor() {
       }
 
       const jsonResponse = await response.json();
+      console.log(jsonResponse);
       setRdfData(jsonResponse);
     } catch (error) {
       console.error("Error fetching RDF data:", error);
     }
   };
   createEffect(() => {
+    // console.log(rdfData())
+    // console.log(rdfData().sparql.results[0].result.data);
+    // setMapData(rdfData().sparql.results[0].result);
     let forMap = JSON.parse(JSON.stringify(rdfData()));
-    console.log(forMap.results.bindings);
+    console.log(forMap.sparql.results[0].result.data[0]);
     setMapData(forMap.results.bindings);
   });
   return (
     <>
       <div className="mx-auto w-full max-w-[1200px] flex flex-row gap-4 min-h-screen">
         <div className="w-[300px] p-4 flex flex-col gap-4">
-          <form className="flex flex-col gap-4" onSubmit={handlePresetQuerySubmit}>
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={handlePresetQuerySubmit}
+          >
             <div className="form-control w-full max-w-xs">
               <label className="label">
                 <span className="label-text">SPARQL Query</span>
@@ -210,12 +251,15 @@ export default function QuerySensor() {
               <select
                 className="select select-bordered"
                 onChange={handlePropertyChange}
+                value={selectedProperty()}
               >
                 <option disabled selected>
                   Pick one
                 </option>
-                {presetQueries.map((data) => (
-                  <option value={data.value}>{data.label}</option>
+                {presetQueries.map((preset, index) => (
+                  <option key={index} value={preset.value}>
+                    {preset.label}
+                  </option>
                 ))}
               </select>
             </div>
@@ -232,7 +276,6 @@ export default function QuerySensor() {
             </div>
             <button className="btn">Execute Query</button>
           </form>
-
           {/* <button className="border rounded px-4 py-2" onClick={togglePopup}>
             Location
           </button>
@@ -245,303 +288,177 @@ export default function QuerySensor() {
         </div>
         <div className="grow p-4">
           <div className="grid grid-cols-4 w-full gap-4">
-            {mapData() !== null
-              ? mapData().map((data, index) => {
-                  if (data.personLabel) {
-                    return (
-                      <div className="card w-96 bg-base-100 shadow-xl">
-                        <div className="card-body">
-                          <h2 className="card-title">
-                            {data.personLabel.value}
-                          </h2>
-                          <p>
-                            If a dog chews shoes whose shoes does he choose?
-                          </p>
-                          <div className="card-actions justify-start">
-                            <button className="btn btn-primary">Details</button>
-                          </div>
+            {rdfData().sparql?.results[0]?.result?.map((result, rowIndex) => (
+              <div className="card w-full bg-base-100 shadow-xl" key={rowIndex}>
+                <div className="card-body">
+                  <h2 className="card-title">Sensor {rowIndex}</h2>
+                  {result.binding.map((header, colIndex) => (
+                    <td
+                      className="w-[140px] overflow-hidden text-ellipsis"
+                      key={colIndex}
+                    >
+                      {header.uri
+                        ? Array.isArray(header.uri)
+                          ? header.uri[0] || "N/A"
+                          : header.uri || "N/A"
+                        : Array.isArray(header.literal)
+                        ? header.literal[0] || "N/A"
+                        : header.literal || "N/A"}
+                    </td>
+                  ))}
+                  <div className="card-actions justify-start">
+                    {/* You can open the modal using document.getElementById('ID').showModal() method */}
+                    <button
+                      className="btn"
+                      onClick={() =>
+                        document.getElementById(`modal`).showModal()
+                      }
+                    >
+                      Details
+                    </button>
+                    <dialog id={`modal`} className="modal">
+                      <div className="modal-box">
+                        <form method="dialog">
+                          {/* if there is a button in form, it will close the modal */}
+                          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                            ✕
+                          </button>
+                        </form>
+                        <h3 className="font-bold text-lg">Details</h3>
+                        <div className="overflow-x-auto">
+                          <table className="table">
+                            {/* head */}
+                            <thead>
+                              {/* <tr>
+                                    <th></th>
+                                    <th>Subject</th>
+                                    <th>Predicate</th>
+                                    <th>Object</th>
+                                  </tr> */}
+                            </thead>
+                            <tbody>
+                              {/* row 1 */}
+                              <tr>
+                                <th></th>
+
+                                <td>
+                                  <ul>
+                                    <li>Subject</li>
+                                    <li>Predicate</li>
+                                    <li>Object</li>
+                                  </ul>
+                                </td>
+                                <td>
+                                  <ul>
+                                    <li>SSMS://</li>
+                                    <li>http://www.w3.org/ns/sosa/observes</li>
+                                    <li>SSMS://#CameraSensorVideo</li>
+                                  </ul>
+                                </td>
+                              </tr>
+                              {/* row 2 */}
+                              <tr>
+                                <th></th>
+
+                                <td>
+                                  <ul>
+                                    <li>Subject</li>
+                                    <li>Predicate</li>
+                                    <li>Object</li>
+                                  </ul>
+                                </td>
+                                <td>
+                                  <ul>
+                                    <li>SSMS://</li>
+                                    <li>
+                                      http://www.w3.org/ns/sosa/hasFeatureOfInterest
+                                    </li>
+                                    <li>SSMS://#CameraSensorLocation</li>
+                                  </ul>
+                                </td>
+                              </tr>
+                              {/* row 3 */}
+                              <tr>
+                                <th></th>
+                                <td></td>
+                                <td>Label</td>
+                                <td>Video</td>
+                              </tr>
+                              {/* row 4 */}
+                              <tr>
+                                <th></th>
+                                <td></td>
+                                <td>Latitude</td>
+                                <td>-37.821658</td>
+                              </tr>
+                              {/* row 5 */}
+                              <tr>
+                                <th></th>
+                                <td></td>
+                                <td>Longitude</td>
+                                <td>145.03904</td>
+                              </tr>
+                              {/* row 6 */}
+                              <tr>
+                                <th></th>
+                                <td></td>
+                                <td>Altitude</td>
+                                <td>12.75</td>
+                              </tr>
+                              {/* row 7 */}
+                              <tr>
+                                <th></th>
+                                <td></td>
+                                <td>Country</td>
+                                <td>Australia</td>
+                              </tr>
+                              {/* row 6 */}
+                              <tr>
+                                <th></th>
+                                <td></td>
+                                <td>Provenance</td>
+                                <td>Queensland</td>
+                              </tr>
+                              {/* row 7 */}
+                              <tr>
+                                <th></th>
+                                <td></td>
+                                <td>City</td>
+                                <td>Brisbane</td>
+                              </tr>
+                              {/* row 8 */}
+                              <tr>
+                                <th></th>
+                                <td></td>
+                                <td>Suburb</td>
+                                <td>Stafford</td>
+                              </tr>
+                              {/* row 9 */}
+                              <tr>
+                                <th></th>
+                                <td></td>
+                                <td>Address</td>
+                                <td>9 Webster Street</td>
+                              </tr>
+                              {/* row 10 */}
+                              <tr>
+                                <th></th>
+                                <td></td>
+                                <td>Postcode</td>
+                                <td>4053</td>
+                              </tr>
+                            </tbody>
+                          </table>
                         </div>
                       </div>
-                    );
-                  } else if (data.cityLabel) {
-                    return (
-                      <div className="card w-96 bg-base-100 shadow-xl">
-                        <div className="card-body">
-                          <h2 className="card-title">{data.cityLabel.value}</h2>
-                          <p>
-                            If a dog chews shoes whose shoes does he choose?
-                          </p>
-                          <div className="card-actions justify-start">
-                            <button className="btn btn-primary">Details</button>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  } else if (data.countryLabel) {
-                    return (
-                      <div className="card w-96 bg-base-100 shadow-xl">
-                        <div className="card-body">
-                          <h2 className="card-title">
-                            {data.countryLabel.value}
-                          </h2>
-                          <p>
-                            If a dog chews shoes whose shoes does he choose?
-                          </p>
-                          <div className="card-actions justify-start">
-                            <button className="btn btn-primary">Details</button>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  } else if (data.itemLabel) {
-                    return (
-                      <div className="card w-full bg-base-100 shadow-xl">
-                        <div className="card-body">
-                          <h2 className="card-title">{data.itemLabel.value}</h2>
-                          <p>
-                            If a dog chews shoes whose shoes does he choose?
-                          </p>
-                          <div className="card-actions justify-start">
-                            {/* You can open the modal using document.getElementById('ID').showModal() method */}
-                            <button
-                              className="btn"
-                              onClick={() =>
-                                document
-                                  .getElementById(`modal-${index}`)
-                                  .showModal()
-                              }
-                            >
-                              Details
-                            </button>
-                            <dialog id={`modal-${index}`} className="modal">
-                              <div className="modal-box">
-                                <form method="dialog">
-                                  {/* if there is a button in form, it will close the modal */}
-                                  <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                                    ✕
-                                  </button>
-                                </form>
-                                <h3 className="font-bold text-lg">Details</h3>
-                                <div className="overflow-x-auto">
-                                  <table className="table">
-                                    {/* head */}
-                                    <thead>
-                                      <tr>
-                                        <th></th>
-                                        <th>Subject</th>
-                                        <th>Predicate</th>
-                                        <th>Object</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      {/* row 1 */}
-                                      <tr>
-                                        <th></th>
-                                        <td></td>
-                                        <td>Observes</td>
-                                        <td>SensorVideo</td>
-                                      </tr>
-                                      {/* row 2 */}
-                                      <tr>
-                                        <th></th>
-                                        <td></td>
-                                        <td>FeatureOfInterest</td>
-                                        <td>CameraSensorLocation</td>
-                                      </tr>
-                                      {/* row 3 */}
-                                      <tr>
-                                        <th></th>
-                                        <td></td>
-                                        <td>Label</td>
-                                        <td>Video</td>
-                                      </tr>
-                                      {/* row 4 */}
-                                      <tr>
-                                        <th></th>
-                                        <td></td>
-                                        <td>Latitude</td>
-                                        <td>-37.821658</td>
-                                      </tr>
-                                      {/* row 5 */}
-                                      <tr>
-                                        <th></th>
-                                        <td></td>
-                                        <td>Longitude</td>
-                                        <td>145.03904</td>
-                                      </tr>
-                                      {/* row 6 */}
-                                      <tr>
-                                        <th></th>
-                                        <td></td>
-                                        <td>Altitude</td>
-                                        <td>12.75</td>
-                                      </tr>
-                                      {/* row 7 */}
-                                      <tr>
-                                        <th></th>
-                                        <td></td>
-                                        <td>Country</td>
-                                        <td>Australia</td>
-                                      </tr>
-                                      {/* row 6 */}
-                                      <tr>
-                                        <th></th>
-                                        <td></td>
-                                        <td>Provenance</td>
-                                        <td>Queensland</td>
-                                      </tr>
-                                      {/* row 7 */}
-                                      <tr>
-                                        <th></th>
-                                        <td></td>
-                                        <td>City</td>
-                                        <td>Brisbane</td>
-                                      </tr>
-                                      {/* row 8 */}
-                                      <tr>
-                                        <th></th>
-                                        <td></td>
-                                        <td>Suburb</td>
-                                        <td>Stafford</td>
-                                      </tr>
-                                      {/* row 9 */}
-                                      <tr>
-                                        <th></th>
-                                        <td></td>
-                                        <td>Address</td>
-                                        <td>9 Webster Street</td>
-                                      </tr>
-                                      {/* row 10 */}
-                                      <tr>
-                                        <th></th>
-                                        <td></td>
-                                        <td>Postcode</td>
-                                        <td>4053</td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                </div>
-                              </div>
-                            </dialog>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  }
-                })
-              : "No Data"}
-            {/* {JSON.stringify(rdfData().results, null, 2)} */}
-            {/* <GridRdfDataDisplay rdfData={rdfData()}/> */}
-            {/* {rdfData() && rdfData().map((data) => (
-                <>
-                  <div className="flex flex-col gap-4 border rounded p-4">
-                    <span>{data.location}</span>
-                    <span>{data.sensortype}</span>
+                    </dialog>
                   </div>
-                </>
-              ))
-            } */}
-            {/* {!filterlocation
-              ? datadummy.map((data) => (
-                  <>
-                    <div className="flex flex-col gap-4 border rounded p-4">
-                      <span>{data.location}</span>
-                      <span>{data.sensortype}</span>
-                    </div>
-                  </>
-                ))
-              : datadummy
-                  .filter((data) => data.location === filterlocation())
-                  .filter((data) => data.sensortype === filtersensor())
-                  .map((data) => (
-                    <>
-                      <div className="flex flex-col gap-4 border rounded p-4">
-                        <span>{data.location}</span>
-                        <span>{data.sensortype}</span>
-                      </div>
-                    </>
-                  ))} */}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
-      {popup() && (
-        <div
-          className={`flex items-center justify-center fixed inset-0 backdrop-blur`}
-        >
-          <div className="flex flex-col gap-4 w-full max-w-sm border rounded p-4 bg-white">
-            <div className="flex justify-between">
-              <div>Location</div>
-              <button onClick={togglePopup}>Close</button>
-            </div>
-            <div className="flex flex-col gap-4">
-              <select className="p-2 border" name="" id="">
-                <option value="Australia">Australia</option>
-              </select>
-              {/* <select className="p-2 border" name="" id="">
-                <option value="State">State</option>
-              </select> */}
-              <select
-                className="p-2 border"
-                name=""
-                id=""
-                onChange={(data) => {
-                  setfilterlocation(data.target.value);
-                  console.log(filterlocation());
-                }}
-              >
-                {citylocation.map((data) => (
-                  <option key={data.value} value={data.value}>
-                    {data.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
-      )}
-      {popup2() && (
-        <div
-          className={`flex items-center justify-center fixed inset-0 backdrop-blur`}
-        >
-          <div className="flex flex-col gap-4 w-full max-w-sm border rounded p-4 bg-white">
-            <div className="flex justify-between">
-              <div>Sensor Type</div>
-              <button onClick={togglePopup2}>Close</button>
-            </div>
-            <div className="flex flex-col gap-4">
-              <select
-                className="p-2 border"
-                name=""
-                id=""
-                onChange={(data) => {
-                  setfiltersensor(data.target.value);
-                  console.log(filtersensor());
-                }}
-              >
-                {sensortype.map((data) => (
-                  <option key={data.value} value={data.value}>
-                    {data.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
-      )}
-      {popup3() && (
-        <div
-          className={`flex items-center justify-center fixed inset-0 backdrop-blur`}
-        >
-          <div className="flex flex-col gap-4 w-full max-w-sm border rounded p-4 bg-white">
-            <div className="flex justify-between">
-              <div>Execute Query</div>
-              <button onClick={togglePopup3}>Close</button>
-            </div>
-            <div className="flex flex-col gap-4"></div>
-          </div>
-        </div>
-      )}
-      <div></div>
     </>
   );
 }
