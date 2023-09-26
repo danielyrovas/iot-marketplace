@@ -413,6 +413,86 @@ export default function RegisterSensor() {
                         rdfPredicate: 'http://schema.org/unitCode',
                         rdfObject: 'http://qudt.org/1.1/vocab/unit#DegreeCelsius'
                     },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Sensitivity`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/ssn/Property'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Sensitivity`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/ssn/systems/Sensitivity'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Sensitivity`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/ssn/systems/Resolution'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Sensitivity`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://schema.org/PropertyValue'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Sensitivity`,
+                        rdfPredicate: 'http://schema.org/unitCode',
+                        rdfObject: 'http://qudt.org/1.1/vocab/unit#DegreeCelsius'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Precision`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/ssn/Property'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Precision`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/ssn/systems/Precision'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Precision`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://schema.org/PropertyValue'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Precision`,
+                        rdfPredicate: 'http://schema.org/unitCode',
+                        rdfObject: 'http://qudt.org/1.1/vocab/unit#DegreeCelsius'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Frequency`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/ssn/Property'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Frequency`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/ssn/systems/Frequency'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Frequency`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://schema.org/PropertyValue'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Frequency`,
+                        rdfPredicate: 'http://schema.org/unitCode',
+                        rdfObject: 'http://qudt.org/1.1/vocab/unit#Second'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Temperature`,
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/sosa/ObservableProperty'
+                    },
+		    {
+                        rdfSubject: `SSMS://#${sensorData.sensorName}Temperature`,
+                        rdfPredicate: 'http://www.w3.org/ns/sosa/isObservedBy',
+                        rdfObject: `SSMS://#${sensorData.sensorName}`
+                    },
+		    {
+                        rdfSubject: 'SSMS://#MeasuringTemperature',
+                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        rdfObject: 'http://www.w3.org/ns/sosa/Procedure'
+                    }
                 );
                 sensorData.extraLiterals.push(
                     {
