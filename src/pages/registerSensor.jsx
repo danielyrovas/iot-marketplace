@@ -657,15 +657,24 @@ export default function RegisterSensor() {
         }
     })
 
-      const handleConfirmation = () => {
-        setShowConfirmation(true); 
-      };
+    const handleConfirmation = () => {
+      setShowConfirmation(true); 
+    };
 
-      const handleDataDisplay = () => {
-        setShowConfirmation(false); 
-        realSubmit(); 
-        setShowData(true); 
-      };
+    const handleDataDisplay = () => {
+      setShowConfirmation(false); 
+      realSubmit(); 
+    };
+
+    const response = async (sensorData) => {
+	await fetch(`${state.api}sensorregistration`, {
+	    method: 'POST',
+	    headers: {
+		'Content-Type': 'application/json'
+	    },
+	    body: JSON.stringify(sensorData)
+	})
+    };
 
     return (
         <div>
