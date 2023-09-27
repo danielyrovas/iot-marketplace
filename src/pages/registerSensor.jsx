@@ -39,6 +39,23 @@ export default function RegisterSensor() {
             selected: false
         }
     ]);
+    
+    const [typePresets, setTypePresets] = createStore(
+        {
+            names: [
+		{
+		    name: "Sensor type: video camera",
+		    selected: false
+		},
+		{
+		    name: "Sensor type: air temperature",
+		    selected: false
+		}
+	    ],
+            icon: "tag",
+            visible: true
+        }
+    );
 
     const { form, errors, setFields, createSubmitHandler } = createForm({
         validate(values) {
@@ -75,7 +92,7 @@ export default function RegisterSensor() {
 	    sensorData.integrationBroker = values.integrationBroker;
             sensorData.extraNodeMetadata = [];
             sensorData.extraLiteralMetadata = [];
-            if (typeof values.longtitude !== 'undefined') {
+            if (typeof values.longitude !== 'undefined') {
                 sensorData.extraNodeMetadata.push(
                     {
                         s: `SSMS://#${sensorData.sensorName}`,
@@ -112,7 +129,7 @@ export default function RegisterSensor() {
                     {
                         s: `SSMS://#${sensorData.sensorName}#location`,
                         p: 'http://www.w3.org/2003/01/geo/wgs84_pos#long',
-                        o: `${values.longtitude}`
+                        o: `${values.longitude}`
                     },
                     {
                         s: `SSMS://#${sensorData.sensorName}#location`,
@@ -730,10 +747,10 @@ export default function RegisterSensor() {
                     </div>
                     <Show when={!presets[0].visible}>
                         <div class="flex flex-row justify-between w-[40rem] m-2">
-			    <div class='tooltip w-[32%]' data-tip='Sensor location: longtitude'>
+			    <div class='tooltip w-[32%]' data-tip='Sensor location: longitude'>
 				<TextInput
-				    label='Longtitude'
-				    name='longtitude'
+				    label='Longitude'
+				    name='longitude'
 				/>
 			    </div>
 			    <div class='tooltip w-[32%]' data-tip='Sensor location: latitude'>
