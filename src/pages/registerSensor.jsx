@@ -74,10 +74,10 @@ export default function RegisterSensor() {
             sensorData.costPerMinute = parseInt(values.costPerMinute);
             sensorData.costPerKB = parseInt(values.costPerKB);
 	    sensorData.integrationBroker = values.integrationBroker;
-            sensorData.extraNodes = [];
-            sensorData.extraLiterals = [];
-            if (typeof values.longtitude !== 'undefined') {
-                sensorData.extraNodes.push(
+            sensorData.extraNodeMetadata = [];
+            sensorData.extraLiteralMetadata = [];
+            if (typeof values.longitude !== 'undefined') {
+                sensorData.extraNodeMetadata.push(
                     {
                         s: `SSMS://#${sensorData.sensorName}`,
                         p: 'http://www.w3.org/ns/sosa/hasFeatureOfInterest',
@@ -99,7 +99,7 @@ export default function RegisterSensor() {
                         o: `http://www.w3.org/ns/sosa/hasFeatureOfInterest`
                     }
                 );
-                sensorData.extraLiterals.push(
+                sensorData.extraLiteralMetadata.push(
                     {
                         s: `SSMS://#${sensorData.sensorName}#location`,
                         p: 'http://www.w3.org/2000/01/rdf-schema#label',
@@ -113,7 +113,7 @@ export default function RegisterSensor() {
                     {
                         s: `SSMS://#${sensorData.sensorName}#location`,
                         p: 'http://www.w3.org/2003/01/geo/wgs84_pos#long',
-                        o: `${values.longtitude}`
+                        o: `${values.longitude}`
                     },
                     {
                         s: `SSMS://#${sensorData.sensorName}#location`,
@@ -137,7 +137,7 @@ export default function RegisterSensor() {
 
 	    console.log(typeof selectedSensorType);
 	    if (selectedSensorType === "Sensor type: video camera") {
-                sensorData.extraNodes.push(
+                sensorData.extraNodeMetadata.push(
                     {
                         s: 'SSMS://#Procedure',
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
@@ -214,7 +214,7 @@ export default function RegisterSensor() {
                         o: 'http://www.w3.org/ns/sosa/Procedure'
                     }
                 );
-                sensorData.extraLiterals.push(
+                sensorData.extraLiteralMetadata.push(
                     {
                         s: 'SSMS://#output',
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
@@ -247,7 +247,7 @@ export default function RegisterSensor() {
                     }
                 );
 	    } else if (selectedSensorType === "Sensor type: air temperature") {
-                sensorData.extraNodes.push(
+                sensorData.extraNodeMetadata.push(
                     {
                         s: 'SSMS://#Procedure',
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
@@ -494,7 +494,7 @@ export default function RegisterSensor() {
                         o: 'http://www.w3.org/ns/sosa/Procedure'
                     }
                 );
-                sensorData.extraLiterals.push(
+                sensorData.extraLiteralMetadata.push(
                     {
                         s: 'SSMS://#output',
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
@@ -620,13 +620,13 @@ export default function RegisterSensor() {
 
             values.extras?.forEach((extra) => {
                 if (extra.literal) {
-                    sensorData.extraLiterals.push({
+                    sensorData.extraLiteralMetadata.push({
                         s: extra.rdfSubject,
                         p: extra.rdfPredicate,
                         o: extra.rdfObject,
                     });
                 } else {
-                    sensorData.extraNodes.push({
+                    sensorData.extraNodeMetadata.push({
                         s: extra.rdfSubject,
                         p: extra.rdfPredicate,
                         o: extra.rdfObject,
@@ -722,10 +722,10 @@ export default function RegisterSensor() {
                     </div>
                     <Show when={!presets[0].visible}>
                         <div class="flex flex-row justify-between w-[40rem] m-2">
-			    <div class='tooltip w-[32%]' data-tip='Sensor location: longtitude'>
+			    <div class='tooltip w-[32%]' data-tip='Sensor location: longitude'>
 				<TextInput
-				    label='Longtitude'
-				    name='longtitude'
+				    label='Longitude'
+				    name='longitude'
 				/>
 			    </div>
 			    <div class='tooltip w-[32%]' data-tip='Sensor location: latitude'>
@@ -827,17 +827,17 @@ export default function RegisterSensor() {
                                 <TextInput
                                     class="w-[40rem]"
                                     label={`RDF Subject ${i() + 1}`}
-                                    name={`extraNodes.${i()}.rdfSubject`}
+                                    name={`extras.${i()}.rdfSubject`}
                                 />
                                 <TextInput
                                     class="w-[40rem]"
                                     label={`RDF Predicate ${i() + 1}`}
-                                    name={`extraNodes.${i()}.rdfPredicate`}
+                                    name={`extras.${i()}.rdfPredicate`}
                                 />
                                 <TextInput
                                     class="w-[40rem]"
                                     label={`RDF Object ${i() + 1}`}
-                                    name={`extraNodes.${i()}.rdfObject`}
+                                    name={`extras.${i()}.rdfObject`}
                                 />
                                 <div class="flex flex-row place-items-start w-[40rem] m-2">
                                     <input name={`extras.${i()}.literal`} type="checkbox" class="checkbox p-4" />
