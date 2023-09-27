@@ -11,7 +11,8 @@ const isString = (str) => {
   
 
 export default function RegisterBroker() {
-
+    
+    const [rawCheck, setRawCheck] = createStore({visible: false});
     const [state, { updateConfig }] = useAppContext();
     const [showConfirmation, setShowConfirmation] = createSignal(false);
     const [extraNodes, setExtraNodes] = createStore([]);
@@ -26,11 +27,6 @@ export default function RegisterBroker() {
             icon: 'location-dot',
             visible: true,
         },
-        {
-            name: 'Type',
-            icon: 'tag',
-            visible: true,
-        }
     ]);
     
     const { form, errors, setFields, createSubmitHandler } = createForm({
@@ -61,110 +57,104 @@ export default function RegisterBroker() {
 
     const realSubmit = createSubmitHandler({
         onSubmit: (values) => {
-            
-            //setData(JSON.stringify(values, null, 2));
 
 
             let brokerData = {}
 
             brokerData.brokerName = values.brokerName;
             brokerData.endPoint = values.endPoint;
-            brokerData.extraNodes = [];
-            brokerData.extraLiterals = [];
+            brokerData.extraNodeMetadata = [];
+            brokerData.extraLiteralMetadata = [];
 
-            if (values.longtitude !== 'undefined' || values.longtitude !== null) {
-                brokerData.extraNodes.push(
+            if (typeof values.longitude !== 'undefined') {
+                brokerData.extraNodeMetadata.push(
                     {
-                        rdfSubject: `SSMS://#${brokerData.brokerName}`,
-                        rdfPredicate: 'http://www.w3.org/ns/sosa/hasFeatureOfInterest',
-                        rdfObject: `SSMS://#${brokerData.brokerName}#location`,
+                        s: `SSMS://#${brokerData.brokerName}`,
+                        p: 'http://www.w3.org/ns/sosa/hasFeatureOfInterest',
+                        o: `SSMS://#${brokerData.brokerName}#location`,
                     },
                     {
-                        rdfSubject: `SSMS://#${brokerData.brokerName}#location`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: `http://www.w3.org/ns/sosa/hasFeatureOfInterest`,
+                        s: `SSMS://#${brokerData.brokerName}#location`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: `http://www.w3.org/ns/sosa/hasFeatureOfInterest`,
                     },
                     {
-                        rdfSubject: `SSMS://#${brokerData.brokerName}#location`,
-                        rdfPredicate: 'http://www.w3.org/ns/sosa/isSampleOf',
-                        rdfObject: `SSMS://earth`,
+                        s: `SSMS://#${brokerData.brokerName}#location`,
+                        p: 'http://www.w3.org/ns/sosa/isSampleOf',
+                        o: `SSMS://earth`,
                     },
                     {
-                        rdfSubject: `SSMS://earth`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: `http://www.w3.org/ns/sosa/hasFeatureOfInterest`,
+                        s: `SSMS://earth`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: `http://www.w3.org/ns/sosa/hasFeatureOfInterest`,
                     },
                 );
-                brokerData.extraLiterals.push(
+                brokerData.extraLiteralMetadata.push(
                     {
-                        rdfSubject: `SSMS://#${brokerData.brokerName}#location`,
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#label',
-                        rdfObject: `location of #${brokerData.brokerName}`,
+                        s: `SSMS://#${brokerData.brokerName}#location`,
+                        p: 'http://www.w3.org/2000/01/rdf-schema#label',
+                        o: `location of #${brokerData.brokerName}`,
                     },
                     {
-                        rdfSubject: `SSMS://#${brokerData.brokerName}#location`,
-                        rdfPredicate: 'http://www.w3.org/2003/01/geo/wgs84_pos#lat',
-                        rdfObject: `${values.latitude}`,
+                        s: `SSMS://#${brokerData.brokerName}#location`,
+                        p: 'http://www.w3.org/2003/01/geo/wgs84_pos#lat',
+                        o: `${values.latitude}`,
                     },
                     {
-                        rdfSubject: `SSMS://#${brokerData.brokerName}#location`,
-                        rdfPredicate: 'http://www.w3.org/2003/01/geo/wgs84_pos#long',
-                        rdfObject: `${values.longtitude}`,
+                        s: `SSMS://#${brokerData.brokerName}#location`,
+                        p: 'http://www.w3.org/2003/01/geo/wgs84_pos#long',
+                        o: `${values.longitude}`,
                     },
                     {
-                        rdfSubject: `SSMS://#${brokerData.brokerName}#location`,
-                        rdfPredicate: 'http://www.w3.org/2003/01/geo/wgs84_pos#alt',
-                        rdfObject: `${values.altitude}`,
+                        s: `SSMS://#${brokerData.brokerName}#location`,
+                        p: 'http://www.w3.org/2003/01/geo/wgs84_pos#alt',
+                        o: `${values.altitude}`,
                     },
                     {
-                        rdfSubject: 'SSMS://earth',
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#label',
-                        rdfObject: 'earth',
+                        s: 'SSMS://earth',
+                        p: 'http://www.w3.org/2000/01/rdf-schema#label',
+                        o: 'earth',
                     },
                 );
             }
 
             values.extras?.forEach((extra) => {
                 if (extra.literal) {
-                    brokerData.extraLiterals.push({
-                        rdfSubject: extra.rdfSubject,
-                        rdfPredicate: extra.rdfPredicate,
-                        rdfObject: extra.rdfObject,
+                    brokerData.extraLiteralMetadata.push({
+                        s: extra.rdfSubject,
+                        p: extra.rdfPredicate,
+                        o: extra.rdfObject,
                     });
                 } else {
-                    brokerData.extraNodes.push({
-                        rdfSubject: extra.rdfSubject,
-                        rdfPredicate: extra.rdfPredicate,
-                        rdfObject: extra.rdfObject,
+                    brokerData.extraNodeMetadata.push({
+                        s: extra.rdfSubject,
+                        p: extra.rdfPredicate,
+                        o: extra.rdfObject,
                     });
                 }
             })
 
 	    setData(JSON.stringify(brokerData, null, 2));
-            
+        if (values.rawCheck) {
+            setData(JSON.stringify(brokerData, null, 2));
+            setRawCheck({visible: true});
+            return;
+        } else if (!values.rawCheck) {
+            setRawCheck({visible: false});
+            return;
         }
+     }
     });
 
-    const resetForm = () => {
-        const confirmed = window.confirm('Are you sure you want to reset the form?');
-        if (confirmed) {
-        form.reset();
-        setExtraNodes([]);
-        setBrokerLocation('');
-        setShowBrokerLocation(false);
-        setBrokerType('');
-        setShowBrokerType(false);
-        setData('');
-        }
+      const handleConfirmation = () => {
+        setShowConfirmation(true); 
       };
 
-      const handleConfirmation = () => {
-        const confirmed = window.confirm('Are you sure you want to confirm?');
-    
-        if (confirmed) {
-            realSubmit();
-        }
-    };
+      const handleDataDisplay = () => {
+        setShowConfirmation(false); 
+        realSubmit(); 
+        setShowData(true); 
+      };
 
     return (
         <div>
@@ -172,7 +162,7 @@ export default function RegisterBroker() {
                 <div class="flex flex-col place-items-center m-4">
                     <TextInput
                         class="w-[40rem]"
-                        label="Name"
+                        label="Broker name"
                         name="brokerName"
                     />
                     <TextInput
@@ -182,7 +172,7 @@ export default function RegisterBroker() {
                     />
                 </div>
                     <h1 class="text-2xl font-bold text-center"> RDF Triples</h1>
-                    <div class="flex flex-row space-x-4 justify-center w-[40rem] p-4">
+                    <div class="flex flex-row space-x-4 justify-center w-[40rem] p-4 mx-auto">
                         <For each={presets}>
                             {(preset, i) => {
                                 return (
@@ -201,27 +191,27 @@ export default function RegisterBroker() {
                         </For>  
                     </div>
 
-                    {/* <button class="btn p-4 ml-4" onClick={() => setShowBrokerLocation(!showBrokerLocation())}>
-                    Add Broker Location
-                 </button> */}
-
                 <Show when={!presets[0].visible}>
-                        <div class="flex flex-row place-items-center w-[40rem] m-2">
+                        <div class="flex flex-row justify-between w-[40rem] m-2 mx-auto">
+                        <div class='tooltip w-[32%]' data-tip='Broker location: longitude'>
+                        
                             <TextInput
-                                class="w-[33.3333%] p-4"
-                                label='Longtitude'
-                                name='longtitude'
+                                label='Longitude'
+                                name='longitude'
                             />
+                        </div>
+                        <div class='tooltip w-[32%]' data-tip='Broker location: latitude'>
                             <TextInput
-                                class="w-[33.3333%] p-4"
                                 label='Latitude'
                                 name='latitude'
                             />
+                        </div>
+                        <div class='tooltip w-[32%]' data-tip='Broker location: altitude'>
                             <TextInput
-                                class="w-[33.3333%] p-4"
                                 label='Altitude'
                                 name='altitude'
                             />
+                        </div>
                         </div>
                     </Show>
 
@@ -281,6 +271,10 @@ export default function RegisterBroker() {
                             Add RDF Triples <i class="fa-solid fa-plus"></i>
                         </button>
                     </div>
+                    <div class="flex flex-row space-x-4 justify-center w-[40rem] p-4">
+                        <input name='rawCheck' type="checkbox" class="checkbox p-4" />
+                        <label class='label ms-2'>Show raw data on submit</label>
+		            </div>
                 </div>
                 
                 
@@ -331,28 +325,33 @@ export default function RegisterBroker() {
                 </Show>
                 */}
                 <div class="flex justify-center m-4">
-                    <button class="btn" type="submit" onClick={realSubmit}>
+                    <button class="btn" type="submit" onClick={handleConfirmation}>
                         Register Broker <i class="fa-solid fa-paper-plane"></i>
                      </button>
                 </div>
                 
-                <div class="flex justify-center m-4">
-                    <button class="btn" type="reset" onClick={resetForm} >
-                        Reset form <i class="fa-solid fa-paper-plane"></i>
-                    </button>
-                </div>
                 
                
-                {showConfirmation() && (
-                <div class="confirmation-dialog">
-                    <p>Are you sure you want to confirm?</p>
-                    <button onClick={handleConfirmation}>Yes</button>
-                    <button onClick={() => setShowConfirmation(false)}>No</button>
+            {showConfirmation() && (
+            <div class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                <p class="text-xl font-semibold mb-4">Confirm Registration</p>
+                <p class="mb-4">Are you sure you want to register?</p>
+                <div class="flex justify-center"> 
+                    <button class="btn btn-primary" onClick={handleDataDisplay}>Yes</button>
+                    <button class="btn btn-secondary ml-2" onClick={() => setShowConfirmation(false)}>No</button>
                 </div>
-                )}
+                </div>
+            </div>
+            )}
                 
             </form>
-            <pre>{data()}</pre>
+            <Show when={rawCheck.visible}>
+                <h1 class="text-center divider">Submitted raw data</h1>
+                <div class="prose max-w-none">
+                    <pre class="language-js"><code class="language-js">{data()}</code></pre>
+                </div>
+	        </Show>  
         </div>
     );
 }
