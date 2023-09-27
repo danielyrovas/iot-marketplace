@@ -13,6 +13,7 @@ const isNumeric = (str) => {
 
 export default function RegisterSensor() {
     const [state, { updateConfig }] = useAppContext();
+    const [showConfirmation, setShowConfirmation] = createSignal(false);
     const [extraNodes, setExtraNodes] = createStore([]);
     const [data, setData] = createSignal('');
     const [rawCheck, setRawCheck] = createStore({visible: false});
@@ -655,6 +656,16 @@ export default function RegisterSensor() {
         }
     })
 
+      const handleConfirmation = () => {
+        setShowConfirmation(true); 
+      };
+
+      const handleDataDisplay = () => {
+        setShowConfirmation(false); 
+        realSubmit(); 
+        setShowData(true); 
+      };
+
     return (
         <div>
             <form use: form>
@@ -823,17 +834,17 @@ export default function RegisterSensor() {
                                 <TextInput
                                     class="w-[40rem]"
                                     label={`RDF Subject ${i() + 1}`}
-                                    name={`extraNodes.${i()}.rdfSubject`}
+                                    name={`extras.${i()}.rdfSubject`}
                                 />
                                 <TextInput
                                     class="w-[40rem]"
                                     label={`RDF Predicate ${i() + 1}`}
-                                    name={`extraNodes.${i()}.rdfPredicate`}
+                                    name={`extras.${i()}.rdfPredicate`}
                                 />
                                 <TextInput
                                     class="w-[40rem]"
                                     label={`RDF Object ${i() + 1}`}
-                                    name={`extraNodes.${i()}.rdfObject`}
+                                    name={`extras.${i()}.rdfObject`}
                                 />
                                 <div class="flex flex-row place-items-start w-[40rem] m-2">
                                     <input name={`extras.${i()}.literal`} type="checkbox" class="checkbox p-4" />
@@ -864,11 +875,25 @@ export default function RegisterSensor() {
 		    </div>
                 </div>
                 <div class="flex justify-center m-4">
-                    <button class="btn" type="submit" onClick={realSubmit}>
+                    <button class="btn" type="submit" onClick={handleConfirmation}>
                         Register Sensor <i class="fa-solid fa-paper-plane"></i>
                     </button>
                 </div>
             </form>
+
+	    {showConfirmation() && (
+            <div class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                <p class="text-xl font-semibold mb-4">Confirm Registration</p>
+                <p class="mb-4">Are you sure you want to register?</p>
+                <div class="flex justify-center"> 
+                    <button class="btn btn-primary" onClick={handleDataDisplay}>Yes</button>
+                    <button class="btn btn-secondary ml-2" onClick={() => setShowConfirmation(false)}>No</button>
+                </div>
+                </div>
+            </div>
+            )}
+	    
 	    <Show when={rawCheck.visible}>
 		<h1 class="text-center divider">Submitted raw data</h1>
 		<div class="prose max-w-none">
