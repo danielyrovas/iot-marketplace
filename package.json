@@ -2,11 +2,13 @@
   "name": "iot-marketplace",
   "version": "0.0.0",
   "description": "",
+  "bin": "src/logic/chainServer.js",
   "scripts": {
     "start": "vite",
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
+    "package": "pkg api/package.json -t node18 --output src-tauri/binaries/app && node scripts/move-binary.js",
     "tauri": "tauri"
   },
   "license": "MIT",
@@ -24,6 +26,8 @@
     "cssnano": "^6.0.1",
     "cssnano-preset-advanced": "^6.0.1",
     "daisyui": "^3.7.3",
+    "execa": "5.1.1",
+    "pkg": "^5.8.1",
     "postcss": "^8.4.29",
     "tailwindcss": "^3.3.3",
     "vite": "^4.4.9",

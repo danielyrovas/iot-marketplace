@@ -4,38 +4,41 @@ import "./App.css";
 
 const tabs = [
   {
-    name: 'Home', title: 'Internet of Things Marketplace',
+    name: "Home",
+    title: "Internet of Things Marketplace",
     component: lazy(() => import("./pages/home")),
   },
   {
-    name: 'Query Sensors', title: 'IoT Marketplace: Sensor Query',
+    name: "Query Sensors",
+    title: "IoT Marketplace: Sensor Query",
     component: lazy(() => import("./pages/querySensor")),
   },
   {
-    name: 'Register a Sensor', title: 'IoT Marketplace: Sensor Registration',
+    name: "Register a Sensor",
+    title: "IoT Marketplace: Sensor Registration",
     component: lazy(() => import("./pages/registerSensor")),
   },
   {
-    name: 'Register a Broker', title: 'IoT Marketplace: Broker Registration',
+    name: "Register a Broker",
+    title: "IoT Marketplace: Broker Registration",
     component: lazy(() => import("./pages/registerBroker")),
   },
   {
-    name: 'Configuration', title: 'IoT Marketplace: Configuration',
+    name: "Configuration",
+    title: "IoT Marketplace: Configuration",
     component: lazy(() => import("./pages/settings")),
   },
-]
-const cfgIndex = tabs.length - 1;
+];
+const configIndex = tabs.length - 1;
 
 export default function App() {
   const setTheme = (theme) => {
-    document.getElementById("body").dataset.theme = theme ? 'dark' : 'light';
-  }
+    document.getElementById("body").dataset.theme = theme ? "dark" : "light";
+  };
   const [darkTheme, setDarkTheme] = createSignal(
-    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)')
-      .matches ? true : false
+    window.matchMedia?.("(prefers-color-scheme: dark)").matches ? true : false,
   );
   const [tabIndex, setTabIndex] = createSignal(0);
-  const [appState, { updateConfig }] = useAppContext();
 
   return (
     <div class="w-full h-full">
@@ -45,19 +48,32 @@ export default function App() {
       </div>
 
       <div class="flex flex-row absolute top-3 right-2">
-        <div class="btn btn-circle mx-1"
-          onClick={() => { setDarkTheme(!darkTheme()); }}
-        >{darkTheme() ? <i class="fa-solid fa-sun" /> : <i class="fa-solid fa-moon" />}
+        <div
+          class="btn btn-circle mx-1"
+          onClick={() => {
+            setDarkTheme(!darkTheme());
+          }}
+        >
+          {darkTheme() ? (
+            <i class="fa-solid fa-sun" />
+          ) : (
+            <i class="fa-solid fa-moon" />
+          )}
         </div>
-        <div class="btn btn-circle mx-1"
-          onClick={() => { setTabIndex(cfgIndex); }}
-        ><i class="fa-solid fa-cog" /></div>
+        <div
+          class="btn btn-circle mx-1"
+          onClick={() => {
+            setTabIndex(configIndex);
+          }}
+        >
+          <i class="fa-solid fa-cog" />
+        </div>
       </div>
 
       <nav class="flex justify-center items-center navbar">
         <For each={tabs}>
           {(tab, index) => (
-            <Show when={tab.name !== 'Configuration'}>
+            <Show when={tab.name !== "Configuration"}>
               <button class="btn m-2" onClick={() => setTabIndex(index())}>
                 {tab.name}
               </button>
@@ -65,7 +81,7 @@ export default function App() {
           )}
         </For>
       </nav>
-      {!appState.loading && tabs[tabIndex()].component()}
+      {tabs[tabIndex()].component()}
     </div>
   );
 }

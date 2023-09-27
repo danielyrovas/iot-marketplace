@@ -1,7 +1,7 @@
 {
   "build": {
     "beforeDevCommand": "pnpm dev",
-    "beforeBuildCommand": "pnpm build",
+    "beforeBuildCommand": "pnpm package && pnpm build",
     "devPath": "http://localhost:1420",
     "distDir": "../dist",
     "withGlobalTauri": false
@@ -13,9 +13,20 @@
   "tauri": {
     "allowlist": {
       "all": false,
+      "http": { 
+        "all": true,
+        "scope": ["https://*", "http://*"]
+      },
       "shell": {
         "all": false,
-        "open": true
+        "open": true,
+        "sidecar": true,
+        "scope": [
+          {
+            "name": "binaries/app",
+            "sidecar": true
+          }
+        ]
       }
     },
     "bundle": {
@@ -28,19 +39,23 @@
         "icons/128x128@2x.png",
         "icons/icon.icns",
         "icons/icon.ico"
-      ]
+      ],
+      "externalBin": ["binaries/app"]
     },
     "security": {
-      "csp": null
+      "csp": "default-src 'self'"
     },
     "windows": [
       {
         "fullscreen": false,
         "resizable": true,
         "title": "IoT Marketplace",
-        "width": 1600,
-        "height": 1200
+        "width": 1400,
+        "height": 900
       }
-    ]
+    ],
+    "updater": {
+      "active": false
+    }
   }
 }

@@ -1,8 +1,9 @@
 import { createSignal } from "solid-js";
 import { TextInput } from "../components/basic";
-import { createForm } from '@felte/solid';
-import { reporter, ValidationMessage } from '@felte/reporter-solid';
+import { createForm } from "@felte/solid";
+import { reporter, ValidationMessage } from "@felte/reporter-solid";
 import { useAppContext } from "../logic/context";
+import { fetch } from '@tauri-apps/api/http';
 import ChainUtil from "senshamartproject/util/chain-util";
 
 export default function Settings() {
@@ -12,9 +13,11 @@ export default function Settings() {
         validate(values) {
             const errors = {};
             if (!values.wallet_key) {
-            } else if (values.wallet_key.length < 50
-                || values.wallet_key.length > 65) {
-                errors.wallet_key = 'your wallet key does not look correct';
+            } else if (
+                values.wallet_key.length < 60 ||
+                values.wallet_key.length > 65
+            ) {
+                errors.wallet_key = "your wallet key does not look correct";
             }
             return errors;
         },
@@ -30,7 +33,23 @@ export default function Settings() {
     });
     const generate_key = () => {
         const key = ChainUtil.serializeKeyPair(ChainUtil.genKeyPair());
-        setFields('wallet_key', key, true);
+        setFields("wallet_key", key, true);
+    };
+    const [publicKey, setPublicKey] = createSignal("");
+
+    fetch(`${state.api}/public-key`).then((key) => {
+        // fetch(`${state.api}/public-key`).then((key) => {
+        if (key.ok) {
+            setPublicKey(key.data);
+        }
+    })
+    if (state.config.wallet_key === "") {
+        fetch(`${state.api}/key-pair`).then((key) => {
+            // fetch(`${state.api}/public-key`).then((key) => {
+            if (key.ok) {
+                updateConfig("wallet_key", key.data);
+            }
+        })
     }
 
     return (
@@ -48,7 +67,7 @@ export default function Settings() {
                         {/* TODO: Public key (about page?) */}
                     </div>
                     <div class="flex justify-center m-4">
-                        <button class="btn" onClick={() => setViewEdit(true)}>
+                        <button type="button" class="btn" onClick={() => setViewEdit(true)}>
                             Edit <i class="fa-regular fa-pen-to-square" />
                         </button>
                     </div>
@@ -59,10 +78,9 @@ export default function Settings() {
                             name="publicKey"
                             class="w-[37rem]"
                             disabled={true}
-                            value={state.wallet.publicKey}
+                            value={publicKey()}
                         />
                     </div>
-
                 </Show>
                 <Show when={viewEdit()}>
                     <div>
@@ -76,13 +94,13 @@ export default function Settings() {
                             </div>
                             <div class="flex justify-center m-4">
                                 <button class="btn" type="submit">
-                                    Save <i class="fa-regular fa-floppy-disk"></i>
+                                    Save <i class="fa-regular fa-floppy-disk" />
                                 </button>
                             </div>
                         </form>
                         <div class="flex justify-center m-4">
-                            <button class="btn" onClick={generate_key}>
-                                Generate New Key <i class="fa-solid fa-rotate"></i>
+                            <button type="button" class="btn" onClick={generate_key}>
+                                Generate New Key <i class="fa-solid fa-rotate" />
                             </button>
                         </div>
                     </div>
