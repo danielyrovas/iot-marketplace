@@ -23,23 +23,20 @@ export default function RegisterSensor() {
             visible: true
         }
     ]);
-    
-    const [typePresets, setTypePresets] = createStore(
+
+    const [typePresetVisible, setTypePresetVisible] = createSignal(true);
+    const [typePresets, setTypePresets] = createStore([
         {
-            names: [
-		{
-		    name: "Sensor type: video camera",
-		    selected: false
-		},
-		{
-		    name: "Sensor type: air temperature",
-		    selected: false
-		}
-	    ],
+            name: "Sensor type: video camera",
             icon: "tag",
-            visible: true
+            selected: false
+        },
+        {
+            name: "Sensor type: air temperature",
+            icon: "tag",
+            selected: false
         }
-    );
+    ]);
 
     const { form, errors, setFields, createSubmitHandler } = createForm({
         validate(values) {
@@ -129,13 +126,12 @@ export default function RegisterSensor() {
             }
 
 	    let selectedSensorType = "";
-	    for (let i = 0; i < typePresets.names.length; i++) {
-		if (typePresets.names[i].selected === true) {
-		    selectedSensorType = typePresets.names[i].name;
+	    for (let i = 0; i < typePresets.length; i++) {
+		if (typePresets[i].selected === true) {
+		    selectedSensorType = typePresets[i].name;
 		}
 	    }
 
-	    console.log(typeof selectedSensorType);
 	    if (selectedSensorType === "Sensor type: video camera") {
                 sensorData.extraNodes.push(
                     {
@@ -703,16 +699,16 @@ export default function RegisterSensor() {
                         </For>
 		    </div>
 		    <div class="flex flex-row space-x-4 justify-center w-[40rem] p-4">
-                        <For each={typePresets.names}>
+                        <For each={typePresets}>
                             {(typePresetName, i) => {
                                 return (
-                                    <Show when={typePresets.visible}>
+                                    <Show when={typePresetVisible()}>
                                         <button class="btn btn-accent p-4" onClick={() => {
-						    setTypePresets({ visible: false });
-						    setTypePresets('names', `${i()}`, 'selected', true);
+						    setTypePresetVisible(false);
+						    setTypePresets(i(), 'selected', true);
                                         }}>
                                             <i class={`fa-solid fa-${typePresets.icon}`}></i>
-                                            {typePresets.names[`${i()}`].name}
+                                            {typePresets[i()].name}
                                             <i class={`fa-solid fa-plus`}></i>
                                         </button>
                                     </Show>			    
@@ -742,7 +738,7 @@ export default function RegisterSensor() {
 			    </div>			    
                         </div>
                     </Show>
-		    <Show when={typePresets.names[1].selected}>
+		    <Show when={typePresets[1].selected}>
                         <div class="flex flex-row justify-between w-[40rem] m-2">
 			    <div class='tooltip w-[32%]' data-tip='Normal sensor temperature range: minimum temperature (in degrees Celsius)'>
 				<TextInput
@@ -764,7 +760,7 @@ export default function RegisterSensor() {
 			    </div>
                         </div>
                     </Show>
-		     <Show when={typePresets.names[1].selected}>
+		     <Show when={typePresets[1].selected}>
                          <div class="flex flex-row justify-between w-[40rem] m-2">
 			    <div class='tooltip w-[32%]' data-tip='Normal sensor humidity range: maximum percentage point (expressed as a decimal number)'>
 				<TextInput
@@ -786,7 +782,7 @@ export default function RegisterSensor() {
 			    </div>			     
                         </div>
                      </Show>
-		    <Show when={typePresets.names[1].selected}>
+		    <Show when={typePresets[1].selected}>
                         <div class="flex flex-row justify-between w-[40rem] m-2">
 			    <div class='tooltip w-[32%]' data-tip='Sensor sensitivity (in degrees Celsius)'>
 				<TextInput
@@ -808,7 +804,7 @@ export default function RegisterSensor() {
 			    </div>			    
                         </div>
                     </Show>
-		    <Show when={typePresets.names[1].selected}>
+		    <Show when={typePresets[1].selected}>
                         <div class="flex flex-row justify-between w-[40rem] m-2">
 			    <div class='tooltip w-[32%]' data-tip='Sensor frequency (in seconds)'>
 				<TextInput
