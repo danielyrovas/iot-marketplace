@@ -79,51 +79,51 @@ export default function RegisterSensor() {
             if (typeof values.longtitude !== 'undefined') {
                 sensorData.extraNodes.push(
                     {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
-                        rdfPredicate: 'http://www.w3.org/ns/sosa/hasFeatureOfInterest',
-                        rdfObject: `SSMS://#${sensorData.sensorName}#location`
+                        s: `SSMS://#${sensorData.sensorName}`,
+                        p: 'http://www.w3.org/ns/sosa/hasFeatureOfInterest',
+                        o: `SSMS://#${sensorData.sensorName}#location`
                     },
                     {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}#location`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: `http://www.w3.org/ns/sosa/hasFeatureOfInterest`
+                        s: `SSMS://#${sensorData.sensorName}#location`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: `http://www.w3.org/ns/sosa/hasFeatureOfInterest`
                     },
                     {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}#location`,
-                        rdfPredicate: 'http://www.w3.org/ns/sosa/isSampleOf',
-                        rdfObject: `SSMS://earth`
+                        s: `SSMS://#${sensorData.sensorName}#location`,
+                        p: 'http://www.w3.org/ns/sosa/isSampleOf',
+                        o: `SSMS://earth`
                     },
                     {
-                        rdfSubject: `SSMS://earth`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: `http://www.w3.org/ns/sosa/hasFeatureOfInterest`
+                        s: `SSMS://earth`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: `http://www.w3.org/ns/sosa/hasFeatureOfInterest`
                     }
                 );
                 sensorData.extraLiterals.push(
                     {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}#location`,
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#label',
-                        rdfObject: `location of #${sensorData.sensorName}`
+                        s: `SSMS://#${sensorData.sensorName}#location`,
+                        p: 'http://www.w3.org/2000/01/rdf-schema#label',
+                        o: `location of #${sensorData.sensorName}`
                     },
                     {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}#location`,
-                        rdfPredicate: 'http://www.w3.org/2003/01/geo/wgs84_pos#lat',
-                        rdfObject: `${values.latitude}`
+                        s: `SSMS://#${sensorData.sensorName}#location`,
+                        p: 'http://www.w3.org/2003/01/geo/wgs84_pos#lat',
+                        o: `${values.latitude}`
                     },
                     {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}#location`,
-                        rdfPredicate: 'http://www.w3.org/2003/01/geo/wgs84_pos#long',
-                        rdfObject: `${values.longtitude}`
+                        s: `SSMS://#${sensorData.sensorName}#location`,
+                        p: 'http://www.w3.org/2003/01/geo/wgs84_pos#long',
+                        o: `${values.longtitude}`
                     },
                     {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}#location`,
-                        rdfPredicate: 'http://www.w3.org/2003/01/geo/wgs84_pos#alt',
-                        rdfObject: `${values.altitude}`
+                        s: `SSMS://#${sensorData.sensorName}#location`,
+                        p: 'http://www.w3.org/2003/01/geo/wgs84_pos#alt',
+                        o: `${values.altitude}`
                     },
                     {
-                        rdfSubject: 'SSMS://earth',
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#label',
-                        rdfObject: 'earth'
+                        s: 'SSMS://earth',
+                        p: 'http://www.w3.org/2000/01/rdf-schema#label',
+                        o: 'earth'
                     }
                 );
             }
@@ -139,481 +139,481 @@ export default function RegisterSensor() {
 	    if (selectedSensorType === "Sensor type: video camera") {
                 sensorData.extraNodes.push(
                     {
-                        rdfSubject: 'SSMS://#Procedure',
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/sosa/Procedure'
+                        s: 'SSMS://#Procedure',
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/sosa/Procedure'
                     },
                     {
-                        rdfSubject: 'SSMS://#Procedure',
-                        rdfPredicate: 'http://www.w3.org/ns/ssn/hasOutput',
-                        rdfObject: 'SSMS://#output'
+                        s: 'SSMS://#Procedure',
+                        p: 'http://www.w3.org/ns/ssn/hasOutput',
+                        o: 'SSMS://#output'
                     },
                     {
-                        rdfSubject: 'SSMS://#output',
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/Output'
+                        s: 'SSMS://#output',
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/Output'
                     },
                     {
-                        rdfSubject: 'SSMS://#output',
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'https://w3id.org/rdfp/GraphDescription'
+                        s: 'SSMS://#output',
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'https://w3id.org/rdfp/GraphDescription'
                     },
                     {
-                        rdfSubject: 'SSMS://',
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/System'
+                        s: 'SSMS://',
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/System'
                     },
                     {
-                        rdfSubject: 'SSMS://',
-                        rdfPredicate: 'http://www.w3.org/ns/ssn/hasSubSystem',
-                        rdfObject: `SSMS://#${sensorData.sensorName}`
+                        s: 'SSMS://',
+                        p: 'http://www.w3.org/ns/ssn/hasSubSystem',
+                        o: `SSMS://#${sensorData.sensorName}`
                     },
                     {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/sosa/Sensor'
+                        s: `SSMS://#${sensorData.sensorName}`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/sosa/Sensor'
                     },
                     {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/System'
+                        s: `SSMS://#${sensorData.sensorName}`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/System'
                     },
                     {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
-                        rdfPredicate: 'http://www.w3.org/ns/ssn/systems/hasOperatingRange',
-                        rdfObject: `SSMS://#${sensorData.sensorName}OperatingRange`
+                        s: `SSMS://#${sensorData.sensorName}`,
+                        p: 'http://www.w3.org/ns/ssn/systems/hasOperatingRange',
+                        o: `SSMS://#${sensorData.sensorName}OperatingRange`
                     },
                     {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
-                        rdfPredicate: 'http://www.w3.org/ns/sosa/observes',
-                        rdfObject: `SSMS://#${sensorData.sensorName}Video`
+                        s: `SSMS://#${sensorData.sensorName}`,
+                        p: 'http://www.w3.org/ns/sosa/observes',
+                        o: `SSMS://#${sensorData.sensorName}Video`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
-                        rdfPredicate: 'http://www.w3.org/ns/ssn/implements',
-                        rdfObject: 'SSMS://#Procedure'
+                        s: `SSMS://#${sensorData.sensorName}`,
+                        p: 'http://www.w3.org/ns/ssn/implements',
+                        o: 'SSMS://#Procedure'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/systems/OperatingRange',
+                        s: `SSMS://#${sensorData.sensorName}`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/systems/OperatingRange',
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Video`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/sosa/ObservableProperty'
+                        s: `SSMS://#${sensorData.sensorName}Video`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/sosa/ObservableProperty'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Video`,
-                        rdfPredicate: 'http://www.w3.org/ns/sosa/isObservedBy',
-                        rdfObject: `SSMS://#${sensorData.sensorName}`
+                        s: `SSMS://#${sensorData.sensorName}Video`,
+                        p: 'http://www.w3.org/ns/sosa/isObservedBy',
+                        o: `SSMS://#${sensorData.sensorName}`
                     },
 		    {
-                        rdfSubject: 'SSMS://#MeasuringVideo',
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/sosa/Procedure'
+                        s: 'SSMS://#MeasuringVideo',
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/sosa/Procedure'
                     }
                 );
                 sensorData.extraLiterals.push(
                     {
-                        rdfSubject: 'SSMS://#output',
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        rdfObject: 'The output video segments.'
+                        s: 'SSMS://#output',
+                        p: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        o: 'The output video segments.'
                     },
                     {
-                        rdfSubject: 'SSMS://',
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        rdfObject: 'Camera system contains a camera.'
+                        s: 'SSMS://',
+                        p: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        o: 'Camera system contains a camera.'
                     },
                     {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        rdfObject: 'The embedded camera sensor in the system.'
+                        s: `SSMS://#${sensorData.sensorName}`,
+                        p: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        o: 'The embedded camera sensor in the system.'
                     },
                     {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Video`,
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        rdfObject: 'Captures the light entering the camera through the lens so that it can be processed and turned into a digital video.'
+                        s: `SSMS://#${sensorData.sensorName}Video`,
+                        p: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        o: 'Captures the light entering the camera through the lens so that it can be processed and turned into a digital video.'
                     },
                     {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Video`,
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#label',
-                        rdfObject: 'Video'
+                        s: `SSMS://#${sensorData.sensorName}Video`,
+                        p: 'http://www.w3.org/2000/01/rdf-schema#label',
+                        o: 'Video'
                     },
 		    {
-                        rdfSubject: 'SSMS://#MeasuringVideo',
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        rdfObject: 'Instructions for measuring Video'
+                        s: 'SSMS://#MeasuringVideo',
+                        p: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        o: 'Instructions for measuring Video'
                     }
                 );
 	    } else if (selectedSensorType === "Sensor type: air temperature") {
                 sensorData.extraNodes.push(
                     {
-                        rdfSubject: 'SSMS://#Procedure',
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/sosa/Procedure'
+                        s: 'SSMS://#Procedure',
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/sosa/Procedure'
                     },
                     {
-                        rdfSubject: 'SSMS://#Procedure',
-                        rdfPredicate: 'http://www.w3.org/ns/ssn/hasOutput',
-                        rdfObject: 'SSMS://#output'
+                        s: 'SSMS://#Procedure',
+                        p: 'http://www.w3.org/ns/ssn/hasOutput',
+                        o: 'SSMS://#output'
                     },
                     {
-                        rdfSubject: 'SSMS://#output',
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/Output'
+                        s: 'SSMS://#output',
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/Output'
                     },
                     {
-                        rdfSubject: 'SSMS://#output',
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'https://w3id.org/rdfp/GraphDescription'
+                        s: 'SSMS://#output',
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'https://w3id.org/rdfp/GraphDescription'
                     },
                     {
-                        rdfSubject: 'SSMS://',
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/System'
+                        s: 'SSMS://',
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/System'
                     },
                     {
-                        rdfSubject: 'SSMS://',
-                        rdfPredicate: 'http://www.w3.org/ns/ssn/hasSubSystem',
-                        rdfObject: `SSMS://#${sensorData.sensorName}`
+                        s: 'SSMS://',
+                        p: 'http://www.w3.org/ns/ssn/hasSubSystem',
+                        o: `SSMS://#${sensorData.sensorName}`
                     },
                     {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/sosa/Sensor'
+                        s: `SSMS://#${sensorData.sensorName}`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/sosa/Sensor'
                     },
                     {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/System'
+                        s: `SSMS://#${sensorData.sensorName}`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/System'
                     },
                     {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
-                        rdfPredicate: 'http://www.w3.org/ns/ssn/systems/hasOperatingRange',
-                        rdfObject: `SSMS://#${sensorData.sensorName}OperatingRange`
+                        s: `SSMS://#${sensorData.sensorName}`,
+                        p: 'http://www.w3.org/ns/ssn/systems/hasOperatingRange',
+                        o: `SSMS://#${sensorData.sensorName}OperatingRange`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
-                        rdfPredicate: 'http://www.w3.org/ns/ssn/systems/hasSystemCapability',
-                        rdfObject: `SSMS://#${sensorData.sensorName}Capability`
+                        s: `SSMS://#${sensorData.sensorName}`,
+                        p: 'http://www.w3.org/ns/ssn/systems/hasSystemCapability',
+                        o: `SSMS://#${sensorData.sensorName}Capability`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
-                        rdfPredicate: 'http://www.w3.org/ns/sosa/observes',
-                        rdfObject: `SSMS://#${sensorData.sensorName}Temperature`
+                        s: `SSMS://#${sensorData.sensorName}`,
+                        p: 'http://www.w3.org/ns/sosa/observes',
+                        o: `SSMS://#${sensorData.sensorName}Temperature`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
-                        rdfPredicate: 'http://www.w3.org/ns/ssn/implements',
-                        rdfObject: 'SSMS://#Procedure'
+                        s: `SSMS://#${sensorData.sensorName}`,
+                        p: 'http://www.w3.org/ns/ssn/implements',
+                        o: 'SSMS://#Procedure'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/systems/OperatingRange',
+                        s: `SSMS://#${sensorData.sensorName}`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/systems/OperatingRange',
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
-                        rdfPredicate: 'http://www.w3.org/ns/ssn/systems/inCondition',
-                        rdfObject: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`
+                        s: `SSMS://#${sensorData.sensorName}`,
+                        p: 'http://www.w3.org/ns/ssn/systems/inCondition',
+                        o: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
-                        rdfPredicate: 'http://www.w3.org/ns/ssn/systems/inCondition',
-                        rdfObject: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`
+                        s: `SSMS://#${sensorData.sensorName}`,
+                        p: 'http://www.w3.org/ns/ssn/systems/inCondition',
+                        o: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/systems/Condition'
+                        s: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/systems/Condition'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://schema.org/PropertyValue'
+                        s: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://schema.org/PropertyValue'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
-                        rdfPredicate: 'http://schema.org/unitCode',
-                        rdfObject: 'http://qudt.org/1.1/vocab/unit#DegreeCelsius'
+                        s: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
+                        p: 'http://schema.org/unitCode',
+                        o: 'http://qudt.org/1.1/vocab/unit#DegreeCelsius'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/systems/Condition'
+                        s: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/systems/Condition'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://schema.org/PropertyValue'
+                        s: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://schema.org/PropertyValue'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
-                        rdfPredicate: 'http://schema.org/unitCode',
-                        rdfObject: 'http://qudt.org/1.1/vocab/unit#Percent'
+                        s: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
+                        p: 'http://schema.org/unitCode',
+                        o: 'http://qudt.org/1.1/vocab/unit#Percent'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Capability`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/Property'
+                        s: `SSMS://#${sensorData.sensorName}Capability`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/Property'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Capability`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/systems/SystemCapability'
+                        s: `SSMS://#${sensorData.sensorName}Capability`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/systems/SystemCapability'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Capability`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://schema.org/PropertyValue'
+                        s: `SSMS://#${sensorData.sensorName}Capability`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://schema.org/PropertyValue'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Capability`,
-                        rdfPredicate: 'http://www.w3.org/ns/ssn/systems/inCondition',
-                        rdfObject: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`
+                        s: `SSMS://#${sensorData.sensorName}Capability`,
+                        p: 'http://www.w3.org/ns/ssn/systems/inCondition',
+                        o: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Capability`,
-                        rdfPredicate: 'http://www.w3.org/ns/ssn/systems/inCondition',
-                        rdfObject: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`
+                        s: `SSMS://#${sensorData.sensorName}Capability`,
+                        p: 'http://www.w3.org/ns/ssn/systems/inCondition',
+                        o: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Capability`,
-                        rdfPredicate: 'http://www.w3.org/ns/ssn/systems/hasSystemProperty',
-                        rdfObject: `SSMS://#${sensorData.sensorName}Accuracy`
+                        s: `SSMS://#${sensorData.sensorName}Capability`,
+                        p: 'http://www.w3.org/ns/ssn/systems/hasSystemProperty',
+                        o: `SSMS://#${sensorData.sensorName}Accuracy`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Capability`,
-                        rdfPredicate: 'http://www.w3.org/ns/ssn/systems/hasSystemProperty',
-                        rdfObject: `SSMS://#${sensorData.sensorName}Sensitivity`
+                        s: `SSMS://#${sensorData.sensorName}Capability`,
+                        p: 'http://www.w3.org/ns/ssn/systems/hasSystemProperty',
+                        o: `SSMS://#${sensorData.sensorName}Sensitivity`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Capability`,
-                        rdfPredicate: 'http://www.w3.org/ns/ssn/systems/hasSystemProperty',
-                        rdfObject: `SSMS://#${sensorData.sensorName}Frequency`
+                        s: `SSMS://#${sensorData.sensorName}Capability`,
+                        p: 'http://www.w3.org/ns/ssn/systems/hasSystemProperty',
+                        o: `SSMS://#${sensorData.sensorName}Frequency`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Accuracy`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/Property'
+                        s: `SSMS://#${sensorData.sensorName}Accuracy`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/Property'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Accuracy`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/systems/Accuracy'
+                        s: `SSMS://#${sensorData.sensorName}Accuracy`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/systems/Accuracy'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Accuracy`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://schema.org/PropertyValue'
+                        s: `SSMS://#${sensorData.sensorName}Accuracy`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://schema.org/PropertyValue'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Accuracy`,
-                        rdfPredicate: 'http://schema.org/unitCode',
-                        rdfObject: 'http://qudt.org/1.1/vocab/unit#DegreeCelsius'
+                        s: `SSMS://#${sensorData.sensorName}Accuracy`,
+                        p: 'http://schema.org/unitCode',
+                        o: 'http://qudt.org/1.1/vocab/unit#DegreeCelsius'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Sensitivity`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/Property'
+                        s: `SSMS://#${sensorData.sensorName}Sensitivity`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/Property'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Sensitivity`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/systems/Sensitivity'
+                        s: `SSMS://#${sensorData.sensorName}Sensitivity`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/systems/Sensitivity'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Sensitivity`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/systems/Resolution'
+                        s: `SSMS://#${sensorData.sensorName}Sensitivity`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/systems/Resolution'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Sensitivity`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://schema.org/PropertyValue'
+                        s: `SSMS://#${sensorData.sensorName}Sensitivity`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://schema.org/PropertyValue'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Sensitivity`,
-                        rdfPredicate: 'http://schema.org/unitCode',
-                        rdfObject: 'http://qudt.org/1.1/vocab/unit#DegreeCelsius'
+                        s: `SSMS://#${sensorData.sensorName}Sensitivity`,
+                        p: 'http://schema.org/unitCode',
+                        o: 'http://qudt.org/1.1/vocab/unit#DegreeCelsius'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Precision`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/Property'
+                        s: `SSMS://#${sensorData.sensorName}Precision`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/Property'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Precision`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/systems/Precision'
+                        s: `SSMS://#${sensorData.sensorName}Precision`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/systems/Precision'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Precision`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://schema.org/PropertyValue'
+                        s: `SSMS://#${sensorData.sensorName}Precision`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://schema.org/PropertyValue'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Precision`,
-                        rdfPredicate: 'http://schema.org/unitCode',
-                        rdfObject: 'http://qudt.org/1.1/vocab/unit#DegreeCelsius'
+                        s: `SSMS://#${sensorData.sensorName}Precision`,
+                        p: 'http://schema.org/unitCode',
+                        o: 'http://qudt.org/1.1/vocab/unit#DegreeCelsius'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Frequency`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/Property'
+                        s: `SSMS://#${sensorData.sensorName}Frequency`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/Property'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Frequency`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/ssn/systems/Frequency'
+                        s: `SSMS://#${sensorData.sensorName}Frequency`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/ssn/systems/Frequency'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Frequency`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://schema.org/PropertyValue'
+                        s: `SSMS://#${sensorData.sensorName}Frequency`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://schema.org/PropertyValue'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Frequency`,
-                        rdfPredicate: 'http://schema.org/unitCode',
-                        rdfObject: 'http://qudt.org/1.1/vocab/unit#Second'
+                        s: `SSMS://#${sensorData.sensorName}Frequency`,
+                        p: 'http://schema.org/unitCode',
+                        o: 'http://qudt.org/1.1/vocab/unit#Second'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Temperature`,
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/sosa/ObservableProperty'
+                        s: `SSMS://#${sensorData.sensorName}Temperature`,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/sosa/ObservableProperty'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Temperature`,
-                        rdfPredicate: 'http://www.w3.org/ns/sosa/isObservedBy',
-                        rdfObject: `SSMS://#${sensorData.sensorName}`
+                        s: `SSMS://#${sensorData.sensorName}Temperature`,
+                        p: 'http://www.w3.org/ns/sosa/isObservedBy',
+                        o: `SSMS://#${sensorData.sensorName}`
                     },
 		    {
-                        rdfSubject: 'SSMS://#MeasuringTemperature',
-                        rdfPredicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-                        rdfObject: 'http://www.w3.org/ns/sosa/Procedure'
+                        s: 'SSMS://#MeasuringTemperature',
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+                        o: 'http://www.w3.org/ns/sosa/Procedure'
                     }
                 );
                 sensorData.extraLiterals.push(
                     {
-                        rdfSubject: 'SSMS://#output',
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        rdfObject: 'The output is a RDF Graph that describes the temperature.'
+                        s: 'SSMS://#output',
+                        p: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        o: 'The output is a RDF Graph that describes the temperature.'
                     },
                     {
-                        rdfSubject: 'SSMS://',
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        rdfObject: `SSMS://#${sensorData.sensorName} measures the air temperature.`
+                        s: 'SSMS://',
+                        p: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        o: `SSMS://#${sensorData.sensorName} measures the air temperature.`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}`,
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        rdfObject: 'The air temperature sensor, a specific instance of temperature sensor.'
+                        s: `SSMS://#${sensorData.sensorName}`,
+                        p: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        o: 'The air temperature sensor, a specific instance of temperature sensor.'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        rdfObject: 'The conditions in which the air temperature sensor is expected to operate.'
+                        s: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
+                        p: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        o: 'The conditions in which the air temperature sensor is expected to operate.'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        rdfObject: `A temperature range of ${values.tempConMinTemp} to ${values.tempConMaxTemp} degrees Celsius.`
+                        s: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
+                        p: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        o: `A temperature range of ${values.tempConMinTemp} to ${values.tempConMaxTemp} degrees Celsius.`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
-                        rdfPredicate: 'http://schema.org/minValue',
-                        rdfObject: `${values.tempConMinTemp}`
+                        s: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
+                        p: 'http://schema.org/minValue',
+                        o: `${values.tempConMinTemp}`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
-                        rdfPredicate: 'http://schema.org/maxValue',
-                        rdfObject: `${values.tempConMaxTemp}`
+                        s: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
+                        p: 'http://schema.org/maxValue',
+                        o: `${values.tempConMaxTemp}`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        rdfObject: `A relative humidity range of ${values.humConMinPerc}% to ${values.humConMaxPerc}%.`
+                        s: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
+                        p: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        o: `A relative humidity range of ${values.humConMinPerc}% to ${values.humConMaxPerc}%.`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
-                        rdfPredicate: 'http://schema.org/minValue',
-                        rdfObject: `${values.humConMinPerc}`
+                        s: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
+                        p: 'http://schema.org/minValue',
+                        o: `${values.humConMinPerc}`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
-                        rdfPredicate: 'http://schema.org/maxValue',
-                        rdfObject: `${values.humConMaxPerc}`
+                        s: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
+                        p: 'http://schema.org/maxValue',
+                        o: `${values.humConMaxPerc}`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Capability`,
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        rdfObject: `The capabilities of the ${sensorData.sensorName} in normal temperature and humidity conditions.`
+                        s: `SSMS://#${sensorData.sensorName}Capability`,
+                        p: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        o: `The capabilities of the ${sensorData.sensorName} in normal temperature and humidity conditions.`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Accuracy`,
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        rdfObject: `The accuracy of the ${sensorData.sensorName} is ${values.sensorMinAcc}°C to ${values.sensorMaxAcc}°C in normal temperature and humidity conditions.`
+                        s: `SSMS://#${sensorData.sensorName}Accuracy`,
+                        p: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        o: `The accuracy of the ${sensorData.sensorName} is ${values.sensorMinAcc}°C to ${values.sensorMaxAcc}°C in normal temperature and humidity conditions.`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Accuracy`,
-                        rdfPredicate: 'http://schema.org/minValue',
-                        rdfObject: `${values.sensorMinAcc}`
+                        s: `SSMS://#${sensorData.sensorName}Accuracy`,
+                        p: 'http://schema.org/minValue',
+                        o: `${values.sensorMinAcc}`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Accuracy`,
-                        rdfPredicate: 'http://schema.org/maxValue',
-                        rdfObject: `${values.sensorMaxAcc}`
+                        s: `SSMS://#${sensorData.sensorName}Accuracy`,
+                        p: 'http://schema.org/maxValue',
+                        o: `${values.sensorMaxAcc}`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Sensitivity`,
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        rdfObject: `The sensitivity and resolution of the ${sensorData.sensorName} is +-${values.sensorSen}°C in normal temperature and humidity conditions.`
+                        s: `SSMS://#${sensorData.sensorName}Sensitivity`,
+                        p: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        o: `The sensitivity and resolution of the ${sensorData.sensorName} is +-${values.sensorSen}°C in normal temperature and humidity conditions.`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Sensitivity`,
-                        rdfPredicate: 'http://schema.org/value',
-                        rdfObject: `${values.sensorSen}`
+                        s: `SSMS://#${sensorData.sensorName}Sensitivity`,
+                        p: 'http://schema.org/value',
+                        o: `${values.sensorSen}`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Precision`,
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        rdfObject: `The precision (= repeatability) of the ${sensorData.sensorName} is ${values.sensorMinPre}°C to ${values.sensorMaxPre}°C in normal temperature and humidity conditions.`
+                        s: `SSMS://#${sensorData.sensorName}Precision`,
+                        p: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        o: `The precision (= repeatability) of the ${sensorData.sensorName} is ${values.sensorMinPre}°C to ${values.sensorMaxPre}°C in normal temperature and humidity conditions.`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Precision`,
-                        rdfPredicate: 'http://schema.org/minValue',
-                        rdfObject: `${values.sensorMinPre}`
+                        s: `SSMS://#${sensorData.sensorName}Precision`,
+                        p: 'http://schema.org/minValue',
+                        o: `${values.sensorMinPre}`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Precision`,
-                        rdfPredicate: 'http://schema.org/maxValue',
-                        rdfObject: `${values.sensorMaxPre}`
+                        s: `SSMS://#${sensorData.sensorName}Precision`,
+                        p: 'http://schema.org/maxValue',
+                        o: `${values.sensorMaxPre}`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Frequency`,
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        rdfObject: `The smallest possible time between one observation and the next is ${values.sensorMaxPre}s on average.`
+                        s: `SSMS://#${sensorData.sensorName}Frequency`,
+                        p: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        o: `The smallest possible time between one observation and the next is ${values.sensorMaxPre}s on average.`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Frequency`,
-                        rdfPredicate: 'http://schema.org/value',
-                        rdfObject: `${values.sensorFre}`
+                        s: `SSMS://#${sensorData.sensorName}Frequency`,
+                        p: 'http://schema.org/value',
+                        o: `${values.sensorFre}`
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Temperature`,
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        rdfObject: 'Temperature is a measure of the heat content of air.'
+                        s: `SSMS://#${sensorData.sensorName}Temperature`,
+                        p: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        o: 'Temperature is a measure of the heat content of air.'
                     },
 		    {
-                        rdfSubject: `SSMS://#${sensorData.sensorName}Temperature`,
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#label',
-                        rdfObject: 'Air Temperature'
+                        s: `SSMS://#${sensorData.sensorName}Temperature`,
+                        p: 'http://www.w3.org/2000/01/rdf-schema#label',
+                        o: 'Air Temperature'
                     },
 		    {
-                        rdfSubject: 'SSMS://#MeasuringTemperature',
-                        rdfPredicate: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        rdfObject: 'Instructions for measuring temperature'
+                        s: 'SSMS://#MeasuringTemperature',
+                        p: 'http://www.w3.org/2000/01/rdf-schema#comment',
+                        o: 'Instructions for measuring temperature'
                     }
                 );
 	    }
@@ -621,15 +621,15 @@ export default function RegisterSensor() {
             values.extras?.forEach((extra) => {
                 if (extra.literal) {
                     sensorData.extraLiterals.push({
-                        rdfSubject: extra.rdfSubject,
-                        rdfPredicate: extra.rdfPredicate,
-                        rdfObject: extra.rdfObject,
+                        s: extra.rdfSubject,
+                        p: extra.rdfPredicate,
+                        o: extra.rdfObject,
                     });
                 } else {
                     sensorData.extraNodes.push({
-                        rdfSubject: extra.rdfSubject,
-                        rdfPredicate: extra.rdfPredicate,
-                        rdfObject: extra.rdfObject,
+                        s: extra.rdfSubject,
+                        p: extra.rdfPredicate,
+                        o: extra.rdfObject,
                     });
                 }
             })
@@ -721,68 +721,65 @@ export default function RegisterSensor() {
                         </For>			
                     </div>
                     <Show when={!presets[0].visible}>
-                        <div class="flex flex-row place-items-center w-[40rem] m-2">
-                            <TextInput
-                                class="w-[33.3333%] p-4"
-                                label='Sensor location: longtitude'
-                                name='longtitude'
-                            />
-                            <TextInput
-                                class="w-[33.3333%] p-4"
-                                label='Sensor location: latitude'
-                                name='latitude'
-                            />
-                            <TextInput
-                                class="w-[33.3333%] p-4"
-                                label='Sensor location: altitude'
-                                name='altitude'
-                            />
+                        <div class="flex flex-row justify-between w-[40rem] m-2">
+			    <div class='tooltip w-[32%]' data-tip='Sensor location: longtitude'>
+				<TextInput
+				    label='Longtitude'
+				    name='longtitude'
+				/>
+			    </div>
+			    <div class='tooltip w-[32%]' data-tip='Sensor location: latitude'>
+				<TextInput
+				    label='Latitude'
+                                    name='latitude'
+				/>
+			    </div>
+			    <div class='tooltip w-[32%]' data-tip='Sensor location: altitude'>
+				<TextInput
+				    label='Altitude'
+				    name='altitude'
+				/>
+			    </div>			    
                         </div>
                     </Show>
 		    <Show when={typePresets.names[1].selected}>
-                        <div class="flex flex-row place-items-center w-[40rem] m-2">
-			    <div class='tooltip' data-tip='Normal sensor temperature range: minimum temperature (in degrees Celsius)'>
+                        <div class="flex flex-row justify-between w-[40rem] m-2">
+			    <div class='tooltip w-[32%]' data-tip='Normal sensor temperature range: minimum temperature (in degrees Celsius)'>
 				<TextInput
-				    class="w-[33.3333%] p-4"
-				    label='Minimum normal temperature'
+				    label='Min normal temperature'
 				    name='tempConMinTemp'
 				/>
 			    </div>
-			    <div class='tooltip' data-tip='Normal sensor temperature range: maximum temperature (in degrees Celsius)'>
+			    <div class='tooltip w-[32%]' data-tip='Normal sensor temperature range: maximum temperature (in degrees Celsius)'>
 				<TextInput
-                                    class="w-[33.3333%] p-4"
-				    label='Maximum normal temperature'
+				    label='Max temperature'
                                     name='tempConMaxTemp'
 				/>
 			    </div>
-			    <div class='tooltip' data-tip='Normal sensor humidity range: minimum percentage point (expressed as a decimal number)'>
+			    <div class='tooltip w-[32%]' data-tip='Normal sensor humidity range: minimum percentage point (expressed as a decimal number)'>
 				<TextInput
-				    class="w-[33.3333%] p-4"
-				    label='Minimum normal humidity'
+				    label='Min normal humidity'
 				    name='humConMinPerc'
 				/>
 			    </div>
                         </div>
                     </Show>
 		     <Show when={typePresets.names[1].selected}>
-                         <div class="flex flex-row place-items-center w-[40rem] m-2">
-			    <div class='tooltip' data-tip='Normal sensor humidity range: maximum percentage point (expressed as a decimal number)'>
+                         <div class="flex flex-row justify-between w-[40rem] m-2">
+			    <div class='tooltip w-[32%]' data-tip='Normal sensor humidity range: maximum percentage point (expressed as a decimal number)'>
 				<TextInput
-				    class="w-[33.3333%] p-4"
 				    label='Minimum normal humidity'
 				    name='humConMaxPerc'
 				/>
 			    </div>
-			    <div class='tooltip' data-tip='Sensor accuracy range: minimum accurate degree (in degrees Celsius)'>
+			    <div class='tooltip w-[32%]' data-tip='Sensor accuracy range: minimum accurate degree (in degrees Celsius)'>
 				<TextInput
-                                    class="w-[33.3333%] p-4"
 				    label='Minimum accuracy'
                                     name='sensorMinAcc'
 				/>
 			    </div>
-			    <div class='tooltip' data-tip='Sensor accuracy range: maximum accurate degree (in degrees Celsius)'>
+			    <div class='tooltip w-[32%]' data-tip='Sensor accuracy range: maximum accurate degree (in degrees Celsius)'>
 				<TextInput
-				    class="w-[33.3333%] p-4"
 				    label='Maximum accuracy'
 				    name='sensorMaxAcc'
 				/>
@@ -790,24 +787,21 @@ export default function RegisterSensor() {
                         </div>
                      </Show>
 		    <Show when={typePresets.names[1].selected}>
-                        <div class="flex flex-row place-items-center w-[40rem] m-2">
-			    <div class='tooltip' data-tip='Sensor sensitivity (in degrees Celsius)'>
+                        <div class="flex flex-row justify-between w-[40rem] m-2">
+			    <div class='tooltip w-[32%]' data-tip='Sensor sensitivity (in degrees Celsius)'>
 				<TextInput
-				    class="w-[33.3333%] p-4"
 				    label='Sensitivity'
 				    name='sensorSen'
 				/>
 			    </div>
-			    <div class='tooltip' data-tip='Sensor precision range: minimum degree (in degrees Celsius)'>
+			    <div class='tooltip w-[32%]' data-tip='Sensor precision range: minimum degree (in degrees Celsius)'>
 				<TextInput
-                                    class="w-[33.3333%] p-4"
 				    label='Minimum precision'
                                     name='sensorMinPre'
 				/>
 			    </div>
-			    <div class='tooltip' data-tip='Sensor precision range: maximum degree (in degrees Celsius))'>
+			    <div class='tooltip w-[32%]' data-tip='Sensor precision range: maximum degree (in degrees Celsius))'>
 				<TextInput
-				    class="w-[33.3333%] p-4"
 				    label='Maximum precision'
 				    name='sensorMaxPre'
 				/>
@@ -815,10 +809,9 @@ export default function RegisterSensor() {
                         </div>
                     </Show>
 		    <Show when={typePresets.names[1].selected}>
-                        <div class="flex flex-row place-items-center w-[40rem] m-2">
-			    <div class='tooltip' data-tip='Sensor frequency (in seconds)'>
+                        <div class="flex flex-row justify-between w-[40rem] m-2">
+			    <div class='tooltip w-[32%]' data-tip='Sensor frequency (in seconds)'>
 				<TextInput
-				    class="w-[33.3333%] p-4"
 				    label='Frequency'
 				    name='sensorFre'
 				/>
@@ -882,8 +875,8 @@ export default function RegisterSensor() {
             </form>
 	    <Show when={rawCheck.visible}>
 		<h1 class="text-center divider">Submitted raw data</h1>
-		<div class="mockup-code">
-		    <pre><code>{data()}</code></pre>
+		<div class="prose max-w-none">
+		    <pre class="language-js"><code class="language-js">{data()}</code></pre>
 		</div>
 	    </Show>
         </div >
