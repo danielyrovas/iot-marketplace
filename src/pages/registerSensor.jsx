@@ -39,23 +39,6 @@ export default function RegisterSensor() {
             selected: false
         }
     ]);
-    
-    const [typePresets, setTypePresets] = createStore(
-        {
-            names: [
-		{
-		    name: "Sensor type: video camera",
-		    selected: false
-		},
-		{
-		    name: "Sensor type: air temperature",
-		    selected: false
-		}
-	    ],
-            icon: "tag",
-            visible: true
-        }
-    );
 
     const { form, errors, setFields, createSubmitHandler } = createForm({
         validate(values) {
