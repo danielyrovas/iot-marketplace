@@ -4,6 +4,7 @@ import { reporter } from '@felte/reporter-solid';
 import { useAppContext } from "../logic/context";
 import { TextInput } from "../components/basic";
 import { createStore } from 'solid-js/store';
+import { fetch } from '@tauri-apps/api/http';
 import ChainUtil from "senshamartproject/util/chain-util";
 
 const isNumeric = (str) => {
@@ -72,10 +73,10 @@ export default function RegisterSensor() {
             sensorData.costPerMinute = parseInt(values.costPerMinute);
             sensorData.costPerKB = parseInt(values.costPerKB);
 	    sensorData.integrationBroker = values.integrationBroker;
-            sensorData.extraNodes = [];
-            sensorData.extraLiterals = [];
+            sensorData.extraNodeMetadata = [];
+            sensorData.extraLiteralMetadata = [];
             if (typeof values.longtitude !== 'undefined') {
-                sensorData.extraNodes.push(
+                sensorData.extraNodeMetadata.push(
                     {
                         s: `SSMS://#${sensorData.sensorName}`,
                         p: 'http://www.w3.org/ns/sosa/hasFeatureOfInterest',
@@ -97,7 +98,7 @@ export default function RegisterSensor() {
                         o: `http://www.w3.org/ns/sosa/hasFeatureOfInterest`
                     }
                 );
-                sensorData.extraLiterals.push(
+                sensorData.extraLiteralMetadata.push(
                     {
                         s: `SSMS://#${sensorData.sensorName}#location`,
                         p: 'http://www.w3.org/2000/01/rdf-schema#label',
@@ -134,7 +135,7 @@ export default function RegisterSensor() {
 	    }
 
 	    if (selectedSensorType === "Sensor type: video camera") {
-                sensorData.extraNodes.push(
+                sensorData.extraNodeMetadata.push(
                     {
                         s: 'SSMS://#Procedure',
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
@@ -211,7 +212,7 @@ export default function RegisterSensor() {
                         o: 'http://www.w3.org/ns/sosa/Procedure'
                     }
                 );
-                sensorData.extraLiterals.push(
+                sensorData.extraLiteralMetadata.push(
                     {
                         s: 'SSMS://#output',
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
@@ -244,7 +245,7 @@ export default function RegisterSensor() {
                     }
                 );
 	    } else if (selectedSensorType === "Sensor type: air temperature") {
-                sensorData.extraNodes.push(
+                sensorData.extraNodeMetadata.push(
                     {
                         s: 'SSMS://#Procedure',
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
@@ -491,7 +492,7 @@ export default function RegisterSensor() {
                         o: 'http://www.w3.org/ns/sosa/Procedure'
                     }
                 );
-                sensorData.extraLiterals.push(
+                sensorData.extraLiteralMetadata.push(
                     {
                         s: 'SSMS://#output',
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
@@ -617,13 +618,13 @@ export default function RegisterSensor() {
 
             values.extras?.forEach((extra) => {
                 if (extra.literal) {
-                    sensorData.extraLiterals.push({
+                    sensorData.extraLiteralMetadata.push({
                         s: extra.rdfSubject,
                         p: extra.rdfPredicate,
                         o: extra.rdfObject,
                     });
                 } else {
-                    sensorData.extraNodes.push({
+                    sensorData.extraNodeMetadata.push({
                         s: extra.rdfSubject,
                         p: extra.rdfPredicate,
                         o: extra.rdfObject,
