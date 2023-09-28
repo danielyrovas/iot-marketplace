@@ -4,11 +4,6 @@ import "./App.css";
 
 const tabs = [
   {
-    name: "Home",
-    title: "Internet of Things Marketplace",
-    component: lazy(() => import("./pages/home")),
-  },
-  {
     name: "Query Sensors",
     title: "IoT Marketplace: Sensor Query",
     component: lazy(() => import("./pages/querySensor")),
