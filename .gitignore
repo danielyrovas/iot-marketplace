@@ -1,4 +1,4 @@
-src-tauri/binaries/*
+src-tauri/binaries/
 ### Node
 # Logs
 logs
