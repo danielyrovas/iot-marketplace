@@ -184,9 +184,9 @@ export default function QuerySensor() {
               <div className="card w-full bg-base-100 shadow-xl" key={index}>
                 <div className="card-body">
                   <h2 className="card-title">{data.sensor.value}</h2>
-                  <p>{data.lat.value}</p>
-                  <p>{data.long.value}</p>
-                  <p>{data.measures.value}</p>
+                  <p>Latitude: {data.lat.value}</p>
+                  <p>Longitude: {data.long.value}</p>
+                  <p>Sensory Type: {data.measures.value}</p>
                   <div className="card-actions justify-start">
                     {/* You can open the modal using document.getElementById('ID').showModal() method */}
                     <button
@@ -272,7 +272,7 @@ export default function QuerySensor() {
                                   <ul>
                                     <li>SSMS://#CameraSensorVideo</li>
                                     <li>http://www.w3.org/2000/01/rdf-schema#label</li>
-                                    <li>Video</li>
+                                    <li>{data.measures.value}</li>
                                   </ul>
                                 </td>
                               </tr>
@@ -290,7 +290,7 @@ export default function QuerySensor() {
                                   <ul>
                                     <li>SSMS://#CameraSensorLocation</li>
                                     <li>http://www.w3.org/2003/01/geo/wgs84_pos#lat</li>
-                                    <li>-37.821568</li>
+                                    <li>{data.lat.value}</li>
                                   </ul>
                                 </td>
                               </tr>
@@ -308,7 +308,7 @@ export default function QuerySensor() {
                                   <ul>
                                     <li>SSMS://#CameraSensorLocation</li>
                                     <li>http://www.w3.org/2003/01/geo/wgs84_pos#long</li>
-                                    <li>145.03904</li>
+                                    <li>{data.long.value}</li>
                                   </ul>
                                 </td>
                               </tr>
