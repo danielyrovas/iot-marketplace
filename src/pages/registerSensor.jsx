@@ -4,7 +4,7 @@ import { reporter } from '@felte/reporter-solid';
 import { useAppContext } from "../logic/context";
 import { TextInput } from "../components/basic";
 import { createStore } from 'solid-js/store';
-import { fetch } from '@tauri-apps/api/http';
+import { Body, fetch } from '@tauri-apps/api/http';
 import ChainUtil from "senshamartproject/util/chain-util";
 
 const isNumeric = (str) => {
@@ -17,7 +17,8 @@ export default function RegisterSensor() {
     const [showConfirmation, setShowConfirmation] = createSignal(false);
     const [extraNodes, setExtraNodes] = createStore([]);
     const [data, setData] = createSignal('');
-    const [rawCheck, setRawCheck] = createStore({visible: false});
+    const [submitResult, setSubmitResult] = createSignal('');
+    const [rawCheck, setRawCheck] = createStore({ visible: false });
     const [presets, setPresets] = createStore([
         {
             name: "Location",
@@ -54,25 +55,19 @@ export default function RegisterSensor() {
             }
             return errors;
         },
-        onSubmit: (values) => {
-            // console.log(JSON.stringify(values));
-            // console.log(JSON.stringify(extraNodes));
-        },
+        onSubmit: (values) => { },
         extend: reporter,
     });
 
     const realSubmit = createSubmitHandler({
         onSubmit: (values) => {
-            console.log('Alternative onSubmit', JSON.stringify(values, null, 2))
-            setData(JSON.stringify(values, null, 2));
-            values.costPerMinute = parseInt(values.costPerMinute);
-            values.costPerKB = parseInt(values.costPerKB);
             let sensorData = {}
 
             sensorData.sensorName = values.sensorName;
             sensorData.costPerMinute = parseInt(values.costPerMinute);
             sensorData.costPerKB = parseInt(values.costPerKB);
-	    sensorData.integrationBroker = values.integrationBroker;
+            sensorData.rewardAmount = parseInt(values.rewardAmount);
+            sensorData.integrationBroker = values.integrationBroker;
             sensorData.extraNodeMetadata = [];
             sensorData.extraLiteralMetadata = [];
             if (typeof values.longitude !== 'undefined') {
@@ -127,14 +122,14 @@ export default function RegisterSensor() {
                 );
             }
 
-	    let selectedSensorType = "";
-	    for (let i = 0; i < typePresets.length; i++) {
-		if (typePresets[i].selected === true) {
-		    selectedSensorType = typePresets[i].name;
-		}
-	    }
+            let selectedSensorType = "";
+            for (let i = 0; i < typePresets.length; i++) {
+                if (typePresets[i].selected === true) {
+                    selectedSensorType = typePresets[i].name;
+                }
+            }
 
-	    if (selectedSensorType === "Sensor type: video camera") {
+            if (selectedSensorType === "Sensor type: video camera") {
                 sensorData.extraNodeMetadata.push(
                     {
                         s: 'SSMS://#Procedure',
@@ -186,27 +181,27 @@ export default function RegisterSensor() {
                         p: 'http://www.w3.org/ns/sosa/observes',
                         o: `SSMS://#${sensorData.sensorName}Video`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}`,
                         p: 'http://www.w3.org/ns/ssn/implements',
                         o: 'SSMS://#Procedure'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://www.w3.org/ns/ssn/systems/OperatingRange',
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Video`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://www.w3.org/ns/sosa/ObservableProperty'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Video`,
                         p: 'http://www.w3.org/ns/sosa/isObservedBy',
                         o: `SSMS://#${sensorData.sensorName}`
                     },
-		    {
+                    {
                         s: 'SSMS://#MeasuringVideo',
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://www.w3.org/ns/sosa/Procedure'
@@ -238,13 +233,13 @@ export default function RegisterSensor() {
                         p: 'http://www.w3.org/2000/01/rdf-schema#label',
                         o: 'Video'
                     },
-		    {
+                    {
                         s: 'SSMS://#MeasuringVideo',
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
                         o: 'Instructions for measuring Video'
                     }
                 );
-	    } else if (selectedSensorType === "Sensor type: air temperature") {
+            } else if (selectedSensorType === "Sensor type: air temperature") {
                 sensorData.extraNodeMetadata.push(
                     {
                         s: 'SSMS://#Procedure',
@@ -291,202 +286,202 @@ export default function RegisterSensor() {
                         p: 'http://www.w3.org/ns/ssn/systems/hasOperatingRange',
                         o: `SSMS://#${sensorData.sensorName}OperatingRange`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}`,
                         p: 'http://www.w3.org/ns/ssn/systems/hasSystemCapability',
                         o: `SSMS://#${sensorData.sensorName}Capability`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}`,
                         p: 'http://www.w3.org/ns/sosa/observes',
                         o: `SSMS://#${sensorData.sensorName}Temperature`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}`,
                         p: 'http://www.w3.org/ns/ssn/implements',
                         o: 'SSMS://#Procedure'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://www.w3.org/ns/ssn/systems/OperatingRange',
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}`,
                         p: 'http://www.w3.org/ns/ssn/systems/inCondition',
                         o: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}`,
                         p: 'http://www.w3.org/ns/ssn/systems/inCondition',
                         o: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://www.w3.org/ns/ssn/systems/Condition'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://schema.org/PropertyValue'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
                         p: 'http://schema.org/unitCode',
                         o: 'http://qudt.org/1.1/vocab/unit#DegreeCelsius'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://www.w3.org/ns/ssn/systems/Condition'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://schema.org/PropertyValue'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
                         p: 'http://schema.org/unitCode',
                         o: 'http://qudt.org/1.1/vocab/unit#Percent'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Capability`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://www.w3.org/ns/ssn/Property'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Capability`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://www.w3.org/ns/ssn/systems/SystemCapability'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Capability`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://schema.org/PropertyValue'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Capability`,
                         p: 'http://www.w3.org/ns/ssn/systems/inCondition',
                         o: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Capability`,
                         p: 'http://www.w3.org/ns/ssn/systems/inCondition',
                         o: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Capability`,
                         p: 'http://www.w3.org/ns/ssn/systems/hasSystemProperty',
                         o: `SSMS://#${sensorData.sensorName}Accuracy`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Capability`,
                         p: 'http://www.w3.org/ns/ssn/systems/hasSystemProperty',
                         o: `SSMS://#${sensorData.sensorName}Sensitivity`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Capability`,
                         p: 'http://www.w3.org/ns/ssn/systems/hasSystemProperty',
                         o: `SSMS://#${sensorData.sensorName}Frequency`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Accuracy`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://www.w3.org/ns/ssn/Property'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Accuracy`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://www.w3.org/ns/ssn/systems/Accuracy'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Accuracy`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://schema.org/PropertyValue'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Accuracy`,
                         p: 'http://schema.org/unitCode',
                         o: 'http://qudt.org/1.1/vocab/unit#DegreeCelsius'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Sensitivity`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://www.w3.org/ns/ssn/Property'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Sensitivity`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://www.w3.org/ns/ssn/systems/Sensitivity'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Sensitivity`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://www.w3.org/ns/ssn/systems/Resolution'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Sensitivity`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://schema.org/PropertyValue'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Sensitivity`,
                         p: 'http://schema.org/unitCode',
                         o: 'http://qudt.org/1.1/vocab/unit#DegreeCelsius'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Precision`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://www.w3.org/ns/ssn/Property'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Precision`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://www.w3.org/ns/ssn/systems/Precision'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Precision`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://schema.org/PropertyValue'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Precision`,
                         p: 'http://schema.org/unitCode',
                         o: 'http://qudt.org/1.1/vocab/unit#DegreeCelsius'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Frequency`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://www.w3.org/ns/ssn/Property'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Frequency`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://www.w3.org/ns/ssn/systems/Frequency'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Frequency`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://schema.org/PropertyValue'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Frequency`,
                         p: 'http://schema.org/unitCode',
                         o: 'http://qudt.org/1.1/vocab/unit#Second'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Temperature`,
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://www.w3.org/ns/sosa/ObservableProperty'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Temperature`,
                         p: 'http://www.w3.org/ns/sosa/isObservedBy',
                         o: `SSMS://#${sensorData.sensorName}`
                     },
-		    {
+                    {
                         s: 'SSMS://#MeasuringTemperature',
                         p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
                         o: 'http://www.w3.org/ns/sosa/Procedure'
@@ -503,118 +498,118 @@ export default function RegisterSensor() {
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
                         o: `SSMS://#${sensorData.sensorName} measures the air temperature.`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}`,
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
                         o: 'The air temperature sensor, a specific instance of temperature sensor.'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
                         o: 'The conditions in which the air temperature sensor is expected to operate.'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
                         o: `A temperature range of ${values.tempConMinTemp} to ${values.tempConMaxTemp} degrees Celsius.`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
                         p: 'http://schema.org/minValue',
                         o: `${values.tempConMinTemp}`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
                         p: 'http://schema.org/maxValue',
                         o: `${values.tempConMaxTemp}`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
                         o: `A relative humidity range of ${values.humConMinPerc}% to ${values.humConMaxPerc}%.`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
                         p: 'http://schema.org/minValue',
                         o: `${values.humConMinPerc}`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
                         p: 'http://schema.org/maxValue',
                         o: `${values.humConMaxPerc}`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Capability`,
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
                         o: `The capabilities of the ${sensorData.sensorName} in normal temperature and humidity conditions.`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Accuracy`,
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
                         o: `The accuracy of the ${sensorData.sensorName} is ${values.sensorMinAcc}°C to ${values.sensorMaxAcc}°C in normal temperature and humidity conditions.`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Accuracy`,
                         p: 'http://schema.org/minValue',
                         o: `${values.sensorMinAcc}`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Accuracy`,
                         p: 'http://schema.org/maxValue',
                         o: `${values.sensorMaxAcc}`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Sensitivity`,
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
                         o: `The sensitivity and resolution of the ${sensorData.sensorName} is +-${values.sensorSen}°C in normal temperature and humidity conditions.`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Sensitivity`,
                         p: 'http://schema.org/value',
                         o: `${values.sensorSen}`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Precision`,
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
                         o: `The precision (= repeatability) of the ${sensorData.sensorName} is ${values.sensorMinPre}°C to ${values.sensorMaxPre}°C in normal temperature and humidity conditions.`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Precision`,
                         p: 'http://schema.org/minValue',
                         o: `${values.sensorMinPre}`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Precision`,
                         p: 'http://schema.org/maxValue',
                         o: `${values.sensorMaxPre}`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Frequency`,
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
                         o: `The smallest possible time between one observation and the next is ${values.sensorMaxPre}s on average.`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Frequency`,
                         p: 'http://schema.org/value',
                         o: `${values.sensorFre}`
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Temperature`,
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
                         o: 'Temperature is a measure of the heat content of air.'
                     },
-		    {
+                    {
                         s: `SSMS://#${sensorData.sensorName}Temperature`,
                         p: 'http://www.w3.org/2000/01/rdf-schema#label',
                         o: 'Air Temperature'
                     },
-		    {
+                    {
                         s: 'SSMS://#MeasuringTemperature',
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
                         o: 'Instructions for measuring temperature'
                     }
                 );
-	    }
+            }
 
             values.extras?.forEach((extra) => {
                 if (extra.literal) {
@@ -631,7 +626,7 @@ export default function RegisterSensor() {
                     });
                 }
             })
-	    
+
             const sensorRegistrationValidators = {
                 sensorName: ChainUtil.validateIsString,
                 costPerMinute: ChainUtil.createValidateIsIntegerWithMin(0),
@@ -643,37 +638,39 @@ export default function RegisterSensor() {
                 extraLiteralMetadata: ChainUtil.createValidateOptional(
                     ChainUtil.validateIsObject)
             };
-            const validateRes = ChainUtil.validateObject(values, sensorRegistrationValidators);
-	    
-            if (!validateRes.result && values.rawCheck) {
-                setData(`${JSON.stringify(sensorData, null, 2)}\n${validateRes.reason}`);
-                setRawCheck({visible: true});
-                return;
-            } else if (!values.rawCheck) {
-		setRawCheck({visible: false});
-		return;
-	    }
-	    
+            const validateRes = ChainUtil.validateObject(sensorData, sensorRegistrationValidators);
+            if (!validateRes.result) {
+                setSubmitResult(validateRes.reason)
+            } else {
+                setSubmitResult('')
+                submitSensor(sensorData);
+            }
+            setData(`${JSON.stringify(sensorData, null, 2)}`);
+            if (values.rawCheck) {
+                setRawCheck({ visible: true });
+            } else {
+                setRawCheck({ visible: false });
+            }
         }
     })
 
     const handleConfirmation = () => {
-      setShowConfirmation(true); 
+        setShowConfirmation(true);
     };
 
     const handleDataDisplay = () => {
-      setShowConfirmation(false); 
-      realSubmit(); 
+        setShowConfirmation(false);
+        realSubmit();
     };
 
-    const response = async (sensorData) => {
-	await fetch(`${state.api}sensorregistration`, {
-	    method: 'POST',
-	    headers: {
-		'Content-Type': 'application/json'
-	    },
-	    body: JSON.stringify(sensorData)
-	})
+    const submitSensor = async (sensorData) => {
+        let response = await fetch(`${state.api}/sensorregistration`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: Body.json(sensorData)
+        })
+        console.log(`data: ${response.status}`);
+        setSubmitResult(response.data.result ? 'Successfully submitted registration transaction.' : 'Failed to register sensor.');
     };
 
     return (
@@ -697,6 +694,11 @@ export default function RegisterSensor() {
                     />
                     <TextInput
                         class="w-[40rem]"
+                        label="Reward Amount"
+                        name="rewardAmount"
+                    />
+                    <TextInput
+                        class="w-[40rem]"
                         label="Integration broker"
                         name="integrationBroker"
                     />
@@ -714,125 +716,125 @@ export default function RegisterSensor() {
                                             {preset.name}
                                             <i class={`fa-solid fa-plus`}></i>
                                         </button>
-                                    </Show>				    
+                                    </Show>
                                 )
                             }}
                         </For>
-		    </div>
-		    <div class="flex flex-row space-x-4 justify-center w-[40rem] p-4">
+                    </div>
+                    <div class="flex flex-row space-x-4 justify-center w-[40rem] p-4">
                         <For each={typePresets}>
                             {(typePresetName, i) => {
                                 return (
                                     <Show when={typePresetVisible()}>
                                         <button class="btn btn-accent p-4" onClick={() => {
-						    setTypePresetVisible(false);
-						    setTypePresets(i(), 'selected', true);
+                                            setTypePresetVisible(false);
+                                            setTypePresets(i(), 'selected', true);
                                         }}>
                                             <i class={`fa-solid fa-${typePresets.icon}`}></i>
                                             {typePresets[i()].name}
                                             <i class={`fa-solid fa-plus`}></i>
                                         </button>
-                                    </Show>			    
+                                    </Show>
                                 )
                             }}
-                        </For>			
+                        </For>
                     </div>
                     <Show when={!presets[0].visible}>
                         <div class="flex flex-row justify-between w-[40rem] m-2">
-			    <div class='tooltip w-[32%]' data-tip='Sensor location: longitude'>
-				<TextInput
-				    label='Longitude'
-				    name='longitude'
-				/>
-			    </div>
-			    <div class='tooltip w-[32%]' data-tip='Sensor location: latitude'>
-				<TextInput
-				    label='Latitude'
+                            <div class='tooltip w-[32%]' data-tip='Sensor location: longitude'>
+                                <TextInput
+                                    label='Longitude'
+                                    name='longitude'
+                                />
+                            </div>
+                            <div class='tooltip w-[32%]' data-tip='Sensor location: latitude'>
+                                <TextInput
+                                    label='Latitude'
                                     name='latitude'
-				/>
-			    </div>
-			    <div class='tooltip w-[32%]' data-tip='Sensor location: altitude'>
-				<TextInput
-				    label='Altitude'
-				    name='altitude'
-				/>
-			    </div>			    
+                                />
+                            </div>
+                            <div class='tooltip w-[32%]' data-tip='Sensor location: altitude'>
+                                <TextInput
+                                    label='Altitude'
+                                    name='altitude'
+                                />
+                            </div>
                         </div>
                     </Show>
-		    <Show when={typePresets[1].selected}>
+                    <Show when={typePresets[1].selected}>
                         <div class="flex flex-row justify-between w-[40rem] m-2">
-			    <div class='tooltip w-[32%]' data-tip='Normal sensor temperature range: minimum temperature (in degrees Celsius)'>
-				<TextInput
-				    label='Min normal temperature'
-				    name='tempConMinTemp'
-				/>
-			    </div>
-			    <div class='tooltip w-[32%]' data-tip='Normal sensor temperature range: maximum temperature (in degrees Celsius)'>
-				<TextInput
-				    label='Max temperature'
+                            <div class='tooltip w-[32%]' data-tip='Normal sensor temperature range: minimum temperature (in degrees Celsius)'>
+                                <TextInput
+                                    label='Min normal temperature'
+                                    name='tempConMinTemp'
+                                />
+                            </div>
+                            <div class='tooltip w-[32%]' data-tip='Normal sensor temperature range: maximum temperature (in degrees Celsius)'>
+                                <TextInput
+                                    label='Max temperature'
                                     name='tempConMaxTemp'
-				/>
-			    </div>
-			    <div class='tooltip w-[32%]' data-tip='Normal sensor humidity range: minimum percentage point (expressed as a decimal number)'>
-				<TextInput
-				    label='Min normal humidity'
-				    name='humConMinPerc'
-				/>
-			    </div>
+                                />
+                            </div>
+                            <div class='tooltip w-[32%]' data-tip='Normal sensor humidity range: minimum percentage point (expressed as a decimal number)'>
+                                <TextInput
+                                    label='Min normal humidity'
+                                    name='humConMinPerc'
+                                />
+                            </div>
                         </div>
                     </Show>
-		     <Show when={typePresets[1].selected}>
-                         <div class="flex flex-row justify-between w-[40rem] m-2">
-			    <div class='tooltip w-[32%]' data-tip='Normal sensor humidity range: maximum percentage point (expressed as a decimal number)'>
-				<TextInput
-				    label='Minimum normal humidity'
-				    name='humConMaxPerc'
-				/>
-			    </div>
-			    <div class='tooltip w-[32%]' data-tip='Sensor accuracy range: minimum accurate degree (in degrees Celsius)'>
-				<TextInput
-				    label='Minimum accuracy'
+                    <Show when={typePresets[1].selected}>
+                        <div class="flex flex-row justify-between w-[40rem] m-2">
+                            <div class='tooltip w-[32%]' data-tip='Normal sensor humidity range: maximum percentage point (expressed as a decimal number)'>
+                                <TextInput
+                                    label='Minimum normal humidity'
+                                    name='humConMaxPerc'
+                                />
+                            </div>
+                            <div class='tooltip w-[32%]' data-tip='Sensor accuracy range: minimum accurate degree (in degrees Celsius)'>
+                                <TextInput
+                                    label='Minimum accuracy'
                                     name='sensorMinAcc'
-				/>
-			    </div>
-			    <div class='tooltip w-[32%]' data-tip='Sensor accuracy range: maximum accurate degree (in degrees Celsius)'>
-				<TextInput
-				    label='Maximum accuracy'
-				    name='sensorMaxAcc'
-				/>
-			    </div>			     
-                        </div>
-                     </Show>
-		    <Show when={typePresets[1].selected}>
-                        <div class="flex flex-row justify-between w-[40rem] m-2">
-			    <div class='tooltip w-[32%]' data-tip='Sensor sensitivity (in degrees Celsius)'>
-				<TextInput
-				    label='Sensitivity'
-				    name='sensorSen'
-				/>
-			    </div>
-			    <div class='tooltip w-[32%]' data-tip='Sensor precision range: minimum degree (in degrees Celsius)'>
-				<TextInput
-				    label='Minimum precision'
-                                    name='sensorMinPre'
-				/>
-			    </div>
-			    <div class='tooltip w-[32%]' data-tip='Sensor precision range: maximum degree (in degrees Celsius))'>
-				<TextInput
-				    label='Maximum precision'
-				    name='sensorMaxPre'
-				/>
-			    </div>			    
+                                />
+                            </div>
+                            <div class='tooltip w-[32%]' data-tip='Sensor accuracy range: maximum accurate degree (in degrees Celsius)'>
+                                <TextInput
+                                    label='Maximum accuracy'
+                                    name='sensorMaxAcc'
+                                />
+                            </div>
                         </div>
                     </Show>
-		    <Show when={typePresets[1].selected}>
+                    <Show when={typePresets[1].selected}>
                         <div class="flex flex-row justify-between w-[40rem] m-2">
-			    <div class='tooltip w-[32%]' data-tip='Sensor frequency (in seconds)'>
-				<TextInput
-				    label='Frequency'
-				    name='sensorFre'
-				/>
-			    </div>			    
+                            <div class='tooltip w-[32%]' data-tip='Sensor sensitivity (in degrees Celsius)'>
+                                <TextInput
+                                    label='Sensitivity'
+                                    name='sensorSen'
+                                />
+                            </div>
+                            <div class='tooltip w-[32%]' data-tip='Sensor precision range: minimum degree (in degrees Celsius)'>
+                                <TextInput
+                                    label='Minimum precision'
+                                    name='sensorMinPre'
+                                />
+                            </div>
+                            <div class='tooltip w-[32%]' data-tip='Sensor precision range: maximum degree (in degrees Celsius))'>
+                                <TextInput
+                                    label='Maximum precision'
+                                    name='sensorMaxPre'
+                                />
+                            </div>
+                        </div>
+                    </Show>
+                    <Show when={typePresets[1].selected}>
+                        <div class="flex flex-row justify-between w-[40rem] m-2">
+                            <div class='tooltip w-[32%]' data-tip='Sensor frequency (in seconds)'>
+                                <TextInput
+                                    label='Frequency'
+                                    name='sensorFre'
+                                />
+                            </div>
                         </div>
                     </Show>
                 </div>
@@ -879,10 +881,10 @@ export default function RegisterSensor() {
                             Add RDF Triple<i class="fa-solid fa-plus"></i>
                         </button>
                     </div>
-		    <div class="flex flex-row space-x-4 justify-center w-[40rem] p-4">
-			<input name='rawCheck' type="checkbox" class="checkbox p-4" />
-			<label class='label ms-2'>Show raw data on submit</label>
-		    </div>
+                    <div class="flex flex-row space-x-4 justify-center w-[40rem] p-4">
+                        <input name='rawCheck' type="checkbox" class="checkbox p-4" />
+                        <label class='label ms-2'>Show raw data on submit</label>
+                    </div>
                 </div>
                 <div class="flex justify-center m-4">
                     <button class="btn" type="submit" onClick={handleConfirmation}>
@@ -891,25 +893,32 @@ export default function RegisterSensor() {
                 </div>
             </form>
 
-	    {showConfirmation() && (
-            <div class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-                <div class="bg-white p-8 rounded-lg shadow-lg">
-                <p class="text-xl font-semibold mb-4">Confirm Registration</p>
-                <p class="mb-4">Are you sure you want to register?</p>
-                <div class="flex justify-center"> 
-                    <button class="btn btn-primary" onClick={handleDataDisplay}>Yes</button>
-                    <button class="btn btn-secondary ml-2" onClick={() => setShowConfirmation(false)}>No</button>
+            {showConfirmation() && (
+                <div class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                    <div class="bg-white p-8 rounded-lg shadow-lg">
+                        <p class="text-xl font-semibold mb-4">Confirm Registration</p>
+                        <p class="mb-4">Are you sure you want to register?</p>
+                        <div class="flex justify-center">
+                            <button class="btn btn-primary" onClick={handleDataDisplay}>Yes</button>
+                            <button class="btn btn-secondary ml-2" onClick={() => setShowConfirmation(false)}>No</button>
+                        </div>
+                    </div>
                 </div>
-                </div>
-            </div>
             )}
-	    
-	    <Show when={rawCheck.visible}>
-		<h1 class="text-center divider">Submitted raw data</h1>
-		<div class="prose max-w-none">
-		    <pre class="language-js"><code class="language-js">{data()}</code></pre>
-		</div>
-	    </Show>
+
+            <Show when={submitResult() !== ''}>
+                <h1 class="text-center divider">Registration Result</h1>
+                <div class="prose max-w-none">
+                    <pre class="language-js"><code class="language-js">{submitResult()}</code></pre>
+                </div>
+            </Show>
+
+            <Show when={rawCheck.visible}>
+                <h1 class="text-center divider">Submitted raw data</h1>
+                <div class="prose max-w-none">
+                    <pre class="language-js"><code class="language-js">{data()}</code></pre>
+                </div>
+            </Show>
         </div >
     );
 }
