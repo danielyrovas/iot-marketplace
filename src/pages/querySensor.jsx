@@ -106,6 +106,8 @@ export default function QuerySensor() {
       if (!response.ok) {
         console.log(`Query: ${query}`);
         console.log(`HTTP error ${response.status}`);
+        console.log(`Query: ${query}`);
+        console.log(`HTTP error ${response.status}`);
       }
 
       // setData(response.data);
