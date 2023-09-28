@@ -22,8 +22,8 @@ export default function QuerySensor() {
         console.log(`HTTP error ${response.status}`);
       }
 
-      setData(response.data);
-      // setData(JSON.stringify(response.data))
+      // setData(response.data);
+      setData(JSON.stringify(response.data))
       // setRdfData(response.data);
     } catch (error) {
       console.error('Error fetching RDF data:', error);
