@@ -7,12 +7,12 @@ import { createStore } from 'solid-js/store';
 
 const isString = (str) => {
     return typeof str === 'string' && isNaN(str);
-  };
-  
+};
+
 
 export default function RegisterBroker() {
-    
-    const [rawCheck, setRawCheck] = createStore({visible: false});
+
+    const [rawCheck, setRawCheck] = createStore({ visible: false });
     const [state, { updateConfig }] = useAppContext();
     const [showConfirmation, setShowConfirmation] = createSignal(false);
     const [extraNodes, setExtraNodes] = createStore([]);
@@ -28,9 +28,9 @@ export default function RegisterBroker() {
             visible: true,
         },
     ]);
-    
+
     const { form, errors, setFields, createSubmitHandler } = createForm({
-        
+
         validate(values) {
 
             const errors = {};
@@ -134,27 +134,27 @@ export default function RegisterBroker() {
                 }
             })
 
-	    setData(JSON.stringify(brokerData, null, 2));
-        if (values.rawCheck) {
             setData(JSON.stringify(brokerData, null, 2));
-            setRawCheck({visible: true});
-            return;
-        } else if (!values.rawCheck) {
-            setRawCheck({visible: false});
-            return;
+            if (values.rawCheck) {
+                setData(JSON.stringify(brokerData, null, 2));
+                setRawCheck({ visible: true });
+                return;
+            } else if (!values.rawCheck) {
+                setRawCheck({ visible: false });
+                return;
+            }
         }
-     }
     });
 
-      const handleConfirmation = () => {
-        setShowConfirmation(true); 
-      };
+    const handleConfirmation = () => {
+        setShowConfirmation(true);
+    };
 
-      const handleDataDisplay = () => {
-        setShowConfirmation(false); 
-        realSubmit(); 
-        setShowData(true); 
-      };
+    const handleDataDisplay = () => {
+        setShowConfirmation(false);
+        realSubmit();
+        setShowData(true);
+    };
 
     return (
         <div>
@@ -171,30 +171,30 @@ export default function RegisterBroker() {
                         name="endPoint"
                     />
                 </div>
-                    <h1 class="text-2xl font-bold text-center"> RDF Triples</h1>
-                    <div class="flex flex-row space-x-4 justify-center w-[40rem] p-4 mx-auto">
-                        <For each={presets}>
-                            {(preset, i) => {
-                                return (
-                                    <Show when={preset.visible}>
-                                        <button class="btn btn-primary p-4" onClick={() => {
-                                            // set(i(), { visible: false })
-                                            setPresets(i(), { visible: false })
-                                        }}>
-                                            <i class={`fa-solid fa-${preset.icon}`}></i>
-                                            {preset.name}
-                                            <i class={`fa-solid fa-plus`}></i>
-                                        </button>
-                                    </Show>
-                                )
-                            }}
-                        </For>  
-                    </div>
+                <h1 class="text-2xl font-bold text-center"> RDF Triples</h1>
+                <div class="flex flex-row space-x-4 justify-center w-[40rem] p-4 mx-auto">
+                    <For each={presets}>
+                        {(preset, i) => {
+                            return (
+                                <Show when={preset.visible}>
+                                    <button class="btn btn-primary p-4" onClick={() => {
+                                        // set(i(), { visible: false })
+                                        setPresets(i(), { visible: false })
+                                    }}>
+                                        <i class={`fa-solid fa-${preset.icon}`}></i>
+                                        {preset.name}
+                                        <i class={`fa-solid fa-plus`}></i>
+                                    </button>
+                                </Show>
+                            )
+                        }}
+                    </For>
+                </div>
 
                 <Show when={!presets[0].visible}>
-                        <div class="flex flex-row justify-between w-[40rem] m-2 mx-auto">
+                    <div class="flex flex-row justify-between w-[40rem] m-2 mx-auto">
                         <div class='tooltip w-[32%]' data-tip='Broker location: longitude'>
-                        
+
                             <TextInput
                                 label='Longitude'
                                 name='longitude'
@@ -212,16 +212,16 @@ export default function RegisterBroker() {
                                 name='altitude'
                             />
                         </div>
-                        </div>
-                    </Show>
+                    </div>
+                </Show>
 
                 <Show when={showBrokerLocation()}>
                     <TextInput
                         class="w-[40rem]"
                         label="Broker Location"
                         name="brokerLocation"
-                        value={brokerLocation()} 
-                        onInput={(e) => setBrokerLocation(e.target.value)} 
+                        value={brokerLocation()}
+                        onInput={(e) => setBrokerLocation(e.target.value)}
                     />
                 </Show>
                 <For each={extraNodes}>
@@ -245,15 +245,15 @@ export default function RegisterBroker() {
                                     label={`RDF Object ${i() + 1}`}
                                     name={`extras.${i()}.rdfObject`}
                                 />
-                            
+
                                 <div class="flex flex-row place-items-start w-[40rem] m-2">
-                                <input name={`extras.${i()}.literal`} type="checkbox" class="checkbox p-4" />
+                                    <input name={`extras.${i()}.literal`} type="checkbox" class="checkbox p-4" />
                                     <label class='label ms-2' for={`extras.${i()}.literal`}>RDF Literal?</label>
                                 </div>
                             </div>
                         )
                     }}
-        
+
                 </For>
 
                 <div class="flex flex-col place-items-center m-2">
@@ -274,10 +274,10 @@ export default function RegisterBroker() {
                     <div class="flex flex-row space-x-4 justify-center w-[40rem] p-4">
                         <input name='rawCheck' type="checkbox" class="checkbox p-4" />
                         <label class='label ms-2'>Show raw data on submit</label>
-		            </div>
+                    </div>
                 </div>
-                
-                
+
+
 
                 {/*<Show when={showExtraLiterals()}>
                     <For each={extraLiterals}>
@@ -327,33 +327,33 @@ export default function RegisterBroker() {
                 <div class="flex justify-center m-4">
                     <button class="btn" type="submit" onClick={handleConfirmation}>
                         Register Broker <i class="fa-solid fa-paper-plane"></i>
-                     </button>
+                    </button>
                 </div>
-                
-                
-               
-            {showConfirmation() && (
-            <div class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-                <div class="bg-white p-8 rounded-lg shadow-lg">
-                <p class="text-xl font-semibold mb-4">Confirm Registration</p>
-                <p class="mb-4">Are you sure you want to register?</p>
-                <div class="flex justify-center"> 
-                    <button class="btn btn-primary" onClick={handleDataDisplay}>Yes</button>
-                    <button class="btn btn-secondary ml-2" onClick={() => setShowConfirmation(false)}>No</button>
-                </div>
-                </div>
-            </div>
-            )}
-                
+
+
+
+                {showConfirmation() && (
+                    <div class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                        <div class="bg-white p-8 rounded-lg shadow-lg">
+                            <p class="text-xl font-semibold mb-4">Confirm Registration</p>
+                            <p class="mb-4">Are you sure you want to register?</p>
+                            <div class="flex justify-center">
+                                <button class="btn btn-primary" onClick={handleDataDisplay}>Yes</button>
+                                <button class="btn btn-secondary ml-2" onClick={() => setShowConfirmation(false)}>No</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
             </form>
             <Show when={rawCheck.visible}>
                 <h1 class="text-center divider">Submitted raw data</h1>
                 <div class="prose max-w-none">
                     <pre class="language-js"><code class="language-js">{data()}</code></pre>
                 </div>
-	        </Show>  
+            </Show>
         </div>
     );
 }
 
-  
+
