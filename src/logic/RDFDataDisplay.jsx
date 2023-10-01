@@ -12,7 +12,7 @@ export const RdfDataDisplay = (props) => {
 
       <div className="grow p-4">
         <div className="grid grid-cols-3 w-full gap-4">
-        {props?.rdfData?.length === 0 ? ( <div >No data available for the sensor type you chosen or custom query you entered </div>):(<div></div>)}
+          {props?.rdfData?.length === 0 ? ( "No data available for the sensor type you chosen or custom query you entered "):(<div></div>)}
           {props?.rdfData?.map((data, index) => (
             <div className="card w-full bg-base-100 shadow-xl" key={index}>
               <div className="card-body">

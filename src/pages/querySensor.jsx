@@ -25,6 +25,7 @@ export default function QuerySensor() {
       body: Body.json({ query: query })
     })
     setRdfData(response.data.values)
+    console.log(response)
 
     if (!response.ok) {
       console.log(`Query: ${query}`);

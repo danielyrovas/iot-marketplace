@@ -7,6 +7,11 @@ const presetQueries = [
     value: '',
   },
   {
+    label: 'All sensor in Australia',
+    property: 'observes',
+    value: '?location juso:country "Australia"',
+  },
+  {
     label: 'Camera Sensors',
     property: 'observes',
     value: '?observes rdfs:label "video"',
