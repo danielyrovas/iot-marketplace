@@ -2,18 +2,28 @@ export const RdfDataDisplay = (props) => {
     // if ( !props.rdfData) {
     //   return <div>No RDF data available...</div>;
     // }
-    console.log(props.rdfData)
+
+  
+
+    console.log(props?.rdfData?.length)
+    console.log(props)
 
 
   
     return (
       <div >
         
-
+      {props?.rdfData?.length === 0 ? ( <div >No data available for the sensor type you chosen or custom query you entered </div>):(<div></div>)}
         <div className="grow p-4">
           <div className="grid grid-cols-3 w-full gap-4">
+            
+            
             {props?.rdfData?.map((data, index) => (
+              
+              
               <div className="card w-full bg-base-100 shadow-xl" key={index}>
+                {console.log(data)}
+                
                 <div className="card-body">
                   <h2 className="card-title">{data.sensor.value}</h2>
                   <p>Latitude: {data.lat.value}</p>
@@ -278,7 +288,7 @@ export const RdfDataDisplay = (props) => {
                   </div>
                 </div>
               </div>
-            ))||"Please select sensor type or enter your custom query"}
+            ))||<div>Please select sensor type or enter your custom query</div>}
           </div>
         </div>
       

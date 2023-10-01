@@ -25,6 +25,8 @@ export default function QuerySensor() {
       body: Body.json({ query: query })
     })
     setRdfData(response.data.values)
+    setData(response.data.values)
+    console.log(data())
 
     if (!response.ok) {
       console.log(`Query: ${query}`);
@@ -45,10 +47,13 @@ export default function QuerySensor() {
       <QueryInput executeQuery={fetchRdfData} />
 
       {rdfData() !== null ? (
-        <RdfDataDisplay rdfData={memoRdfData()} />
+        <RdfDataDisplay rdfData={memoRdfData()}  />
+        
       ) : (
         <div>No query has been executed...</div>
       )}
+      {console.log(data())}
+      
       </div>
     </div>
   );
