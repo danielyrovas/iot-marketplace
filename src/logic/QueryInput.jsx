@@ -9,44 +9,31 @@ const presetQueries = [
   {
     label: 'Camera Sensors',
     property: 'observes',
-    value: 'FILTER (?measures = "video")',
+    value: '?observes rdfs:label "video"',
   },
   {
     label: 'Milk temperature',
     property: 'observes',
-    value: 'FILTER (?measures = "Milk Temperature")',
+    value: '?observes rdfs:label "Milk Temperature"',
   },
   {
     label: 'Milk Pressure',
     property: 'observes',
-    value: 'FILTER (?measures = "milk pressure")',
+    value: '?observes rdfs:label "milk pressure"',
   },
   {
     label: 'Relative air Humidity',
     property: 'observes',
-    value: 'FILTER (?measures = "relative air Humidity")',
+    value: '?observes rdfs:label "relative air Humidity"',
   },
 
 
 ];
-const queryAllData = `
-PREFIX sosa: <http://www.w3.org/ns/sosa/>
-PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 
-SELECT ?sensor ?lat ?long ?measures
-WHERE {
-  ?sensor a sosa:Sensor ;
-          sosa:observes ?observes ;
-          sosa:hasFeatureOfInterest ?location .
-  ?observes rdfs:label ?measures .
-  ?location geo:lat ?lat ;
-           geo:long ?long .
-}`;
 
 export const QueryInput = (props) => {
-  const [selectedQuery, setSelectedQuery] = createSignal(null);
+  const [selectedQuery, setSelectedQuery] = createSignal('please');
   const [customQuery, setCustomQuery] = createSignal('');
-  const [selectAllQuery, setSelectAllQuery] = createSignal(queryAllData)
   const [loading, setLoading] = createSignal(false);
 
   const executeQuery = () => {
@@ -58,16 +45,23 @@ export const QueryInput = (props) => {
     // Check if the user entered a custom query; if yes, use it, otherwise, use the selected preset query
     const queryToExecute = customQuery() || `
     PREFIX sosa: <http://www.w3.org/ns/sosa/>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+    PREFIX juso: <http://rdfs.co/juso/>
     
-    SELECT ?sensor ?lat ?long ?measures
+    SELECT ?sensor ?lat ?long ?measures ?country ?City ?Provenance ?Suburb ?Address ?Postcode
     WHERE {
-      ?sensor a sosa:Sensor ;
-              sosa:observes ?observes ;
-              sosa:hasFeatureOfInterest ?location .
-      ?observes rdfs:label ?measures .
-      ?location geo:lat ?lat ;
-               geo:long ?long .
+      ?sensor sosa:observes ?observes.
+      ?sensor sosa:hasFeatureOfInterest ?location.
+      ?observes rdfs:label ?measures.
+      ?location geo:lat ?lat.
+      ?location geo:long ?long.
+      ?location juso:country ?country.
+      ?location juso:City ?City.
+      ?location juso:Provenance ?Provenance.
+      ?location juso:Suburb ?Suburb.
+      ?location juso:Address ?Address.
+      ?location juso:Postcode ?Postcode.
       ${selectedQuery()}
     }`;
 
@@ -121,19 +115,19 @@ export const QueryInput = (props) => {
           placeholder="Enter your custom SPARQL query here..."
           onChange={handleCustomQueryChange}
           value={customQuery()}
-          title="Sample query = PREFIX sosa: <http://www.w3.org/ns/sosa/>
-          PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
-          
-          SELECT ?sensor ?lat ?long ?measures
-          WHERE {
-            ?sensor a sosa:Sensor ;
-                    sosa:observes ?observes ;
-                    sosa:hasFeatureOfInterest ?location .
-            ?observes rdfs:label ?measures .
-            ?location geo:lat ?lat ;
-                     geo:long ?long .
-            FILTER (?measures = 'video')
-          }"
+          title="Sample query = SELECT ?sensor ?lat ?long ?measures ?country ?City ?Provenance ?Suburb ?Address ?Postcode
+          WHERE { ?sensor <http://www.w3.org/ns/sosa/observes> ?observes. 
+          ?sensor <http://www.w3.org/ns/sosa/hasFeatureOfInterest> ?location. 
+          ?observes <http://www.w3.org/2000/01/rdf-schema#label> ?measures . 
+          ?location <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat . 
+          ?location <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?long . 
+          ?location <http://rdfs.co/juso/country> ?country . 
+          ?location <http://rdfs.co/juso/City> ?City . 
+          ?location <http://rdfs.co/juso/Provenance> ?Provenance . 
+          ?location <http://rdfs.co/juso/Suburb> ?Suburb . 
+          ?location <http://rdfs.co/juso/Address> ?Address . 
+          ?location <http://rdfs.co/juso/Postcode> ?Postcode . 
+          ?observes <http://www.w3.org/2000/01/rdf-schema#label> 'video'}"
         ></textarea>
         <p></p>
         <button class= "btn" type="submit">Execute Query</button>
