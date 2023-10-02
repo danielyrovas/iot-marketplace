@@ -4,6 +4,8 @@ import { reporter } from '@felte/reporter-solid';
 import { useAppContext } from "../logic/context";
 import { TextInput } from "../components/basic";
 import { createStore } from 'solid-js/store';
+import ChainUtil from "senshamartproject/util/chain-util";
+import { Body, fetch } from '@tauri-apps/api/http'
 
 const isString = (str) => {
     return typeof str === 'string' && isNaN(str);
@@ -16,10 +18,10 @@ export default function RegisterBroker() {
     const [state, { updateConfig }] = useAppContext();
     const [showConfirmation, setShowConfirmation] = createSignal(false);
     const [extraNodes, setExtraNodes] = createStore([]);
-    const [showExtraLiterals, setShowExtraLiterals] = createSignal(false);
     const [showBrokerLocation, setShowBrokerLocation] = createSignal(false);
     const [brokerLocation, setBrokerLocation] = createSignal('');
     const [data, setData] = createSignal('');
+    const [submitResult, setSubmitResult] = createSignal('');
 
     const [presets, setPresets] = createStore([
         {
@@ -42,15 +44,13 @@ export default function RegisterBroker() {
             } else if (!isString(values.brokerName)) {
                 errors.brokerName = "please use alphabets, integers format are not allowed";
             }
-            if (!values.endPoint) {
-            } else if (!isString(values.endPoint)) {
-                errors.endPoint = "please use alphabets, integers format are not allowed";
+            if (!values.endpoint) {
+            } else if (!isString(values.endpoint)) {
+                errors.endpoint = "please use alphabets, integers format are not allowed";
             }
             return errors;
         },
         onSubmit: (values) => {
-            // console.log(JSON.stringify(values));
-            // console.log(JSON.stringify(extraNodes));
         },
         extend: reporter,
     });
@@ -58,11 +58,11 @@ export default function RegisterBroker() {
     const realSubmit = createSubmitHandler({
         onSubmit: (values) => {
 
-
             let brokerData = {}
-
+            
             brokerData.brokerName = values.brokerName;
-            brokerData.endPoint = values.endPoint;
+            brokerData.endpoint = values.endpoint;
+            brokerData.rewardAmount = parseInt(values.rewardAmount);
             brokerData.extraNodeMetadata = [];
             brokerData.extraLiteralMetadata = [];
 
@@ -133,18 +133,39 @@ export default function RegisterBroker() {
                     });
                 }
             })
-
-	    setData(JSON.stringify(brokerData, null, 2));
+        const brokerRegistrationValidators ={
+            brokerName: ChainUtil.validateIsString,
+            endpoint: ChainUtil.validateIsString,
+            rewardAmount : ChainUtil.createValidateIsIntegerWithMin(0),
+            extraNodeMetadata: ChainUtil.createValidateOptional(ChainUtil.validateIsObject),
+            extraLiteralMetadata: ChainUtil.createValidateOptional(ChainUtil.validateIsObject)
+        };
+        const validateRes = ChainUtil.validateObject(brokerData,brokerRegistrationValidators);
+        if(!validateRes.result){
+            setSubmitResult(validateRes.reason)
+        }else{
+            setSubmitResult('')
+            submitBrokerRegistration(brokerData);
+        }
+        setData(`${JSON.stringify(sensorData, null, 2)}`);
         if (values.rawCheck) {
-            setData(JSON.stringify(brokerData, null, 2));
             setRawCheck({visible: true});
-            return;
-        } else if (!values.rawCheck) {
+        } else{
             setRawCheck({visible: false});
-            return;
         }
      }
-    });
+    })
+
+    const submitBrokerRegistration = async(brokerData) =>{
+        let response = await fetch(`${state.api}/brokerregistration`,{
+            method: 'POST',
+            headers:{'Content-Type':'application/json'},
+            body: Body.json(brokerData)
+        })
+
+        console.log(`data: ${response.status}`);
+        setSubmitResult(response.data.result ? 'The registration transaction has been successfully submitted.':'Failed to register broker.');
+    };
 
       const handleConfirmation = () => {
         setShowConfirmation(true); 
@@ -155,6 +176,7 @@ export default function RegisterBroker() {
         realSubmit(); 
         setShowData(true); 
       };
+     
 
     return (
         <div>
@@ -168,8 +190,15 @@ export default function RegisterBroker() {
                     <TextInput
                         class="w-[40rem]"
                         label="Endpoint"
-                        name="endPoint"
+                        name="endpoint"
                     />
+                    
+                    <TextInput
+                        class="w-[40rem]"
+                        label="Reward Amount"
+                        name="rewardAmount"
+                    />
+    
                 </div>
                     <h1 class="text-2xl font-bold text-center"> RDF Triples</h1>
                     <div class="flex flex-row space-x-4 justify-center w-[40rem] p-4 mx-auto">
@@ -276,54 +305,7 @@ export default function RegisterBroker() {
                         <label class='label ms-2'>Show raw data on submit</label>
 		            </div>
                 </div>
-                
-                
-
-                {/*<Show when={showExtraLiterals()}>
-                    <For each={extraLiterals}>
-                        {(_, i) => (
-                            <div class="flex flex-col place-items-center m-2">
-                                <h1 class="text-center divider">RDF Literals {i() + 1}</h1>
-                                <TextInput
-                                    class="w-[40rem]"
-                                    label={`RDF Subject ${i() + 1}`}
-                                    name={`extras.${i()}.rdfSubject`}
-                                />
-                                <TextInput
-                                    class="w-[40rem]"
-                                    label={`RDF Predicate ${i() + 1}`}
-                                    name={`extras.${i()}.rdfPredicate`}
-                                />
-                                <TextInput
-                                    class="w-[40rem]"
-                                    label={`RDF Object ${i() + 1}`}
-                                    name={`extras.${i()}.rdfObject`}
-                                />
-                            </div>
-                        )}
-                    </For>
-                    <div class="flex flex-col place-items-center m-2">
-                        <div class="flex flex-row justify-end w-[40rem] ">
-                            <Show when={extraLiterals.length > 1}>
-                                <button
-                                    class="btn btn-primary p-4"
-                                    onClick={() => {
-                                        setExtraLiterals(extraLiterals.slice(0, -1));
-                                    }}
-                                >
-                                    <i class="fa-solid fa-minus"></i>
-                                </button>
-                            </Show>
-                            <button
-                                class="btn p-4 ml-4"
-                                onClick={() => setExtraLiterals([...extraLiterals, {}])}
-                            >
-                                Add RDF Literals <i class="fa-solid fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                </Show>
-                */}
+    
                 <div class="flex justify-center m-4">
                     <button class="btn" type="submit" onClick={handleConfirmation}>
                         Register Broker <i class="fa-solid fa-paper-plane"></i>
@@ -344,8 +326,15 @@ export default function RegisterBroker() {
                 </div>
             </div>
             )}
+           
+           <Show when={submitResult() !== ''}>
+                <h1 class="text-center divider">Registration Result</h1>
+                <div class="prose max-w-none">
+                    <pre class="language-js"><code class="language-js">{submitResult()}</code></pre>
+                </div>
+            </Show>
                 
-            </form>
+            </form>  
             <Show when={rawCheck.visible}>
                 <h1 class="text-center divider">Submitted raw data</h1>
                 <div class="prose max-w-none">
