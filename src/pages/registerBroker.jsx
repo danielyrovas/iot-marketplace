@@ -159,7 +159,7 @@ export default function RegisterBroker() {
     })
 
     const submitBrokerRegistration = async(brokerData) =>{
-        let response = await fetch(`${state.api}/brokerregistration`,{
+        let response = await fetch(`${state.api}/BrokerRegistration`,{
             method: 'POST',
             headers:{'Content-Type':'application/json'},
             body: Body.json(brokerData)
@@ -175,8 +175,7 @@ export default function RegisterBroker() {
 
       const handleDataDisplay = () => {
         setShowConfirmation(false); 
-        realSubmit(); 
-        setShowData(true); 
+        realSubmit();
       };
      
 
@@ -209,7 +208,6 @@ export default function RegisterBroker() {
                                 return (
                                     <Show when={preset.visible}>
                                         <button class="btn btn-primary p-4" onClick={() => {
-                                            // set(i(), { visible: false })
                                             setPresets(i(), { visible: false })
                                         }}>
                                             <i class={`fa-solid fa-${preset.icon}`}></i>
