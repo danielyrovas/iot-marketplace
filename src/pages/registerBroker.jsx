@@ -136,9 +136,11 @@ export default function RegisterBroker() {
         const brokerRegistrationValidators ={
             brokerName: ChainUtil.validateIsString,
             endpoint: ChainUtil.validateIsString,
-            rewardAmount : ChainUtil.createValidateIsIntegerWithMin(0),
-            extraNodeMetadata: ChainUtil.createValidateOptional(ChainUtil.validateIsObject),
-            extraLiteralMetadata: ChainUtil.createValidateOptional(ChainUtil.validateIsObject)
+            rewardAmount: ChainUtil.createValidateIsIntegerWithMin(0),
+            extraNodeMetadata: ChainUtil.createValidateOptional(
+              ChainUtil.validateIsObject),
+            extraLiteralMetadata: ChainUtil.createValidateOptional(
+              ChainUtil.validateIsObject)
         };
         const validateRes = ChainUtil.validateObject(brokerData,brokerRegistrationValidators);
         if(!validateRes.result){
@@ -147,7 +149,7 @@ export default function RegisterBroker() {
             setSubmitResult('')
             submitBrokerRegistration(brokerData);
         }
-        setData(`${JSON.stringify(sensorData, null, 2)}`);
+        setData(`${JSON.stringify(brokerData, null, 2)}`);
         if (values.rawCheck) {
             setRawCheck({visible: true});
         } else{
