@@ -37,7 +37,7 @@ const presetQueries = [
 
 
 export const QueryInput = (props) => {
-  const [selectedQuery, setSelectedQuery] = createSignal('please');
+  const [selectedQuery, setSelectedQuery] = createSignal('');
   const [customQuery, setCustomQuery] = createSignal('');
   const [loading, setLoading] = createSignal(false);
 

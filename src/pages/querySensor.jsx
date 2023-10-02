@@ -41,7 +41,7 @@ export default function QuerySensor() {
   return (
     <div>
         <div class="flex flex-col place-items-left m-7">
-      <h1>RDF Data Viewer</h1>
+      <h1></h1>
       <h2> &nbsp; </h2>
       <QueryInput executeQuery={fetchRdfData} />
 
