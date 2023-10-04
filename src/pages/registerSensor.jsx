@@ -102,17 +102,17 @@ export default function RegisterSensor() {
                     {
                         s: `SSMS://#${sensorData.sensorName}#location`,
                         p: 'http://www.w3.org/2003/01/geo/wgs84_pos#lat',
-                        o: `${values.latitude}`
+                        o: parseFloat(values.latitude)
                     },
                     {
                         s: `SSMS://#${sensorData.sensorName}#location`,
                         p: 'http://www.w3.org/2003/01/geo/wgs84_pos#long',
-                        o: `${values.longitude}`
+                        o: parseFloat(values.longitude)
                     },
                     {
                         s: `SSMS://#${sensorData.sensorName}#location`,
                         p: 'http://www.w3.org/2003/01/geo/wgs84_pos#alt',
-                        o: `${values.altitude}`
+                        o: parseFloat(values.altitude)
                     },
                     {
                         s: 'SSMS://earth',
@@ -516,12 +516,12 @@ export default function RegisterSensor() {
                     {
                         s: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
                         p: 'http://schema.org/minValue',
-                        o: `${values.tempConMinTemp}`
+                        o: parseFloat(values.tempConMinTemp)
                     },
                     {
                         s: `SSMS://#${sensorData.sensorName}NormalTemperatureCondition`,
                         p: 'http://schema.org/maxValue',
-                        o: `${values.tempConMaxTemp}`
+                        o: parseFloat(values.tempConMaxTemp)
                     },
                     {
                         s: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
@@ -531,12 +531,12 @@ export default function RegisterSensor() {
                     {
                         s: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
                         p: 'http://schema.org/minValue',
-                        o: `${values.humConMinPerc}`
+                        o: parseFloat(values.humConMinPerc)
                     },
                     {
                         s: `SSMS://#${sensorData.sensorName}NormalHumidityCondition`,
                         p: 'http://schema.org/maxValue',
-                        o: `${values.humConMaxPerc}`
+                        o: parseFloat(values.humConMaxPerc)
                     },
                     {
                         s: `SSMS://#${sensorData.sensorName}Capability`,
@@ -551,12 +551,12 @@ export default function RegisterSensor() {
                     {
                         s: `SSMS://#${sensorData.sensorName}Accuracy`,
                         p: 'http://schema.org/minValue',
-                        o: `${values.sensorMinAcc}`
+                        o: parseFloat(values.sensorMinAcc)
                     },
                     {
                         s: `SSMS://#${sensorData.sensorName}Accuracy`,
                         p: 'http://schema.org/maxValue',
-                        o: `${values.sensorMaxAcc}`
+                        o: parseFloat(values.sensorMaxAcc)
                     },
                     {
                         s: `SSMS://#${sensorData.sensorName}Sensitivity`,
@@ -566,7 +566,7 @@ export default function RegisterSensor() {
                     {
                         s: `SSMS://#${sensorData.sensorName}Sensitivity`,
                         p: 'http://schema.org/value',
-                        o: `${values.sensorSen}`
+                        o: parseFloat(values.sensorSen)
                     },
                     {
                         s: `SSMS://#${sensorData.sensorName}Precision`,
@@ -576,12 +576,12 @@ export default function RegisterSensor() {
                     {
                         s: `SSMS://#${sensorData.sensorName}Precision`,
                         p: 'http://schema.org/minValue',
-                        o: `${values.sensorMinPre}`
+                        o: parseFloat(values.sensorMinPre)
                     },
                     {
                         s: `SSMS://#${sensorData.sensorName}Precision`,
                         p: 'http://schema.org/maxValue',
-                        o: `${values.sensorMaxPre}`
+                        o: parseFloat(values.sensorMaxPre)
                     },
                     {
                         s: `SSMS://#${sensorData.sensorName}Frequency`,
@@ -591,7 +591,7 @@ export default function RegisterSensor() {
                     {
                         s: `SSMS://#${sensorData.sensorName}Frequency`,
                         p: 'http://schema.org/value',
-                        o: `${values.sensorFre}`
+                        o: parseFloat(values.sensorFre)
                     },
                     {
                         s: `SSMS://#${sensorData.sensorName}Temperature`,
