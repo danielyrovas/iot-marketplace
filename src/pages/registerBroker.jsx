@@ -96,17 +96,17 @@ export default function RegisterBroker() {
                     {
                         rdfSubject: `SSMS://#${brokerData.brokerName}#location`,
                         rdfPredicate: 'http://www.w3.org/2003/01/geo/wgs84_pos#lat',
-                        rdfObject: `${values.latitude}`,
+                        rdfObject: parseFloat(values.latitude),
                     },
                     {
                         rdfSubject: `SSMS://#${brokerData.brokerName}#location`,
                         rdfPredicate: 'http://www.w3.org/2003/01/geo/wgs84_pos#long',
-                        rdfObject: `${values.longtitude}`,
+                        rdfObject: parseFloat(values.longtitude),
                     },
                     {
                         rdfSubject: `SSMS://#${brokerData.brokerName}#location`,
                         rdfPredicate: 'http://www.w3.org/2003/01/geo/wgs84_pos#alt',
-                        rdfObject: `${values.altitude}`,
+                        rdfObject: parseFloat(values.altitude),
                     },
                     {
                         s: 'SSMS://earth',
