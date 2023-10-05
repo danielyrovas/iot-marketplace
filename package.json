@@ -8,6 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
+    "api-install": "cd api && pnpm install",
     "package": "pkg api/package.json -t node18 --output src-tauri/binaries/app && node scripts/move-binary.js",
     "tauri": "tauri"
   },
