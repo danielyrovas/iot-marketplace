@@ -96,17 +96,17 @@ export default function RegisterBroker() {
                     {
                         s: `SSMS://#${brokerData.brokerName}#location`,
                         p: 'http://www.w3.org/2003/01/geo/wgs84_pos#lat',
-                        o: `${values.latitude}`,
+                        o: parseFloat(values.latitude),
                     },
                     {
                         s: `SSMS://#${brokerData.brokerName}#location`,
                         p: 'http://www.w3.org/2003/01/geo/wgs84_pos#long',
-                        o: `${values.longitude}`,
+                        o: parseFloat(values.longitude),
                     },
                     {
                         s: `SSMS://#${brokerData.brokerName}#location`,
                         p: 'http://www.w3.org/2003/01/geo/wgs84_pos#alt',
-                        o: `${values.altitude}`,
+                        o: parseFloat(values.altitude),
                     },
                     {
                         s: 'SSMS://earth',
@@ -163,7 +163,7 @@ export default function RegisterBroker() {
             body: Body.json(brokerData)
         })
 
-        console.log(`data: ${JSON.stringify(response.data)}`);
+        console.log(`data: ${response.status}`);
         if (typeof response.data.input === 'undefined') {
             setSubmitResult('Failed to register broker.');
         } else if (typeof response.data.input === 'string') {
@@ -180,6 +180,7 @@ export default function RegisterBroker() {
     const handleDataDisplay = () => {
         setShowConfirmation(false);
         realSubmit();
+        setShowData(true);
     };
 
 
