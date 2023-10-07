@@ -45,8 +45,8 @@ export default function RegisterSensor() {
         validate(values) {
 
             const errors = {};
-            if (!values.name) {
-            } else if (values.name.length < 5) {
+            if (!values.sensorName) {
+            } else if (values.sensorName.length < 5) {
                 errors.name = "please add a descriptive name";
             }
             if (!values.costPerMinute) {
