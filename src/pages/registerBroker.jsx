@@ -38,14 +38,14 @@ export default function RegisterBroker() {
             } else if (values.brokerName.length < 5) {
                 errors.brokerName = "please add a broker name, broker name can't be empty";
             }
-            if (!values.brokerName) {
-            } else if (!isString(values.brokerName)) {
-                errors.brokerName = "please use alphabets, integers format are not allowed";
-            }
-            if (!values.endpoint) {
-            } else if (!isString(values.endpoint)) {
-                errors.endpoint = "please use alphabets, integers format are not allowed";
-            }
+            // if (!values.brokerName) {
+            // } else if (!isString(values.brokerName)) {
+            //     errors.brokerName = "please use alphabets, integers format are not allowed";
+            // }
+            // if (!values.endpoint) {
+            // } else if (!isString(values.endpoint)) {
+            //     errors.endpoint = "please use alphabets, integers format are not allowed";
+            // }
             return errors;
         },
         onSubmit: (values) => {

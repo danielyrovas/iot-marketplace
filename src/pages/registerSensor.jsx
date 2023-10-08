@@ -45,8 +45,8 @@ export default function RegisterSensor() {
         validate(values) {
 
             const errors = {};
-            if (!values.name) {
-            } else if (values.name.length < 5) {
+            if (!values.sensorName) {
+            } else if (values.sensorName.length < 5) {
                 errors.name = "please add a descriptive name";
             }
             if (!values.costPerMinute) {
@@ -546,7 +546,7 @@ export default function RegisterSensor() {
                     {
                         s: `SSMS://#${sensorData.sensorName}Accuracy`,
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        o: `The accuracy of the ${sensorData.sensorName} is ${values.sensorMinAcc}캜 to ${values.sensorMaxAcc}캜 in normal temperature and humidity conditions.`
+                        o: `The accuracy of the ${sensorData.sensorName} is ${values.sensorMinAcc}째C to ${values.sensorMaxAcc}째C in normal temperature and humidity conditions.`
                     },
                     {
                         s: `SSMS://#${sensorData.sensorName}Accuracy`,
@@ -561,7 +561,7 @@ export default function RegisterSensor() {
                     {
                         s: `SSMS://#${sensorData.sensorName}Sensitivity`,
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        o: `The sensitivity and resolution of the ${sensorData.sensorName} is +-${values.sensorSen}캜 in normal temperature and humidity conditions.`
+                        o: `The sensitivity and resolution of the ${sensorData.sensorName} is +-${values.sensorSen}째C in normal temperature and humidity conditions.`
                     },
                     {
                         s: `SSMS://#${sensorData.sensorName}Sensitivity`,
@@ -571,7 +571,7 @@ export default function RegisterSensor() {
                     {
                         s: `SSMS://#${sensorData.sensorName}Precision`,
                         p: 'http://www.w3.org/2000/01/rdf-schema#comment',
-                        o: `The precision (= repeatability) of the ${sensorData.sensorName} is ${values.sensorMinPre}캜 to ${values.sensorMaxPre}캜 in normal temperature and humidity conditions.`
+                        o: `The precision (= repeatability) of the ${sensorData.sensorName} is ${values.sensorMinPre}째C to ${values.sensorMaxPre}째C in normal temperature and humidity conditions.`
                     },
                     {
                         s: `SSMS://#${sensorData.sensorName}Precision`,
