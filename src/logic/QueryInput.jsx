@@ -72,13 +72,13 @@ export const QueryInput = (props) => {
 
     // Trigger the query using props.executeQuery
     props.executeQuery(queryToExecute)
-      .then(() => {
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.error(error);
-      });
+      // .then(() => {
+      //   setLoading(false);
+      // })
+      // .catch((error) => {
+      //   setLoading(false);
+      //   console.error(error);
+      // });
   };
 
   const handleQueryChange = (event) => {
