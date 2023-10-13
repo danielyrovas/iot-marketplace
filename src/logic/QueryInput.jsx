@@ -1,4 +1,6 @@
 import { createSignal } from 'solid-js';
+import Button from '../components/Button';
+import Heading from '../components/heading';
 
 const presetQueries = [
   {
@@ -103,6 +105,7 @@ export const QueryInput = (props) => {
 
   return (
     <div>
+      <Heading text="SPARQL Sensor Query"/>
       <h2>Select sensor type</h2>
       <form onSubmit={handlePresetQuerySubmit}>
         <select onChange={handleQueryChange} value={selectedQuery()}>
@@ -134,10 +137,10 @@ export const QueryInput = (props) => {
           ?location <http://rdfs.co/juso/Postcode> ?Postcode . 
           ?observes <http://www.w3.org/2000/01/rdf-schema#label> 'video'}"
         ></textarea>
-        <p></p>
-        <button class= "btn" type="submit">Execute Query</button>
-        
-        <button class="btn btn-primary p-4 ml-4" type="button" onClick={handleClear}> Clear</button>
+        <div className="flex gap-4">
+        <Button text="Execute Query" type="submit"/>
+        <Button text="Clear" type="button" onClick={handleClear}/>
+        </div>
       </form>
     </div>
   );
