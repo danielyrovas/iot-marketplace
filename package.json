@@ -10,28 +10,50 @@
     "serve": "vite preview",
     "api-install": "cd api && pnpm install",
     "package": "pkg api/package.json -t node18 --output src-tauri/binaries/app && node scripts/move-binary.js",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "test": "jest"
   },
   "license": "MIT",
   "dependencies": {
     "@felte/reporter-solid": "^1.2.9",
     "@felte/solid": "^1.2.11",
+    "@solidjs/testing-library": "^0.8.4",
     "@tauri-apps/api": "^1.4.0",
-    "solid-js": "^1.7.11",
-    "senshamartproject": "file:../SenShaMart"
+    "@testing-library/user-event": "^14.5.1",
+    "jest-environment-jsdom": "^29.7.0",
+    "senshamartproject": "file:../SenShaMart",
+    "solid-js": "^1.7.11"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.22.20",
+    "@babel/preset-react": "^7.22.15",
     "@tailwindcss/typography": "^0.5.10",
     "@tauri-apps/cli": "^1.4.0",
+    "@testing-library/jest-dom": "^6.1.3",
+    "@testing-library/react": "^14.0.0",
     "autoprefixer": "^10.4.15",
+    "babel-preset-solid": "^1.7.12",
     "cssnano": "^6.0.1",
     "cssnano-preset-advanced": "^6.0.1",
     "daisyui": "^3.7.3",
     "execa": "5.1.1",
+    "jest": "^29.7.0",
     "pkg": "^5.8.1",
     "postcss": "^8.4.29",
     "tailwindcss": "^3.3.3",
     "vite": "^4.4.9",
     "vite-plugin-solid": "^2.7.0"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/"
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/.empty.js"
+    },
+    "setupFilesAfterEnv": [
+      "<rootDir>/setuptest.js"
+    ]
   }
 }

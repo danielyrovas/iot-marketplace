@@ -8,8 +8,6 @@ export const RdfDataDisplay = (props) => {
 
   return (
     <div >
-      
-
       <div className="grow p-4">
         <div className="grid grid-cols-3 w-full gap-4">
           {props?.rdfData?.length === 0 ? ( "No data available for the sensor type you chosen or custom query you entered "):(<div></div>)}
